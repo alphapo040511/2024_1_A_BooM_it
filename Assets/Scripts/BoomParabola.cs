@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoomParabola : MonoBehaviour
 {
-    public bool ready = true;       //임시로 작동 테스트
-
     public BoomType type;
 
 
@@ -26,38 +25,36 @@ public class BoomParabola : MonoBehaviour
 
     private MeshRenderer meshRenderer;
 
-
+    private bool isArrived = false;
 
     private Vector3Int targetIntPos;
+
+    private LayerMask leveLayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        leveLayer = LayerMask.NameToLayer("Level");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ready) return;
-
         ThrowBoom();
-        
     }
 
-    public void BoomInitialize(RaycastHit hit, Transform FirePosition, BoomType boomType)
+    public void BoomInitialize(Vector3 pos, Vector3Int intPos, Transform FirePosition, BoomType boomType)
     {
         meshRenderer = GetComponent<MeshRenderer>();
         type = boomType;
-        targetPosition = hit.point;
-        targetIntPos = hit.collider.GetComponent<BlockData>().intPosition;
+        targetPosition = pos;
+        targetIntPos = intPos;
         startPosition = FirePosition.position;
         float dis = Vector3.Distance(startPosition, targetPosition);
         arriveTime = dis / velocity;
         currentTime = 0;
         transform.position = startPosition;
         CalculateVelocity();
-        ready = false;
         meshRenderer.enabled = true;
     }
 
@@ -78,8 +75,13 @@ public class BoomParabola : MonoBehaviour
 
     private void ThrowBoom()
     {
-        
-        if (currentTime < arriveTime)
+        if(transform.position.y <= -5)
+        {
+            Destroy(gameObject);
+        }
+
+
+        if (isArrived == false)
         {
             currentTime += Time.deltaTime;
             currentPosition = startPosition + initialVelocity * currentTime;
@@ -87,25 +89,23 @@ public class BoomParabola : MonoBehaviour
 
             transform.position = currentPosition;
         }
-        else
+
+        Collider[] target = Physics.OverlapSphere(transform.position, 0.1f, (1 << leveLayer));
+        foreach (Collider C in target)
         {
-            Collider[] target = Physics.OverlapSphere(transform.position, 0.1f);
-            foreach (Collider C in target)
+            if (C != null)
             {
-                if (C != null)
-                {
-                    ready = true;
-                    meshRenderer.enabled = false;
-                    Debug.Log("도착" + transform.position);
-                    Explosion();
-                }
+                targetIntPos = C.GetComponent<BlockData>().intPosition;
+                isArrived = true;
+                Explosion(targetIntPos);
+                break;
             }
         }
     }
 
-    private void Explosion()
+    private void Explosion(Vector3Int targetP)
     {
-        LevelManager.instance.DestroyBlock(type, targetIntPos);
+        LevelManager.instance.DestroyBlock(type, targetP);
         Destroy(gameObject);
     }
 

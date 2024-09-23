@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(transform.position.y <= -5)
+        {
+            Debug.Log("주거땅");
+        }
+
         isGrounded = controller.isGrounded;
 
         horizontalInput = Input.GetAxis("Horizontal");
