@@ -15,10 +15,17 @@ public class ItemButton : MonoBehaviour
 
     private InventorySystem inventorySystem;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         inventorySystem = InventorySystem.instance;
+    }
+
+    public void Init (ItemData itemData, ItemType type)
+    {
+        inventorySystem = InventorySystem.instance;
+        this.itemData = itemData;
+        this.type = type;
+        isMounted = false;
         UpdateImage();
     }
 

@@ -19,30 +19,41 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    public GameObject ButtonRef;
+
     public ItemButton[] bombButton = new ItemButton[3];
     public ItemButton itemButton;
 
     public Canvas bombListCanvas;
     public Canvas itemListCanvas;
 
+    public GameObject bombLayout;
+    public GameObject itemLayout;
+
     //나중에 프로퍼티 설정
     public int[] mountedBombIndex = new int[3];     //현재 장착중인 폭탄의 인덱스
     public int mountedItemIndex;                    //현재 장착중인 아이템의 인덱스 
 
-    [SerializeField]private ItemIndex bombIndex;    //폭탄 데이터 인덱스
-    [SerializeField]private ItemIndex ItemIndex;    //아이템 데이터 인덱스
+    [SerializeField]private ItemIndex bombIndexData;    //폭탄 데이터 인덱스
+    [SerializeField]private ItemIndex ItemIndexData;    //아이템 데이터 인덱스
 
-    private ItemType nowSelectType;                 //현재 선택할 아이템의 종류
+    private GameManager gameManager;
+
+    private List<ItemButton> bombList = new List<ItemButton> { };
+    private List<ItemButton> itemList = new List<ItemButton> { };
+
+    public ItemType nowSelectType;                 //현재 선택할 아이템의 종류
 
     void Start()
     {
+        gameManager = GameManager.instance;
         Init();
     }
 
     //장착할 아이템(또는 폭탄)을 선택했을때
     public void SelectItem(ItemButton button)    //매개변수로 해당 버튼 클래스를 받기
     {
-        ItemType type = button.itemData.itemType;
+        ItemType type = button.type;
         int index = button.itemData.itemIndex;
         bool isMounted = button.isMounted;
 
@@ -54,9 +65,9 @@ public class InventorySystem : MonoBehaviour
         }
 
         int targetIndex = EnptyIndex();
-        if(targetIndex == -1)
+        if(targetIndex == -1 || mountedItemIndex != 0)
         {
-            Debug.Log("이미 3개의 폭탄이 장착 되어있습니다.");
+            Debug.Log("이미 모든 아이템(폭탄)이 장착 되어있습니다.");
         }
         else
         {
@@ -67,6 +78,8 @@ public class InventorySystem : MonoBehaviour
     //아이템 장착 
     private void SetItem(ItemType type, int index, ItemButton button, int arrayIndex = 0)
     {
+        if (type != nowSelectType) return;
+
         if(type == ItemType.Bomb)
         {
             mountedBombIndex[arrayIndex] = index;
@@ -79,7 +92,7 @@ public class InventorySystem : MonoBehaviour
             itemButton.itemData = button.itemData;
         }
         button.isMounted = true;
-        UpdateButtons();
+        UpdateInventoryButtons();
     }
 
     //아이템 해제
@@ -97,9 +110,10 @@ public class InventorySystem : MonoBehaviour
             itemButton.itemData = null;
         }
         button.isMounted = false;
-        UpdateButtons();
+        UpdateInventoryButtons();
     }
 
+    //착용중인 폭탄중에 앞에서부터 비어있는 칸이 있는지 확인
     private int EnptyIndex()
     {
         for(int i = 0; i < mountedBombIndex.Length; i++)
@@ -113,7 +127,32 @@ public class InventorySystem : MonoBehaviour
         return -1;
     }
 
-    private void UpdateButtons()
+    //인덱스 초기화
+    private void Init()
+    {
+        for (int i = 0; i < gameManager.bombIndex.Length; i++)
+        {
+            int temp = gameManager.bombIndex[i];
+            if (temp != 0)
+            {
+                mountedBombIndex[i] = temp;
+                bombButton[i].itemData = bombIndexData.itemList[temp - 1];
+            }
+        }
+
+        int n = gameManager.itemIndex;
+        if (n != 0)
+        {
+            mountedItemIndex = n;
+            itemButton.itemData = ItemIndexData.itemList[n - 1];
+        }
+        LoadItemList();
+        UpdateInventoryButtons();
+        InitListButtons();
+    }
+
+    //지금 착용한 아이템 버튼의 이미지(정보) 업데이트
+    private void UpdateInventoryButtons()
     {
         foreach(ItemButton button in bombButton)
         {
@@ -122,24 +161,65 @@ public class InventorySystem : MonoBehaviour
         itemButton.UpdateImage();
     }
 
-    //인덱스 초기화
-    private void Init()
+    //처음 실행 시 리스트 아이템 버튼 데이터 초기화
+    private void InitListButtons()
     {
-        for (int i = 0; i < bombButton.Length; i++)
+        for (int i = 0; i < gameManager.bombIndex.Length; i++)
         {
-            if (bombButton[i].itemData != null)
+            if (gameManager.bombIndex[i] != 0)
             {
-                mountedBombIndex[i] = bombButton[i].itemData.itemIndex;
+                bombList[gameManager.bombIndex[i] - 1].isMounted = true;
+                bombList[gameManager.bombIndex[i] - 1].mountIndex = i;
             }
         }
-        mountedItemIndex = itemButton.itemData.itemIndex;
-        UpdateButtons();
+        if (gameManager.itemIndex != 0)
+        {
+            itemList[gameManager.itemIndex - 1].isMounted = true;
+        }
+    }
+
+    //아이템 리스트 불러오기
+    private void LoadItemList()
+    {
+        foreach(ItemData data in bombIndexData.itemList)
+        {
+            SetButton(data, ItemType.Bomb);
+        }
+
+        foreach (ItemData data in ItemIndexData.itemList)
+        {
+            SetButton(data, ItemType.Item);
+        }
+    }
+
+    //아이템 추가하기
+    private void SetButton(ItemData data, ItemType type)
+    {
+        GameObject button = Instantiate(ButtonRef, Vector3.zero, Quaternion.identity);
+        ItemButton buttonData = button.GetComponent<ItemButton>();
+        buttonData.Init(data, type);
+
+        if (type == ItemType.Bomb)
+        {
+            button.transform.SetParent(bombLayout.transform, false);
+            bombList.Add(buttonData);
+        }
+        else
+        {
+            button.transform.SetParent(itemLayout.transform, false);
+            itemList.Add(buttonData);
+        }
+    }
+
+    public void SaveItems()
+    {
+        gameManager.SaveItems(mountedBombIndex, mountedItemIndex);
     }
 
     //아이템 리스트의 UI 활성화
     public void ItemListUIActive(ItemType type)
     {
-        nowSelectType = ItemType.Item;
+        nowSelectType = type;
 
         AllCanvasTurnOff();
         if (type == ItemType.Bomb)
@@ -153,7 +233,7 @@ public class InventorySystem : MonoBehaviour
     }
 
     //모든 캔버스 비활성화
-    private void AllCanvasTurnOff()
+    public void AllCanvasTurnOff()
     {
         bombListCanvas.enabled = false;
         itemListCanvas.enabled = false;
