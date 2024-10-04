@@ -3,8 +3,14 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
+    [Range(5, 85)] public float angle = 0;
+
     private NetworkCharacterController _cc;
     public float moveSpeed = 5.0f;
+
+    [SerializeField] private NetworkPrefabRef _prefabBall;
+    [SerializeField] private TickTimer delay { get; set; }
+    [SerializeField] private NetworkButtons _networkButtons { get; set; }
 
     private void Awake()
     {
@@ -15,6 +21,7 @@ public class Player : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
+            _networkButtons = data.buttons;
 
             Vector3 moveDirection = data.direction;
             _cc.Move(moveDirection * moveSpeed * Runner.DeltaTime);
@@ -23,6 +30,32 @@ public class Player : NetworkBehaviour
             {
                 transform.rotation = Quaternion.LookRotation(moveDirection);
             }
+        }
+        CheckAndFireProjectile();
+    }
+
+    private void CheckAndFireProjectile()                   //체크하고 쏘는 함수
+    {
+        if (delay.ExpiredOrNotRunning(Runner))
+        {
+            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
+            {
+                delay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
+                FirePosition();
+            }
+        }
+    }
+
+    private void FirePosition()                                             //발사체 생성 함수
+    {
+        if (Object.HasStateAuthority)
+        {
+            Vector3 forward = transform.forward;
+            Runner.Spawn(_prefabBall,
+                transform.position + forward,
+                Quaternion.LookRotation(forward),
+                Object.InputAuthority,
+                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle));
         }
     }
 

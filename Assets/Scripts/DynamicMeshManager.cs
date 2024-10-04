@@ -17,7 +17,7 @@ public class DynamicMeshManager : MonoBehaviour
 
     void Start()
     {
-        mapData.LoadFormJson();
+        //mapData.LoadFormJson();
         GenerateInitialBlocks(); // 초기 블록 생성
         if (mainCamera == null)
         {

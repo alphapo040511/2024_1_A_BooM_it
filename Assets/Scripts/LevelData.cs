@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class LevelData : MonoBehaviour
 {
     public GameObject BlockPrefabs;
@@ -27,12 +28,14 @@ public class LevelData : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     public void SaveLevelData(int[,,] map, Dictionary<Vector3Int, int> mapDic)
     {
         mapData.BlockArr = map;
         //mapData.BlockDataDictionary = mapDic;
         mapData.SaveToJson();
     }
+
 
     public void LoadLevelData()
     {
@@ -57,7 +60,7 @@ public class LevelData : MonoBehaviour
             }
         }
     }
-
+#endif
     public void DestroyBlock(BoomType boom, Vector3 Pos)
     {
         switch(boom)

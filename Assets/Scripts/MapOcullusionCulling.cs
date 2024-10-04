@@ -14,7 +14,7 @@ public class MapOcullusionCulling : MonoBehaviour
     private Plane[] cameraFrustumPlanes = new Plane[6]; // 카메라 프러스텀 평면 배열
     void Start()
     {
-        mapData.LoadFormJson();
+        //mapData.LoadFormJson();
         GenerateInitialBlocks(); // 초기 블록 생성
         if (mainCamera == null)
         {
