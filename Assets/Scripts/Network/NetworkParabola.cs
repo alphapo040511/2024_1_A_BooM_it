@@ -22,10 +22,14 @@ public class NetworkParabola : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         currentTime += Runner.DeltaTime;
-        Vector3 currentPosition = stargPosition + initialVelocity * Time.deltaTime;
+        Vector3 currentPosition = stargPosition + initialVelocity * currentTime;
         currentPosition.y -= 0.5f * gravity * currentTime * currentTime;
         transform.position = currentPosition;
-        CheckCollision();
+        if(currentTime > 10)
+        {
+            Runner.Despawn(Object);
+        }
+        //CheckCollision();
     }
 
     private void CheckCollision()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    [Range(5, 85)] public float angle = 0;
+    [Range(5, 85)] public float angle = 15;
 
     private NetworkCharacterController _cc;
     public float moveSpeed = 5.0f;
