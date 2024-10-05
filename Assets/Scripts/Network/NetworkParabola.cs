@@ -5,31 +5,44 @@ using Fusion;
 
 public class NetworkParabola : NetworkBehaviour
 {
+    [Networked] private TickTimer life { get; set; }
+
     [SerializeField] private float speed = 5.0f;
     [SerializeField]  private float gravity = 9.81f;
-    private Vector3 stargPosition;
+    private Vector3 startPosition;
     private Vector3 initialVelocity;
     private float currentTime = 0;
 
-    public void Init(float angle)
+    private bool isReady = false;
+
+    public void Init(float angle, Vector3 position)
     {
-        stargPosition = transform.position;
+        life = TickTimer.CreateFromSeconds(Runner, 5.0f);
+
+        startPosition = position;
+        transform.position = startPosition;
         float initialX = speed * Mathf.Cos(angle * Mathf.Rad2Deg);
         float initialY = speed * Mathf.Sin(angle * Mathf.Rad2Deg);
         initialVelocity = transform.forward * initialX + transform.up * initialY;
+        isReady = true;
     }
 
     public override void FixedUpdateNetwork()
     {
-        currentTime += Runner.DeltaTime;
-        Vector3 currentPosition = stargPosition + initialVelocity * currentTime;
-        currentPosition.y -= 0.5f * gravity * currentTime * currentTime;
-        transform.position = currentPosition;
-        if(currentTime > 10)
+        if (!isReady) return;
+
+        if (life.Expired(Runner))
         {
             Runner.Despawn(Object);
         }
-        //CheckCollision();
+        else
+        {
+            currentTime += Runner.DeltaTime;
+            Vector3 currentPosition = startPosition + initialVelocity * currentTime;
+            currentPosition.y -= 0.5f * gravity * currentTime * currentTime;
+            transform.position = currentPosition;
+            //CheckCollision();
+        }
     }
 
     private void CheckCollision()

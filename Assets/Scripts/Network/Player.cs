@@ -14,19 +14,25 @@ public class Player : NetworkBehaviour
     [SerializeField] private NetworkButtons _networkButtons { get; set; }
 
     [SerializeField] private Transform cameraPivot;
-    private NetworkCameraFollow mainCamera;
+
+    private GameObject mainCamera;
+    private float cameraDistance;
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
+        Cursor.lockState = CursorLockMode.Locked;           //마우스 커서를 잠그고 숨긴다.
     }
 
     public override void Spawned()
     {
-        if(HasInputAuthority)
+        if (HasInputAuthority)
         {
-            mainCamera = NetworkCameraFollow.instanse;
-            mainCamera.SetPlayerTransform(transform, cameraPivot);
+            mainCamera = Camera.main.gameObject;
+            mainCamera.transform.SetParent(cameraPivot.transform);
+            mainCamera.transform.localPosition = new Vector3(0, 0, -5);
+            mainCamera.transform.localRotation = default;
+            cameraDistance = mainCamera.transform.localPosition.z;
         }
     }
 
@@ -38,6 +44,7 @@ public class Player : NetworkBehaviour
 
             Vector3 moveDirection = data.direction;
             Vector2 mouseDirection = data.lookDirection;
+            float wheel = data.wheel;
 
             moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
 
@@ -48,17 +55,17 @@ public class Player : NetworkBehaviour
 
             _cc.Move(moveDirection * moveSpeed * Runner.DeltaTime);
 
-            mainCamera.CameraRotate(mouseDirection.x, mouseDirection.y, Runner.DeltaTime);
+            transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y, 0f));
+            cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
+            if (HasInputAuthority)
+            {
+                cameraDistance += wheel;
+                cameraDistance = Mathf.Clamp(cameraDistance, -8, -3);
+                Vector3 targetPos = Vector3.forward * cameraDistance;
+                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetPos, Runner.DeltaTime * 2);
+            }
         }
         CheckAndFireProjectile();
-    }
-
-    public override void Render()
-    {
-        if(mainCamera != null)
-        {
-            mainCamera.UpdateCameraPosition();
-        }
     }
 
     private void CheckAndFireProjectile()                   //체크하고 쏘는 함수
@@ -82,7 +89,7 @@ public class Player : NetworkBehaviour
                 transform.position + forward,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,
-                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle));
+                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, transform.position + forward));
         }
     }
 

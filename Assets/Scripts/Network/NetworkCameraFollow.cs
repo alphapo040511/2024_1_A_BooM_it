@@ -4,20 +4,6 @@ using UnityEngine;
 
 public class NetworkCameraFollow : MonoBehaviour
 {
-    public static NetworkCameraFollow instanse;
-
-    private void Awake()
-    {
-        if(instanse == null)
-        {
-            instanse = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
     public Transform playerTransform;           //?????? ?????? ???????? ???? ???????? ????????
 
     public Transform target;                    //???????? ?????? ????
@@ -46,7 +32,7 @@ public class NetworkCameraFollow : MonoBehaviour
         if (target != null && playerTransform != null)
         {
             HandleInput(x, y, deltaTime);
-            UpdateCameraPosition();
+            //UpdateCameraPosition();
             Vector3 targetRotation = new Vector3(transform.forward.x, 0, transform.forward.z).normalized;
             playerTransform.forward = targetRotation;
         }
