@@ -1,4 +1,5 @@
 using Fusion;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
@@ -12,9 +13,21 @@ public class Player : NetworkBehaviour
     [SerializeField] private TickTimer delay { get; set; }
     [SerializeField] private NetworkButtons _networkButtons { get; set; }
 
+    [SerializeField] private Transform cameraPivot;
+    private NetworkCameraFollow mainCamera;
+
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
+    }
+
+    public override void Spawned()
+    {
+        if(HasInputAuthority)
+        {
+            mainCamera = NetworkCameraFollow.instanse;
+            mainCamera.SetPlayerTransform(transform, cameraPivot);
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -24,14 +37,28 @@ public class Player : NetworkBehaviour
             _networkButtons = data.buttons;
 
             Vector3 moveDirection = data.direction;
+            Vector2 mouseDirection = data.lookDirection;
+
+            moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
+
+            if (moveDirection.magnitude > 1)
+            {
+                moveDirection.Normalize();
+            }
+
             _cc.Move(moveDirection * moveSpeed * Runner.DeltaTime);
 
-            if (moveDirection != Vector3.zero)
-            {
-                transform.rotation = Quaternion.LookRotation(moveDirection);
-            }
+            mainCamera.CameraRotate(mouseDirection.x, mouseDirection.y, Runner.DeltaTime);
         }
         CheckAndFireProjectile();
+    }
+
+    public override void Render()
+    {
+        if(mainCamera != null)
+        {
+            mainCamera.UpdateCameraPosition();
+        }
     }
 
     private void CheckAndFireProjectile()                   //체크하고 쏘는 함수

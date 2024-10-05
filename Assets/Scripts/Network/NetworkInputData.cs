@@ -10,7 +10,7 @@ public struct NetworkInputData : INetworkInput
     public const byte MOUSEBUTTON1 = 0x02;
     public NetworkButtons buttons;
     public Vector3 direction;
-    public Vector3 lookDirection;
+    public Vector2 lookDirection;
 }
 
 // NetworkInputHandler Å¬·¡½º
@@ -20,31 +20,17 @@ public class NetworkInputHandler : MonoBehaviour
     {
         var data = new NetworkInputData();
 
-        float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
 
-        data.direction = new Vector3(horizontal, 0, vertical);
+        data.direction = new Vector3(vertical, 0, horizontal);
 
-        Camera mainCamera = Camera.main;
-        if (mainCamera != null)
-        {
-            Vector3 cameraForward = mainCamera.transform.forward;
-            Vector3 cameraRight = mainCamera.transform.right;
+        //if (data.direction.magnitude > 1)
+        //{
+        //    data.direction.Normalize();
+        //}
 
-            cameraForward.y = 0;
-            cameraRight.y = 0;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            data.direction = cameraRight * horizontal + cameraForward * vertical;
-        }
-
-        if (data.direction.magnitude > 1)
-        {
-            data.direction.Normalize();
-        }
-
-        data.lookDirection = mainCamera != null ? mainCamera.transform.forward : Vector3.forward;
+        data.lookDirection = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButton(0));
         data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButton(1));

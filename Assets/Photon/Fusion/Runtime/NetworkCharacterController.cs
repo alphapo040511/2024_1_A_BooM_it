@@ -94,8 +94,9 @@ namespace Fusion {
       if (direction == default) {
         horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
       } else {
-        horizontalVel      = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
+        horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
+        //플레이어 회전 임시 해제
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
       }
 
       moveVelocity.x = horizontalVel.x;
