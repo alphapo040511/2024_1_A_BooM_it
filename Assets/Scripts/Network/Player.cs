@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    [Range(5, 85)] public float angle = 15;
+    [Networked] public float angle { get; set; }
 
     private NetworkCharacterController _cc;
     public float moveSpeed = 5.0f;
@@ -15,7 +15,8 @@ public class Player : NetworkBehaviour
 
     [SerializeField] private Transform cameraPivot;
 
-    private GameObject mainCamera;
+
+    private GameObject thirdPersonCamera;
     private float cameraDistance;
 
     private void Awake()
@@ -28,11 +29,11 @@ public class Player : NetworkBehaviour
     {
         if (HasInputAuthority)
         {
-            mainCamera = Camera.main.gameObject;
-            mainCamera.transform.SetParent(cameraPivot.transform);
-            mainCamera.transform.localPosition = new Vector3(0, 0, -5);
-            mainCamera.transform.localRotation = default;
-            cameraDistance = mainCamera.transform.localPosition.z;
+            thirdPersonCamera = Camera.main.gameObject;
+            thirdPersonCamera.transform.SetParent(cameraPivot.transform);
+            thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
+            thirdPersonCamera.transform.localRotation = default;
+            cameraDistance = thirdPersonCamera.transform.localPosition.z;
         }
     }
 
@@ -58,12 +59,13 @@ public class Player : NetworkBehaviour
             transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y, 0f));
             cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
             if (HasInputAuthority)
-            {
+            { 
                 cameraDistance += wheel;
                 cameraDistance = Mathf.Clamp(cameraDistance, -8, -3);
                 Vector3 targetPos = Vector3.forward * cameraDistance;
-                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetPos, Runner.DeltaTime * 2);
+                thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 2);
             }
+            angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         }
         CheckAndFireProjectile();
     }
