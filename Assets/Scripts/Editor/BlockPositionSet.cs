@@ -164,7 +164,7 @@ public class BlockPositionSet : EditorWindow
                         {
                             BlockDataDictionary.Add(IntPos, map[x, y, z]);
                         }
-                        var newBlock = Instantiate(blockIndex.Blocks[map[x, y, z] - 1], new Vector3(x, y, z), Quaternion.identity);
+                        var newBlock = Instantiate(blockIndex.Blocks[CheckBlockIndex(map[x, y, z] - 1)], new Vector3(x, y, z), Quaternion.identity);
                         newBlock.transform.parent = levelData.gameObject.transform;
                         BlockData temp = newBlock.GetComponent<BlockData>();
                     }
@@ -177,6 +177,18 @@ public class BlockPositionSet : EditorWindow
                     }
                 }
             }
+        }
+    }
+
+    private int CheckBlockIndex(int value)
+    {
+        if(blockIndex.Blocks.Count <= value)
+        {
+            return 0;
+        }
+        else
+        {
+            return value;
         }
     }
 

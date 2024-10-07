@@ -51,7 +51,7 @@ public class LevelData : MonoBehaviour
                 {
                     if (BlockArr[x, y, z] != 0)
                     {
-                        GameObject temp = Instantiate(mapData.BlockIndexData.Blocks[BlockArr[x, y, z] - 1], new Vector3(x, y, z), Quaternion.identity);
+                        GameObject temp = Instantiate(mapData.BlockIndexData.Blocks[CheckBlockIndex(BlockArr[x, y, z] - 1)], new Vector3(x, y, z), Quaternion.identity);
                         temp.transform.parent = this.transform;
                         BlockData data = temp.GetComponent<BlockData>();
                     }
@@ -59,6 +59,19 @@ public class LevelData : MonoBehaviour
             }
         }
     }
+
+    private int CheckBlockIndex(int value)
+    {
+        if (mapData.BlockIndexData.Blocks.Count <= value)
+        {
+            return 0;
+        }
+        else
+        {
+            return value;
+        }
+    }
+
 #endif
     public void DestroyBlock(BoomType boom, Vector3 Pos)
     {

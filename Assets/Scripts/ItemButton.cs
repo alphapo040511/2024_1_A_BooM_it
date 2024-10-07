@@ -11,6 +11,20 @@ public class ItemButton : MonoBehaviour
     public int mountIndex = 0;
     public bool isMounted = false;
 
+    public string ItemName { 
+        get
+        {
+            return itemData != null ? itemData.itemName : "NULL"; 
+        } 
+        set
+        {
+            if (itemData != null)
+            {
+                itemData.itemName = value; 
+            }
+        }
+    }
+
     public ItemType type;
 
     private InventorySystem inventorySystem;
