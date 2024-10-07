@@ -240,7 +240,7 @@ public class BlockPositionSet : EditorWindow
 
         EditorGUI.DrawRect(rect, blockColor);
 
-        if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
+        if (Event.current.type == EventType.MouseDrag && rect.Contains(Event.current.mousePosition))
         {
             if (Event.current.button == 0)        //마우스 왼쪽 클릭
             {
