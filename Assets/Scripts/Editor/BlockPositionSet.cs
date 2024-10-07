@@ -107,7 +107,7 @@ public class BlockPositionSet : EditorWindow
         if (GUILayout.Button("-")) nowBlockIndex--;
         nowBlockIndex = EditorGUILayout.IntField("설치할 블럭 인덱스", nowBlockIndex);
         if (GUILayout.Button("+")) nowBlockIndex++;
-        if (nowBlockIndex >= blockIndex.Blocks.Count) nowBlockIndex = blockIndex.Blocks.Count - 1;
+        if (nowBlockIndex > blockIndex.Blocks.Count) nowBlockIndex = blockIndex.Blocks.Count;
         if (nowBlockIndex < 1) nowBlockIndex = 1;
         GUILayout.EndHorizontal();
 
@@ -215,6 +215,9 @@ public class BlockPositionSet : EditorWindow
                 break;
             case 3:
                 blockColor = UnityEngine.Color.red;
+                break;
+            case 4:
+                blockColor = UnityEngine.Color.blue;
                 break;
             default:
                 blockColor = UnityEngine.Color.white;

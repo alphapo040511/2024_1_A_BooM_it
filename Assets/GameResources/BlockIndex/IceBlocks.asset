@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a74ba4b28884244d9657becb30094d4, type: 3}
   m_Name: IceBlocks
   m_EditorClassIdentifier: 
-  Blocks: []
+  Blocks:
+  - {fileID: 3964708505264979027, guid: 3241a2363215b8942bc43e7adb79b702, type: 3}
+  - {fileID: 1913828044884231373, guid: 0a413ad47b0e6664c8dc91d659fa2fbf, type: 3}

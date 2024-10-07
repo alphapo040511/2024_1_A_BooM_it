@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a74ba4b28884244d9657becb30094d4, type: 3}
-  m_Name: DesertBlocks
+  m_Script: {fileID: 11500000, guid: 7ec073763240f624e8a6ef29819c3257, type: 3}
+  m_Name: Ice
   m_EditorClassIdentifier: 
-  Blocks:
-  - {fileID: 6641087088878483273, guid: ca66498a3df8e8743be58aecc156b82c, type: 3}
-  - {fileID: 7332494899303407096, guid: 98f5b56f07468d34fa9c1668598e6169, type: 3}
+  BlockIndexData: {fileID: 11400000, guid: 947f36e9d04203c4590b80e0aac941b8, type: 2}
+  mapJsonFile: {fileID: 0}
