@@ -65,7 +65,7 @@ public class InventorySystem : MonoBehaviour
         }
 
         int targetIndex = EnptyIndex();
-        if(targetIndex == -1 || mountedItemIndex != 0)
+        if(targetIndex == -1 || mountedItemIndex != -1)
         {
             Debug.Log("이미 모든 아이템(폭탄)이 장착 되어있습니다.");
         }
@@ -106,7 +106,7 @@ public class InventorySystem : MonoBehaviour
         }
         else if (type == ItemType.Item)
         {
-            mountedItemIndex = 0;
+            mountedItemIndex = -1;
             itemButton.itemData = null;
         }
         button.isMounted = false;

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LevelData : MonoBehaviour
 {
-    public GameObject BlockPrefabs;
     public MapData mapData;
 
     public List<BlockData> DestroyedBlocks = new List<BlockData>();
