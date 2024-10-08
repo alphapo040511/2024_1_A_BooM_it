@@ -13,6 +13,9 @@ public class BlockPositionSet : EditorWindow
     private Vector3Int MapSize = new Vector3Int(16,3,16);
     private int NowHeight = 0;
     private int[,,] map = new int[16, 3, 16];
+    private int playerCount = 2;
+    private int nowPlayer = 1;
+    private Vector3Int[] spawnPos = new Vector3Int[2];
     private Dictionary<Vector3Int, int> BlockDataDictionary = new Dictionary<Vector3Int, int> { };
     private int nowBlockIndex = 1;
 
@@ -28,12 +31,6 @@ public class BlockPositionSet : EditorWindow
     private void OnEnable()
     {
         levelData = FindAnyObjectByType<LevelData>();
-        if(levelData == null)
-        {
-            GameObject level = new GameObject("LevelData");
-            level.transform.position = Vector3.zero;
-            level.AddComponent<LevelData>();
-        }
         blockIndex = levelData.mapData.BlockIndexData;
     }
 
@@ -59,9 +56,11 @@ public class BlockPositionSet : EditorWindow
         {
             levelData.LoadLevelData();
             map = levelData.BlockArr;
+            spawnPos = levelData.SpawnPos;
             MapSize.x = map.GetLength(0);
             MapSize.y = map.GetLength(1);
             MapSize.z = map.GetLength(2);
+            playerCount = spawnPos.Length;
         }
 
         GUILayout.Space(10);
@@ -87,14 +86,17 @@ public class BlockPositionSet : EditorWindow
         if (GUILayout.Button("데이터 저장", GUILayout.Width(100), GUILayout.Height(50)))
         {
             SetBlock();
-            levelData.SaveLevelData(map, BlockDataDictionary);
+            levelData.SaveLevelData(map, BlockDataDictionary, spawnPos);
         }
 
         EditorGUILayout.EndHorizontal();
 
+        EditorGUILayout.BeginHorizontal();
         MapSize.x = EditorGUILayout.IntField("맵 가로 크기", MapSize.x);
         MapSize.z = EditorGUILayout.IntField("맵 세로 크기", MapSize.z);
         MapSize.y = EditorGUILayout.IntField("맵 최대 높이", MapSize.y);
+        EditorGUILayout.EndHorizontal();
+
         if (MapSize.x <= 0) MapSize.x = 1;
         if(MapSize.z <= 0) MapSize.z = 1;
 
@@ -118,6 +120,22 @@ public class BlockPositionSet : EditorWindow
         if (NowHeight >= MapSize.y) NowHeight = MapSize.y - 1;
         if (NowHeight < 0) NowHeight = 0;
         GUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        playerCount = EditorGUILayout.IntField("총 플레이어 수", playerCount);
+        GUILayout.Space(10);
+        nowPlayer = EditorGUILayout.IntField("설정할 플레이어", nowPlayer);
+        GUILayout.Space(10);
+        if (GUILayout.Button("위치 확인")) CheckSpawnPosition();
+        EditorGUILayout.EndHorizontal();
+
+        if(spawnPos.Length != playerCount)
+        spawnPos = new Vector3Int[playerCount];
+
+        if (playerCount < 1) playerCount = 1;
+
+        if (nowPlayer < 1) nowPlayer = 1;
+        else if (nowPlayer > spawnPos.Length) nowPlayer = spawnPos.Length;
 
         EditorGUILayout.BeginHorizontal();
 
@@ -207,6 +225,15 @@ public class BlockPositionSet : EditorWindow
         }
     }
 
+    private void CheckSpawnPosition()
+    {
+        for(int i = 0; i < playerCount; i++)
+        {
+            Debug.Log($"{i + 1}번째 플레이어의 스폰 위치 {spawnPos[i]}");
+        }
+    }
+
+
     private void DrawBlock(int x, int z)
     {
         if (levelData == null || blockIndex == null) return;
@@ -240,7 +267,7 @@ public class BlockPositionSet : EditorWindow
 
         EditorGUI.DrawRect(rect, blockColor);
 
-        if (Event.current.type == EventType.MouseDrag && rect.Contains(Event.current.mousePosition))
+        if ((Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) && rect.Contains(Event.current.mousePosition))
         {
             if (Event.current.button == 0)        //마우스 왼쪽 클릭
             {
@@ -249,6 +276,11 @@ public class BlockPositionSet : EditorWindow
             else if (Event.current.button == 1)      //마우스 오른쪽 클릭
             {
                 map[x, NowHeight, z] = 0;
+            }
+            else if (Event.current.button == 2)          //마우스 휠 클릭
+            {
+                spawnPos[nowPlayer - 1] = new Vector3Int(x, 0, z);
+                Debug.Log($"{nowPlayer}번째 플레이어의 생성 위치가 {spawnPos[nowPlayer - 1]}로 설정되었습니다.");
             }
             Event.current.Use();
         }

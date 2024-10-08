@@ -17,9 +17,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public ItemIndex bombIndexData;
-    public ItemIndex itemIndexData;
-
     public int[] bombIndex = new int[3];
     public int itemIndex;
 

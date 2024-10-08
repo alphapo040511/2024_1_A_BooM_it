@@ -9,6 +9,7 @@ public class LevelData : MonoBehaviour
 
     public List<BlockData> DestroyedBlocks = new List<BlockData>();
     public int[,,] BlockArr = new int[,,] { };
+    public Vector3Int[] SpawnPos = new Vector3Int[] { };
     public Dictionary<Vector3Int, int> BlockDataDic = new Dictionary<Vector3Int, int> { };
 
 
@@ -28,9 +29,10 @@ public class LevelData : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    public void SaveLevelData(int[,,] map, Dictionary<Vector3Int, int> mapDic)
+    public void SaveLevelData(int[,,] map, Dictionary<Vector3Int, int> mapDic, Vector3Int[] spawnPos)
     {
         mapData.BlockArr = map;
+        mapData.SpawnPosition = spawnPos;
         //mapData.BlockDataDictionary = mapDic;
         mapData.SaveToJson();
     }
@@ -40,6 +42,7 @@ public class LevelData : MonoBehaviour
     {
         mapData.LoadFormJson();
         BlockArr = mapData.BlockArr;
+        SpawnPos = mapData.SpawnPosition;
         //BlockDataDic = mapData.BlockDataDictionary;
 
         ResetMap(BlockArr.GetLength(0), BlockArr.GetLength(1), BlockArr.GetLength(2));

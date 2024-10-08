@@ -9,6 +9,10 @@ public class MapData : ScriptableObject
 {
     public BlockIndex BlockIndexData;
     public int[,,] BlockArr = new int[,,] { };
+    public Vector3Int[] SpawnPosition = new Vector3Int[] { };
+    private int posLength = 1;
+    private int[] xPos = new int[] { };
+    private int[] zPos = new int[] { };
     public TextAsset mapJsonFile;
 
 #if UNITY_EDITOR
@@ -20,8 +24,20 @@ public class MapData : ScriptableObject
             return;
         }
 
+        posLength = SpawnPosition.Length;
+        xPos = new int[posLength];
+        zPos = new int[posLength];
+
+        for (int i = 0; i < posLength; i++)
+        {
+            xPos[i] = SpawnPosition[i].x;
+            zPos[i] = SpawnPosition[i].z;
+        }
+
         var data = JsonConvert.SerializeObject(new
         {
+            xPos,
+            zPos,
             BlockArr,
         }, Formatting.Indented);        //JSON 변환 빛 파일 포맷 설정
 
@@ -39,10 +55,21 @@ public class MapData : ScriptableObject
 
         var data = JsonConvert.DeserializeAnonymousType(mapJsonFile.text, new
         {
+            xPos = new int[] { },
+            zPos = new int[] { },
             BlockArr = new int[,,] { },
         });
         
         BlockArr = data.BlockArr;
+
+        posLength = xPos.Length;
+
+        SpawnPosition = new Vector3Int[posLength];
+
+        for (int i = 0; i < posLength; i++)
+        {
+            SpawnPosition[i] = new Vector3Int(xPos[i], 0 , zPos[i]);
+        }
     }
 
 #endif
