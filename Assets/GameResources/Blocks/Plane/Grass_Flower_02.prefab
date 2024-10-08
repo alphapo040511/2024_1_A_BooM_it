@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3436384804425898394}
-  - component: {fileID: -307212912925987065}
-  m_Layer: 0
+  - component: {fileID: -68790434036099714}
+  - component: {fileID: 4852411607921105271}
+  m_Layer: 3
   m_Name: Grass_Flower_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +34,28 @@ Transform:
   - {fileID: 646670477656137747}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-307212912925987065
+--- !u!65 &-68790434036099714
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188379899619840406}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4852411607921105271
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,13 +64,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 188379899619840406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de652061b356b14c81a15e1f5d7dd37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3df783d8d05c3884eb1aa3076e872432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IsDestroyed: 0
   Regeneration: 0
   intPosition: {x: 0, y: 0, z: 0}
-  respawnTime: 0
 --- !u!1 &3727539163328376926
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +81,7 @@ GameObject:
   - component: {fileID: 646670477656137747}
   - component: {fileID: 8051189773157336664}
   - component: {fileID: 6020486529150013251}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}

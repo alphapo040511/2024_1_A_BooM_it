@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1097333463291073386}
-  - component: {fileID: -1184424335315738748}
-  m_Layer: 0
+  - component: {fileID: 5642907781015082034}
+  - component: {fileID: -9155522465125560448}
+  m_Layer: 3
   m_Name: Dirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +34,28 @@ Transform:
   - {fileID: 940112869082183460}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-1184424335315738748
+--- !u!65 &5642907781015082034
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069042218975691758}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-9155522465125560448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,13 +64,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1069042218975691758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de652061b356b14c81a15e1f5d7dd37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3df783d8d05c3884eb1aa3076e872432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IsDestroyed: 0
   Regeneration: 0
   intPosition: {x: 0, y: 0, z: 0}
-  respawnTime: 0
 --- !u!1 &3599516821264111321
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +81,7 @@ GameObject:
   - component: {fileID: 940112869082183460}
   - component: {fileID: 8891505129075077669}
   - component: {fileID: 1428062436090264049}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -44,7 +44,7 @@ public class MapData : ScriptableObject
         System.IO.File.WriteAllText(AssetDatabase.GetAssetPath(mapJsonFile), data);       //파일에 JSON을 쓴다.
         AssetDatabase.Refresh();                                                            //완료후 리프레시    
     }
-
+#endif
     public void LoadFormJson()
     {
         if(mapJsonFile == null)
@@ -72,5 +72,5 @@ public class MapData : ScriptableObject
         }
     }
 
-#endif
+
 }

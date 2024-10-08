@@ -17,7 +17,9 @@ public class DynamicMeshManager : MonoBehaviour
 
     void Start()
     {
+#if UNITY_EDITOR
         mapData.LoadFormJson();
+#endif
         GenerateInitialBlocks(); // 초기 블록 생성
         if (mainCamera == null)
         {

@@ -10,7 +10,7 @@ public class BlockData : MonoBehaviour
     [Header("재 생성이 가능한 블럭")] public bool Regeneration;            //현재 블럭이 재생성이 가능한지 나타낼 bool
 
     public Vector3Int intPosition;
-    public float respawnTime;                                             //재 생성까지 필요한 시간을 저장할 float
+    public float respawnTime = 0;                                             //재 생성까지 필요한 시간을 저장할 float
 
     private LevelManager levelManager;
 
@@ -57,7 +57,6 @@ public class BlockData : MonoBehaviour
         IsDestroyed = false;
         intPosition = Pos;
         Regeneration = isBool;
-        respawnTime = 0;
     }
 
     public void ResetPosition()

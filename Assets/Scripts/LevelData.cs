@@ -62,6 +62,7 @@ public class LevelData : MonoBehaviour
             }
         }
     }
+#endif
 
     private int CheckBlockIndex(int value)
     {
@@ -75,7 +76,6 @@ public class LevelData : MonoBehaviour
         }
     }
 
-#endif
     public void DestroyBlock(BoomType boom, Vector3 Pos)
     {
         switch(boom)
