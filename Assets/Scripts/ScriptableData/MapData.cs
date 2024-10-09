@@ -62,13 +62,13 @@ public class MapData : ScriptableObject
         
         BlockArr = data.BlockArr;
 
-        posLength = xPos.Length;
+        posLength = data.xPos.Length;
 
         SpawnPosition = new Vector3Int[posLength];
 
         for (int i = 0; i < posLength; i++)
         {
-            SpawnPosition[i] = new Vector3Int(xPos[i], 0 , zPos[i]);
+            SpawnPosition[i] = new Vector3Int(data.xPos[i], 0 , data.zPos[i]);
         }
     }
 

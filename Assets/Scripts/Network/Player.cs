@@ -1,23 +1,33 @@
 using Fusion;
 using Unity.VisualScripting;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class Player : NetworkBehaviour
 {
     [Networked] public float angle { get; set; }
 
     private NetworkCharacterController _cc;
-    public float moveSpeed = 5.0f;
 
     [SerializeField] private NetworkPrefabRef _prefabBall;
-    [SerializeField] private TickTimer delay { get; set; }
+    [SerializeField] private TickTimer fireDelay { get; set; }
+    [SerializeField] private TickTimer jumpDelay { get; set; }
     [SerializeField] private NetworkButtons _networkButtons { get; set; }
 
     [SerializeField] private Transform cameraPivot;
 
+    public NetworkMecanimAnimator _animator;
+    public Transform FirePoint;
 
     private GameObject thirdPersonCamera;
     private float cameraDistance;
+
+    [Networked] public float initTheta { get; set; }
+
+    public void Init(float angle)
+    {
+        initTheta = angle;
+    }
 
     private void Awake()
     {
@@ -47,36 +57,52 @@ public class Player : NetworkBehaviour
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
 
+
+            _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
+            _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
+
+
             moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
 
-            if (moveDirection.magnitude > 1)
-            {
-                moveDirection.Normalize();
-            }
+            _cc.Move(moveDirection);
+            
 
-            _cc.Move(moveDirection * moveSpeed * Runner.DeltaTime);
-
-            transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y, 0f));
+            transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
             cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
             if (HasInputAuthority)
             { 
                 cameraDistance += wheel;
-                cameraDistance = Mathf.Clamp(cameraDistance, -8, -3);
+                cameraDistance = Mathf.Clamp(cameraDistance, -2.5f, -1);
                 Vector3 targetPos = Vector3.forward * cameraDistance;
-                thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 2);
+                thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 15);
             }
             angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         }
         CheckAndFireProjectile();
+        CheckAndJump();
+    }
+
+
+    private void CheckAndJump()
+    {
+        if (jumpDelay.ExpiredOrNotRunning(Runner))
+        {
+            if (_networkButtons.IsSet(NetworkInputData.KEYBOARDSPACE))
+            {
+                jumpDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
+                _cc.Jump();
+            }
+        }
     }
 
     private void CheckAndFireProjectile()                   //체크하고 쏘는 함수
     {
-        if (delay.ExpiredOrNotRunning(Runner))
+        if (fireDelay.ExpiredOrNotRunning(Runner))
         {
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
             {
-                delay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
+                fireDelay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
+                if(HasInputAuthority) RPC_SendMessage_Fire();
                 FirePosition();
             }
         }
@@ -88,11 +114,22 @@ public class Player : NetworkBehaviour
         {
             Vector3 forward = transform.forward;
             Runner.Spawn(_prefabBall,
-                transform.position + forward,
+                FirePoint.position,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,
-                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, transform.position + forward));
+                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint.position));
         }
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_SendMessage_Fire()
+    {
+        RPC_RelayMessage_Fire();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    public void RPC_RelayMessage_Fire()
+    {
+        _animator.Animator.SetTrigger("Fire");
+    }
 }

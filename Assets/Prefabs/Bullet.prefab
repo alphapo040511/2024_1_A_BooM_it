@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1a245ade80d76745823ac233d6a631a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
-  gravity: 9.81
+  speed: 25
+  gravity: 29.43
   adjustedMinAngle: -30
   adjustedMaxAngle: 75
 --- !u!114 &6113691430285859659

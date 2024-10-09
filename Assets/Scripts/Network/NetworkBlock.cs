@@ -15,12 +15,6 @@ public class NetworkBlock : MonoBehaviour
     private BoxCollider blockCollider;
     private MeshRenderer meshRenderer;
 
-    void Start()
-    {
-        blockCollider = GetComponent<BoxCollider>();
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-    }
-
     public void DestroyBlock(float RespawnTime)     //블럭이 파괴됐을때 호출할 함수
     {
         if (IsDestroyed) return;
@@ -60,5 +54,7 @@ public class NetworkBlock : MonoBehaviour
         intPosition = Pos;
         Regeneration = isBool;
         this.levelManager = levelManager;
+        blockCollider = GetComponent<BoxCollider>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 }

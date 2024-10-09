@@ -84,20 +84,41 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             // 플레이어 스폰 위치 계산을 위한 새로운 로직
             Vector3 spawnPosition = GetNextSpawnPosition();
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            Vector3 lookDirection = GetLookDirection(spawnPosition);
+            Debug.Log(lookDirection);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player, (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
         }
         Debug.Log($"플레이어 참가: {player}");
     }
 
     private Vector3 GetNextSpawnPosition()
+    { 
+        int playerCount = _spawnedCharacters.Count;
+        GameManager.instance.mapData.LoadFormJson();
+        Vector3Int pos = GameManager.instance.mapData.SpawnPosition[playerCount];
+        for (int y = GameManager.instance.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
+        {
+            if (GameManager.instance.mapData.BlockArr[pos.x, y, pos.z] == 0)
+            {
+                pos.y = y;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return pos;
+    }
+
+    private Vector3 GetLookDirection(Vector3 spawnPosition)
     {
-        // 간단한 예: 플레이어 수에 따라 원형으로 배치
-        float angle = _spawnedCharacters.Count * (360f / 8); // 최대 8명의 플레이어 가정
-        float radius = 5f; // 스폰 반경
-        float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
-        float z = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
-        return new Vector3(x, 2, z);
+        int playerCount = _spawnedCharacters.Count;
+        GameManager.instance.mapData.LoadFormJson();
+        float x = GameManager.instance.mapData.BlockArr.GetLength(0) / 2;
+        float z = GameManager.instance.mapData.BlockArr.GetLength(2) / 2;
+        Vector3 target = new Vector3(x, spawnPosition.y, z);
+        return (target - spawnPosition).normalized;
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
