@@ -6,6 +6,7 @@ public class NetworkBlock : MonoBehaviour
 {
     public bool IsDestroyed;
     public bool Regeneration;
+    public ParticleSystem explosionEffect;
 
     public Vector3Int intPosition;
     private float respawnTime = 0;
@@ -22,10 +23,16 @@ public class NetworkBlock : MonoBehaviour
         IsDestroyed = true;                         //블럭이 파괴된 것으로 변경
         blockCollider.enabled = false;
         meshRenderer.enabled = false;
+        Effect();
         if (Regeneration)
         {
             levelManager.DisabledBlocks.Add(this);
         }
+    }
+
+    public void Effect()
+    {
+        explosionEffect.Play();
     }
 
     public void Timer(float deltaTime)
