@@ -97,6 +97,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         int playerCount = _spawnedCharacters.Count;
         GameManager.instance.mapData.LoadFormJson();
         Vector3Int pos = GameManager.instance.mapData.SpawnPosition[playerCount];
+        pos.y = GameManager.instance.mapData.BlockArr.GetLength(1);
         for (int y = GameManager.instance.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
         {
             if (GameManager.instance.mapData.BlockArr[pos.x, y, pos.z] == 0)

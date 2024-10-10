@@ -45,18 +45,16 @@ public class NetworkLevelGenerator : MonoBehaviour
     //해당 블럭이 가장 아래 있는 블럭인지 확인
     private bool CheckBelowBlock(int x, int y, int z)
     {
-        bool isBelowBlock = false;
-        if (y <= 0)        //해당 블럭의 높이가 0 아래이거나 해당 블럭 아래에 다른 블럭이 없을경우
+        if (y == 0) return true;        //해당 블럭의 높이가 0 이면
+
+        bool isBelowBlock = true;
+
+        for (int i = y - 1; i >= 0; i--)    //해당 블럭의 아래 블럭들을 전부 검사
         {
-            isBelowBlock = true;
-        }
-        else if(mapData.BlockArr[x, y - 1, z] == 0)
-        {
-            isBelowBlock = true;
-        }
-        else
-        {
-            isBelowBlock = false;
+            if(mapData.BlockArr[x, i, z] != 0)
+            {
+                isBelowBlock = false;
+            }
         }
 
         return isBelowBlock;
@@ -118,8 +116,18 @@ public class NetworkLevelGenerator : MonoBehaviour
     bool IsBlockOnSurface(Vector3Int position)
     {
         // 6방향(상,하,좌,우,앞,뒤)의 이웃 블록 확인
+        // 대각선 위쪽 블럭이 비어있는 경우에도 추가
         Vector3Int[] neighbors = new Vector3Int[]
         {
+            new Vector3Int(-1, 1, 0),
+            new Vector3Int(1, 1, 0),
+            new Vector3Int(0, 1, -1),
+            new Vector3Int(0, 1, 1),
+            new Vector3Int(-1, 1, 1),
+            new Vector3Int(1, 1, -1),
+            new Vector3Int(-1, 1, -1),
+            new Vector3Int(1, 1, 1),
+            //윗 부분이 추가 내용
             new Vector3Int(1, 0, 0),
             new Vector3Int(-1, 0, 0),
             new Vector3Int(0, 1, 0),
