@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Ice
   m_EditorClassIdentifier: 
   BlockIndexData: {fileID: 11400000, guid: 947f36e9d04203c4590b80e0aac941b8, type: 2}
+  SpawnPosition: []
   mapJsonFile: {fileID: 0}

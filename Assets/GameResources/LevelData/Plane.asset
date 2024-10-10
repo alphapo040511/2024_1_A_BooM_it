@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: Plane
   m_EditorClassIdentifier: 
   BlockIndexData: {fileID: 11400000, guid: c460f49a4832b394f84713b142d3e4e9, type: 2}
-  mapJsonFile: {fileID: 4900000, guid: 6670e838e3cd7b44c80ec1d7b7cc84f0, type: 3}
+  SpawnPosition:
+  - {x: 13, y: 0, z: 2}
+  - {x: 2, y: 0, z: 16}
+  mapJsonFile: {fileID: 4900000, guid: 83fda252a31104e4fadf533c3cb62c1a, type: 3}
