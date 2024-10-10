@@ -13,8 +13,8 @@ public class NetworkParabola : NetworkBehaviour
 
     public float speed = 5.0f;
     public float gravity = 9.81f;
-    public float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
-    public float adjustedMaxAngle = 75f;
+    public float adjustedMinAngle = 45f;     //출력 발사 각도 최소 최대값
+    public float adjustedMaxAngle = 80f;
 
     private float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
     private float maxAngle = 75;
