@@ -85,6 +85,11 @@ namespace Fusion {
         moveVelocity.y = 0f;
       }
 
+      if(moveVelocity.y > maxSpeed * 2)
+        {
+            moveVelocity.y = maxSpeed * 2;
+        }
+
       moveVelocity.y += gravity * Runner.DeltaTime;
 
       var horizontalVel = default(Vector3);
