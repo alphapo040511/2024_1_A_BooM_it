@@ -118,9 +118,6 @@ MonoBehaviour:
   cameraPivot: {fileID: 6447740115564093217}
   _animator: {fileID: 8637261848777380372}
   FirePoint: {fileID: 7854653979831548048}
-  mouseSensitivity: 2
-  yMinLimit: -75
-  yMaxLimit: 75
   _initTheta: 0
 --- !u!114 &7637000873822231789
 MonoBehaviour:
