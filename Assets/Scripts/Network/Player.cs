@@ -1,11 +1,24 @@
 using Fusion;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+
+public enum PlayerState
+{
+    NotReady,      // 준비 전
+    Ready,         // 준비 완료
+    Standby,       // 게임 시작 카운트다운
+    Playing,       // 게임 중
+    GameOver,      // 게임 종료
+    Spectating     // 관전
+}
 
 public class Player : NetworkBehaviour
 {
     [Networked] public float angle { get; set; }
+    [Networked] public PlayerState state { get; set; }
 
     private NetworkCharacterController _cc;
 
@@ -50,14 +63,14 @@ public class Player : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
-        {
+        {   
+            //인풋 데이터 받아오는 부분
             _networkButtons = data.buttons;
-
             Vector3 moveDirection = data.direction;
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
 
-
+            //애니메이션 동기화
             _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
             _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
 
@@ -65,21 +78,28 @@ public class Player : NetworkBehaviour
             moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
 
             _cc.Move(moveDirection);
-            
 
-            transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
-            cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
-            if (HasInputAuthority)
-            { 
-                cameraDistance += wheel;
-                cameraDistance = Mathf.Clamp(cameraDistance, -2.5f, -1);
-                Vector3 targetPos = Vector3.forward * cameraDistance;
-                thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 15);
-            }
-            angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
+            CameraMovement(mouseDirection, wheel);
+
+            //발사체, 점프 확인
+            CheckAndFireProjectile();
+            CheckAndJump();
         }
-        CheckAndFireProjectile();
-        CheckAndJump();
+    }
+
+    //카메라 움직임
+    private void CameraMovement(Vector3 mouseDirection, float wheel)
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
+        cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
+        angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
+        if (HasInputAuthority)
+        {
+            cameraDistance += wheel;
+            cameraDistance = Mathf.Clamp(cameraDistance, -2.5f, -1);
+            Vector3 targetPos = Vector3.forward * cameraDistance;
+            thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 15);
+        }
     }
 
 
@@ -102,10 +122,17 @@ public class Player : NetworkBehaviour
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
             {
                 fireDelay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
-                if(HasInputAuthority) RPC_SendMessage_Fire();
+                _animator.Animator.SetInteger("Fire", 1);
+                StartCoroutine(AnimationDelay());
                 FirePosition();
             }
         }
+    }
+
+    private IEnumerator AnimationDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _animator.Animator.SetInteger("Fire", 0);
     }
 
     private void FirePosition()                                             //발사체 생성 함수
@@ -119,17 +146,5 @@ public class Player : NetworkBehaviour
                 Object.InputAuthority,
                 (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint.position));
         }
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    public void RPC_SendMessage_Fire()
-    {
-        RPC_RelayMessage_Fire();
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    public void RPC_RelayMessage_Fire()
-    {
-        _animator.Animator.SetTrigger("Fire");
     }
 }
