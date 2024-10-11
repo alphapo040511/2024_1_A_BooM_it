@@ -16,9 +16,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    public event Action<int> onPlayerCount;
+
     private void Awake()
     {
         _inputHandler = gameObject.AddComponent<NetworkInputHandler>();
+        
     }
 
     private void OnGUI()
@@ -88,6 +91,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Debug.Log(lookDirection);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player, (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
+            onPlayerCount(_spawnedCharacters.Count);
         }
         Debug.Log($"플레이어 참가: {player}");
     }
@@ -129,6 +133,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
+            onPlayerCount(_spawnedCharacters.Count);
         }
         Debug.Log($"플레이어 퇴장: {player}");
     }
