@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _angle: 0
+  _state: 0
   _prefabBall:
     RawGuidValue: 0db81970128101e4291d22b59edf1e66
   cameraPivot: {fileID: 6447740115564093217}
@@ -200,7 +201,7 @@ MonoBehaviour:
   ApplyTiming: 2
   SyncSettings: 79
   StateHashes: 000000008a18fce4b9abd9d38527350bd77d4a22
-  TriggerHashes: 00000000f1a6ecf8
+  TriggerHashes: 00000000
 --- !u!1001 &1708455877267102823
 PrefabInstance:
   m_ObjectHideFlags: 0
