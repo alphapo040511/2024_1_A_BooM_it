@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 // NetworkManager 클래스
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public static NetworkManager instance;
+
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private NetworkRunner _runner;
     private NetworkInputHandler _inputHandler;
@@ -16,12 +18,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
-    public event Action<int> onPlayerCount;
+    public event Action<int, int> onPlayerCount;
 
     private void Awake()
     {
         _inputHandler = gameObject.AddComponent<NetworkInputHandler>();
-        
+        instance = this;
     }
 
     private void OnGUI()
@@ -89,9 +91,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Vector3 spawnPosition = GetNextSpawnPosition();
             Vector3 lookDirection = GetLookDirection(spawnPosition);
             Debug.Log(lookDirection);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player, (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
+                            (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y, player.GetHashCode()));
             _spawnedCharacters.Add(player, networkPlayerObject);
-            onPlayerCount(_spawnedCharacters.Count);
+            onPlayerCount(_spawnedCharacters.Count, player.GetHashCode());
         }
         Debug.Log($"플레이어 참가: {player}");
     }
@@ -133,7 +136,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
-            onPlayerCount(_spawnedCharacters.Count);
+            onPlayerCount(_spawnedCharacters.Count, player.GetHashCode());
         }
         Debug.Log($"플레이어 퇴장: {player}");
     }

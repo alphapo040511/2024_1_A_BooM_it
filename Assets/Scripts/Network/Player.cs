@@ -7,8 +7,7 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public enum PlayerState
 {
-    NotReady,      // 준비 전
-    Ready,         // 준비 완료
+    Ready,         // 준비 중
     Standby,       // 게임 시작 카운트다운
     Playing,       // 게임 중
     GameOver,      // 게임 종료
@@ -17,15 +16,17 @@ public enum PlayerState
 
 public class Player : NetworkBehaviour
 {
+    private int playerRef;
     [Networked] public float angle { get; set; }
     [Networked] public PlayerState state { get; set; }
 
     private NetworkCharacterController _cc;
 
+    private TickTimer fireDelay { get; set; }
+    private TickTimer jumpDelay { get; set; }
+    private NetworkButtons _networkButtons { get; set; }
+
     [SerializeField] private NetworkPrefabRef _prefabBall;
-    [SerializeField] private TickTimer fireDelay { get; set; }
-    [SerializeField] private TickTimer jumpDelay { get; set; }
-    [SerializeField] private NetworkButtons _networkButtons { get; set; }
 
     [SerializeField] private Transform cameraPivot;
 
@@ -37,9 +38,10 @@ public class Player : NetworkBehaviour
 
     [Networked] public float initTheta { get; set; }
 
-    public void Init(float angle)
+    public void Init(float angle, int playerRef)
     {
         initTheta = angle;
+        this.playerRef = playerRef;
     }
 
     private void Awake()
@@ -70,25 +72,27 @@ public class Player : NetworkBehaviour
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
 
-            //애니메이션 동기화
-            _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
-            _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
 
-
-            moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
-
-            _cc.Move(moveDirection);
-
+            PlayerMovement(moveDirection);
             CameraMovement(mouseDirection, wheel);
-
-            //발사체, 점프 확인
             CheckAndFireProjectile();
             CheckAndJump();
         }
     }
 
+    //캐릭터 움직임
+    private void PlayerMovement(Vector3 moveDirection)
+    {
+        //애니메이션 동기화
+        _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
+        _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
+
+        moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
+        _cc.Move(moveDirection);
+    }
+
     //카메라 움직임
-    private void CameraMovement(Vector3 mouseDirection, float wheel)
+    private void CameraMovement(Vector2 mouseDirection, float wheel)
     {
         transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
         cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
@@ -103,6 +107,7 @@ public class Player : NetworkBehaviour
     }
 
 
+    //점프 확인
     private void CheckAndJump()
     {
         if (jumpDelay.ExpiredOrNotRunning(Runner))
@@ -115,7 +120,8 @@ public class Player : NetworkBehaviour
         }
     }
 
-    private void CheckAndFireProjectile()                   //체크하고 쏘는 함수
+    //발사 확인
+    private void CheckAndFireProjectile()
     {
         if (fireDelay.ExpiredOrNotRunning(Runner))
         {
