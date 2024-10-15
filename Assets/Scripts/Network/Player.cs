@@ -36,6 +36,7 @@ public class Player : NetworkBehaviour
     private float cameraDistance;
 
     [Networked] public float initTheta { get; set; }
+    [Networked] public int weaponIndex { get; set; }
 
     public void Init(float angle)
     {
@@ -60,6 +61,7 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
+            _prefabBall = GameManager.instance.bombPrefabs[0];
         }
         UpdataState(PlayerState.Playing);       //일단 플레이 중 상태로 설정
     }
@@ -76,7 +78,11 @@ public class Player : NetworkBehaviour
 
 
             PlayerMovement(moveDirection);
-            CameraMovement(mouseDirection, wheel);
+
+            if (mouseDirection != Vector2.zero) CameraMovement(mouseDirection);
+
+            if (wheel != 0) ChangeWeapon(wheel);
+
             CheckAndJump();
             CheckAndFireProjectile();
         }
@@ -109,7 +115,7 @@ public class Player : NetworkBehaviour
     }
 
     //카메라 움직임
-    private void CameraMovement(Vector2 mouseDirection, float wheel)
+    private void CameraMovement(Vector2 mouseDirection)
     {
         if (state != PlayerState.Standby && state != PlayerState.Playing) return;
 
@@ -118,10 +124,35 @@ public class Player : NetworkBehaviour
         angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         if (HasInputAuthority)
         {
-            cameraDistance += wheel;
             cameraDistance = Mathf.Clamp(cameraDistance, -2.5f, -1);
             Vector3 targetPos = Vector3.forward * cameraDistance;
             thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 15);
+        }
+    }
+
+    private void ChangeWeapon(float wheel)
+    {
+        if(HasInputAuthority)
+        {
+            if(wheel > 0)
+            {
+                weaponIndex++;
+            }
+            else
+            {
+                weaponIndex--;
+            }
+
+            if (weaponIndex >= GameManager.instance.bombPrefabs.Count)
+            {
+                weaponIndex = GameManager.instance.bombPrefabs.Count - 1;
+            }
+            else if(weaponIndex < 0)
+            {
+                weaponIndex = 0;
+            }
+
+            _prefabBall = GameManager.instance.bombPrefabs[weaponIndex];
         }
     }
 

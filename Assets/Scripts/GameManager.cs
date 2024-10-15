@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
     public MapData mapData;
+
+    public List<NetworkPrefabRef> bombPrefabs;
 
     private void Awake()
     {

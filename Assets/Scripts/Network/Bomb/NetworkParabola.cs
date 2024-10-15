@@ -4,17 +4,17 @@ using UnityEngine;
 using Fusion;
 using Unity.VisualScripting;
 
-public class NetworkParabola : NetworkBehaviour
+public abstract class NetworkParabola : NetworkBehaviour
 {
     [Networked] private TickTimer life { get; set; }
     [Networked] private Vector3 startPosition{ get; set; }
     [Networked] private Vector3 initialVelocity{ get; set; }
     [Networked] private float currentTime{ get; set; }
 
-    public float speed = 5.0f;
+    public float speed = 8.0f;
     public float gravity = 9.81f;
-    public float adjustedMinAngle = 45f;     //출력 발사 각도 최소 최대값
-    public float adjustedMaxAngle = 80f;
+    private float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
+    private float adjustedMaxAngle = 80f;
 
     private float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
     private float maxAngle = 75;
@@ -71,30 +71,11 @@ public class NetworkParabola : NetworkBehaviour
         NetworkLevelManager.instance.DestroyBlocks(blockData, range);
     }
 
-    public virtual Vector3Int[] ExplosionRange()
-    {
-        //for문 돌려서 배열로 만드는 방식을 사용할 듯
-        return new Vector3Int[13] {
-        new Vector3Int(0,0,0),
-        new Vector3Int(1,0,0),
-        new Vector3Int(2,0,0),
-        new Vector3Int(-1,0,0),
-        new Vector3Int(-2,0,0),
-        new Vector3Int(0,0,1),
-        new Vector3Int(0,0,2),
-        new Vector3Int(0,0,-1),
-        new Vector3Int(0,0,-2),
-        new Vector3Int(1,0,1),
-        new Vector3Int(1,0,-1),
-        new Vector3Int(-1,0,1),
-        new Vector3Int(-1,0,-1)
-        };
-    }
+    public abstract Vector3Int[] ExplosionRange();
 
-    public void KnockBack()       //넉백 기능
-    {
-        //넉백 시킬 반지름만 변경하는 방식으로 사용할 예정
-    }
+
+
+    public abstract void KnockBack();       //넉백 기능 추후에 변경할 듯
 
 
     
