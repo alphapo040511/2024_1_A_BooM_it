@@ -16,7 +16,6 @@ public enum PlayerState
 
 public class Player : NetworkBehaviour
 {
-    private int playerRef;
     [Networked] public float angle { get; set; }
     [Networked] public PlayerState state { get; set; }
 
@@ -38,16 +37,18 @@ public class Player : NetworkBehaviour
 
     [Networked] public float initTheta { get; set; }
 
-    public void Init(float angle, int playerRef)
+    public void Init(float angle)
     {
         initTheta = angle;
-        this.playerRef = playerRef;
+        if(HasInputAuthority)
+        {
+            NetworkLevelManager.instance.battleManager.thisPlayerHash = Runner.LocalPlayer.GetHashCode();
+        }
     }
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;           //마우스 커서를 잠그고 숨긴다.
     }
 
     public override void Spawned()
@@ -60,6 +61,7 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
         }
+        UpdataState(PlayerState.Playing);       //일단 플레이 중 상태로 설정
     }
 
     public override void FixedUpdateNetwork()
@@ -75,14 +77,29 @@ public class Player : NetworkBehaviour
 
             PlayerMovement(moveDirection);
             CameraMovement(mouseDirection, wheel);
-            CheckAndFireProjectile();
             CheckAndJump();
+            CheckAndFireProjectile();
+        }
+    }
+
+    public void UpdataState(PlayerState newState)
+    {
+        state = newState;
+        if(newState == PlayerState.Playing || newState == PlayerState.Spectating) 
+        {
+            Cursor.lockState = CursorLockMode.Locked;           //마우스 커서를 잠그고 숨긴다.
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
     //캐릭터 움직임
     private void PlayerMovement(Vector3 moveDirection)
     {
+        if (state != PlayerState.Playing) return;
+
         //애니메이션 동기화
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
@@ -94,6 +111,8 @@ public class Player : NetworkBehaviour
     //카메라 움직임
     private void CameraMovement(Vector2 mouseDirection, float wheel)
     {
+        if (state != PlayerState.Standby && state != PlayerState.Playing) return;
+
         transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
         cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
         angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
@@ -110,6 +129,8 @@ public class Player : NetworkBehaviour
     //점프 확인
     private void CheckAndJump()
     {
+        if (state != PlayerState.Playing) return;
+
         if (jumpDelay.ExpiredOrNotRunning(Runner))
         {
             if (_networkButtons.IsSet(NetworkInputData.KEYBOARDSPACE))
@@ -123,6 +144,8 @@ public class Player : NetworkBehaviour
     //발사 확인
     private void CheckAndFireProjectile()
     {
+        if (state != PlayerState.Playing) return;
+
         if (fireDelay.ExpiredOrNotRunning(Runner))
         {
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.

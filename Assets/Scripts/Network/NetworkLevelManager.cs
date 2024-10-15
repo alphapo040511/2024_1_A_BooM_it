@@ -20,6 +20,7 @@ public class NetworkLevelManager : NetworkBehaviour
 
     public List<NetworkBlock> DisabledBlocks = new List<NetworkBlock>();
     public NetworkLevelGenerator levelGenerator;
+    public BattleManager battleManager;
 
     public override void FixedUpdateNetwork()
     {

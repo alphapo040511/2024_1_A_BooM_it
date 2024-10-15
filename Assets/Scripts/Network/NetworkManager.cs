@@ -92,7 +92,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Vector3 lookDirection = GetLookDirection(spawnPosition);
             Debug.Log(lookDirection);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
-                            (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y, player.GetHashCode()));
+                            (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
             onPlayerCount(_spawnedCharacters.Count, player.GetHashCode());
         }
