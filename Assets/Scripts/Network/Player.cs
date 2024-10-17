@@ -83,7 +83,10 @@ public class Player : NetworkBehaviour
 
             if (wheel != 0) ChangeWeapon(wheel);
 
-            CheckAndJump();
+            if (Grounded())
+            {
+                CheckAndJump();
+            }
             CheckAndFireProjectile();
         }
     }
@@ -109,7 +112,7 @@ public class Player : NetworkBehaviour
         //애니메이션 동기화
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
-
+        _animator.Animator.SetFloat("Speed",Mathf.Abs(moveDirection.magnitude));
         moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
         _cc.Move(moveDirection);
     }
@@ -167,6 +170,7 @@ public class Player : NetworkBehaviour
             if (_networkButtons.IsSet(NetworkInputData.KEYBOARDSPACE))
             {
                 jumpDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
+                _animator.Animator.SetBool("Jump", true);
                 _cc.Jump();
             }
         }
@@ -187,6 +191,17 @@ public class Player : NetworkBehaviour
                 FirePosition();
             }
         }
+    }
+
+    private bool Grounded()
+    {
+        _animator.Animator.SetBool("Falling", !_cc.Grounded);
+        if(_cc.Grounded)
+        {
+            _animator.Animator.SetBool("Jump", false);
+        }
+
+        return _cc.Grounded;
     }
 
     private IEnumerator AnimationDelay()

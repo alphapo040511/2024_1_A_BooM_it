@@ -21,14 +21,4 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
-
-    public int[] bombIndex = new int[3];
-    public int itemIndex;
-
-    public void SaveItems(int[] bombIndex, int itemIndex)
-    {
-        this.bombIndex = (int[])bombIndex.Clone();
-        this.itemIndex = itemIndex;
-        Debug.Log("Save");
-    }
 }
