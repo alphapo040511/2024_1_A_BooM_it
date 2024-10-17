@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15884718, g: 0.5172879, b: 1.0389385, a: 1}
+  m_IndirectSpecularColor: {r: 0.158974, g: 0.5174101, b: 1.0391095, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -272,6 +272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab:
     RawGuidValue: a37d0fdd024f6a143972943f2354eb16
+  RPCMessenger:
+    RawGuidValue: 307af18338797344bbfeffe1b06acaeb
   _gameSceneName: GameScene
 --- !u!4 &594226955
 Transform:
@@ -459,8 +461,6 @@ MonoBehaviour:
   - RawGuidValue: 3ef8333af28ee804d995422ea4686c63
   - RawGuidValue: c3f360c63a6d16741bdf38b5eb7c14ca
   - RawGuidValue: 35ff380cba735344a87e23c381fd5c13
-  bombIndex: 000000000000000000000000
-  itemIndex: 0
 --- !u!4 &1640635622
 Transform:
   m_ObjectHideFlags: 0

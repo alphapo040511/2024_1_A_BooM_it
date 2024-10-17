@@ -18,7 +18,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
-    public event Action<int, int> onPlayerCount;
+    public event Action<bool, int> onPlayerCount;
 
     private void Awake()
     {
@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
                             (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
-            onPlayerCount(_spawnedCharacters.Count, player.GetHashCode());
+            onPlayerCount(true, player.GetHashCode());
         }
         Debug.Log($"플레이어 참가: {player}");
     }
@@ -136,7 +136,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
-            onPlayerCount(_spawnedCharacters.Count, player.GetHashCode());
+            onPlayerCount(false, player.GetHashCode());
         }
         Debug.Log($"플레이어 퇴장: {player}");
     }

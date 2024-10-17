@@ -32,7 +32,7 @@ public class NetworkLevelManager : NetworkBehaviour
 
     public void DestroyBlocks(Vector3Int hitPosition, Vector3Int[] positions)
     {
-        if (Object.HasStateAuthority)
+        if (Runner.IsServer)
         {
             RPC_RelayMessage_Destroy(hitPosition, positions);
         }
@@ -58,7 +58,7 @@ public class NetworkLevelManager : NetworkBehaviour
 
     public void RegenerationBlocks(Vector3Int position)
     {
-        if (Object.HasStateAuthority)
+        if (Runner.IsServer)
         {
             RPC_RelayMessage_Regeneration(position);
         }

@@ -49,7 +49,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: HorizontalSpeed
     m_Mirror: 0
-  m_BlendParameter: HorizontalSpeed
+  m_BlendParameter: Speed
   m_BlendParameterY: HorizontalSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 0.25
@@ -411,7 +411,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.8604651
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
