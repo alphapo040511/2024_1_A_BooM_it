@@ -46,6 +46,8 @@ namespace Fusion {
     public float maxSpeed      = 2.0f;
     public float rotationSpeed = 15.0f;
 
+        private Vector3 knockbackVel;
+
     Tick                _initial;
     CharacterController _controller;
 
@@ -74,13 +76,19 @@ namespace Fusion {
       }
     }
 
+    public void Knockback(Vector3 force) {
+            var newVel = knockbackVel;
+            newVel += force;
+            knockbackVel = newVel;
+        }
+
     public void Move(Vector3 direction) {
       var deltaTime    = Runner.DeltaTime;
       var previousPos  = transform.position;
       var moveVelocity = Data.Velocity;
 
       direction = direction.normalized;
-
+    
       if (Data.Grounded && moveVelocity.y < 0) {
         moveVelocity.y = 0f;
       }
@@ -96,18 +104,27 @@ namespace Fusion {
       horizontalVel.x = moveVelocity.x;
       horizontalVel.z = moveVelocity.z;
 
-      if (direction == default) {
-        horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
-      } else {
-        horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
-        //플레이어 회전 임시 해제
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
-      }
+        if (direction == default) 
+        {
+            horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
+        }
+        else 
+        {
+            horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
+            //플레이어 회전 임시 해제
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
+        }
 
       moveVelocity.x = horizontalVel.x;
       moveVelocity.z = horizontalVel.z;
 
-      _controller.Move(moveVelocity * deltaTime);
+            if (knockbackVel != default)
+            {
+                moveVelocity += knockbackVel;
+                knockbackVel = Vector3.Lerp(knockbackVel, default, braking * 0.25f * deltaTime);
+            }
+
+        _controller.Move(moveVelocity * deltaTime);
 
       Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
       Data.Grounded = _controller.isGrounded;

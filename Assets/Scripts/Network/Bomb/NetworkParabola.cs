@@ -13,6 +13,9 @@ public abstract class NetworkParabola : NetworkBehaviour
 
     public float speed = 8.0f;
     public float gravity = 9.81f;
+
+    private protected int knockbackDistance = 0;
+
     private float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
     private float adjustedMaxAngle = 80f;
 
@@ -75,7 +78,16 @@ public abstract class NetworkParabola : NetworkBehaviour
 
 
 
-    public abstract void KnockBack();       //넉백 기능 추후에 변경할 듯
+    public virtual void KnockBack()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, knockbackDistance, 1 << 6);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            Player player = hitCollider.GetComponent<Player>();
+            player.Knockback(transform.position);
+        }
+    }
 
 
     

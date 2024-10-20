@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
                             (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
-            onPlayerCount(true, player.GetHashCode());
+            //onPlayerCount(true, player.GetHashCode());
         }
         Debug.Log($"플레이어 참가: {player}");
     }

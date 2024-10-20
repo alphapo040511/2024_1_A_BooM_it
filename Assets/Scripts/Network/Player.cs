@@ -104,6 +104,19 @@ public class Player : NetworkBehaviour
         }
     }
 
+    public void Knockback(Vector3 bombPos)
+    {
+        if (HasStateAuthority)
+        {
+            Vector3 knockback = (transform.position - bombPos).normalized * 10;
+            if (knockback.y < 0)
+            {
+                knockback.y = 0;
+            }
+            _cc.Knockback(knockback);
+        }
+    }
+
     //캐릭터 움직임
     private void PlayerMovement(Vector3 moveDirection)
     {

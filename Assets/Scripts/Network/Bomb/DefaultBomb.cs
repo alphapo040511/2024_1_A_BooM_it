@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class DefaultBomb : NetworkParabola
@@ -38,6 +39,7 @@ public class DefaultBomb : NetworkParabola
 
     public override void KnockBack()
     {
-        
+        base.KnockBack();
     }
+
 }

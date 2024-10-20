@@ -19,9 +19,4 @@ public class CrossBomb : NetworkParabola
 
         return explosionRange;
     }
-
-    public override void KnockBack()
-    {
-
-    }
 }

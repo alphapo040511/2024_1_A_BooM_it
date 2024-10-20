@@ -15,9 +15,4 @@ public class StraightBomb : NetworkParabola
 
         return explosionRange;
     }
-
-    public override void KnockBack()
-    {
-
-    }
 }

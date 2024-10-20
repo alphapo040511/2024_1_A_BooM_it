@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.158974, g: 0.5174101, b: 1.0391095, a: 1}
+  m_IndirectSpecularColor: {r: 0.15889004, g: 0.51735747, b: 1.039093, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -451,6 +451,7 @@ GameObject:
   m_Component:
   - component: {fileID: 941149698}
   - component: {fileID: 941149697}
+  - component: {fileID: 941149699}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -465,18 +466,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941149695}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5eac01a9f79e47f4abbae21905f9327d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RPC: {fileID: 0}
   readyButton: {fileID: 1591229613}
   startButton: {fileID: 1119376923}
   readyText: {fileID: 1551002914}
   networkManager: {fileID: 0}
   gameState: 0
   maxPlayer: 2
+  _players:
+    _items: []
+  _playersHash: 
   thisPlayerHash: 0
 --- !u!4 &941149698
 Transform:
@@ -493,6 +496,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &941149699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941149695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2543561665
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 941149697}
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
