@@ -202,7 +202,7 @@ public class Player : NetworkBehaviour
         {
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
             {
-                Vector3[] point = _prefabBall.Trajectory(angle, FirePoint);
+                Vector3[] point = _prefabBall.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Length;
                 for (int i = 0; i < point.Length; i++)
                 {
@@ -254,7 +254,7 @@ public class Player : NetworkBehaviour
                 FirePoint.position,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,
-                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint));
+                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint.position, cameraPivot.rotation));
         }
     }
 }

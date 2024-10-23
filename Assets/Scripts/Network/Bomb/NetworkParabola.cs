@@ -23,14 +23,14 @@ public abstract class NetworkParabola : NetworkBehaviour
     private const float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
     private const float maxAngle = 75;
 
-    public void Init(float angle, Transform firePoint)
+    public void Init(float angle, Vector3 firePoint, Quaternion cameraRotation)
     {
         life = TickTimer.CreateFromSeconds(Runner, 15.0f);      //혹시 모를 상황에 대비해서 시간 체크
         float newAngle = (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
-        startPosition = firePoint.position;
+        startPosition = firePoint;
         transform.position = startPosition;
-        transform.rotation = firePoint.rotation;
-        initialVelocity = VelocityCalculate(newAngle, firePoint.position);
+        transform.rotation = cameraRotation;
+        initialVelocity = VelocityCalculate(newAngle, firePoint);
     }
 
     private Vector3 VelocityCalculate(float angle, Vector3 position, Transform firePoint = null)
@@ -103,9 +103,10 @@ public abstract class NetworkParabola : NetworkBehaviour
         }
     }
 
-    public Vector3[] Trajectory(float angle, Transform firePoint)
+    public Vector3[] Trajectory(float angle, Transform firePoint, Transform cameraDirection)
     {
-        Vector3 vel = VelocityCalculate(angle, firePoint.position, firePoint);
+        float newAngle = (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
+        Vector3 vel = VelocityCalculate(newAngle, firePoint.position, cameraDirection);
 
         Vector3[] point = new Vector3[10];
         for (int i = 0; i < 10; i++)
