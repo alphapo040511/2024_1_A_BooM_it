@@ -115,7 +115,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _angle: 0
   _state: 0
-  _prefabBall: {fileID: 0}
+  parabola: {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63,
+    type: 3}
+  ballPre:
+    RawGuidValue: 3ef8333af28ee804d995422ea4686c63
   cameraPivot: {fileID: 6447740115564093217}
   _animator: {fileID: 8637261848777380372}
   FirePoint: {fileID: 7854653979831548048}
