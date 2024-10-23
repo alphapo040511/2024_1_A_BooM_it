@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public abstract class NetworkParabola : NetworkBehaviour
 {
@@ -14,23 +15,36 @@ public abstract class NetworkParabola : NetworkBehaviour
     public float speed = 8.0f;
     public float gravity = 9.81f;
 
-    private protected int knockbackDistance = 0;
+    private protected int knockbackDistance = 3;
 
-    private float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
-    private float adjustedMaxAngle = 80f;
+    private const float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
+    private const float adjustedMaxAngle = 80f;
 
-    private float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
-    private float maxAngle = 75;
+    private const float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
+    private const float maxAngle = 75;
 
-    public void Init(float angle, Vector3 position)
+    public void Init(float angle, Transform firePoint)
     {
         life = TickTimer.CreateFromSeconds(Runner, 15.0f);      //혹시 모를 상황에 대비해서 시간 체크
         float newAngle = (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
-        startPosition = position;
+        startPosition = firePoint.position;
         transform.position = startPosition;
-        float initialX = speed * Mathf.Cos(newAngle * Mathf.Deg2Rad);
-        float initialY = speed * Mathf.Sin(newAngle * Mathf.Deg2Rad);
-        initialVelocity = transform.forward * initialX + transform.up * initialY;
+        transform.rotation = firePoint.rotation;
+        initialVelocity = VelocityCalculate(newAngle, firePoint.position);
+    }
+
+    private Vector3 VelocityCalculate(float angle, Vector3 position, Transform firePoint = null)
+    {
+        float initialX = speed * Mathf.Cos(angle * Mathf.Deg2Rad);
+        float initialY = speed * Mathf.Sin(angle * Mathf.Deg2Rad);
+        if(firePoint != null)
+        {
+            return firePoint.forward * initialX + firePoint.up * initialY;
+        }
+        else
+        {
+            return transform.forward * initialX + transform.up * initialY;
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -89,6 +103,21 @@ public abstract class NetworkParabola : NetworkBehaviour
         }
     }
 
+    public Vector3[] Trajectory(float angle, Transform firePoint)
+    {
+        Vector3 vel = VelocityCalculate(angle, firePoint.position, firePoint);
 
-    
+        Vector3[] point = new Vector3[10];
+        for (int i = 0; i < 10; i++)
+        {
+            float targetTime = i * 0.2f;
+            Vector3 currentPosition = firePoint.position + vel * targetTime;
+            currentPosition.y -= 0.5f * gravity * targetTime * targetTime;
+            point[i] = currentPosition;
+        }
+
+        return point;
+    }
+
+
 }

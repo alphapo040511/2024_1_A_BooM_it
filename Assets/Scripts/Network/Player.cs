@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
@@ -25,15 +26,18 @@ public class Player : NetworkBehaviour
     private TickTimer jumpDelay { get; set; }
     private NetworkButtons _networkButtons { get; set; }
 
-    [SerializeField] private NetworkPrefabRef _prefabBall;
+    [SerializeField] private NetworkParabola _prefabBall;
 
     [SerializeField] private Transform cameraPivot;
 
     public NetworkMecanimAnimator _animator;
     public Transform FirePoint;
+    public LineRenderer lineRenderer;
 
     private GameObject thirdPersonCamera;
     private float cameraDistance;
+
+
 
     [Networked] public float initTheta { get; set; }
     [Networked] public int weaponIndex { get; set; }
@@ -194,6 +198,24 @@ public class Player : NetworkBehaviour
     {
         if (state != PlayerState.Playing) return;
 
+        if (HasInputAuthority)
+        {
+            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
+            {
+                Vector3[] point = _prefabBall.Trajectory(angle, FirePoint);
+                lineRenderer.positionCount = point.Length;
+                for (int i = 0; i < point.Length; i++)
+                {
+                    lineRenderer.SetPosition(i, point[i]);
+                }
+                lineRenderer.enabled = true;
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+            }
+        }
+
         if (fireDelay.ExpiredOrNotRunning(Runner))
         {
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
@@ -232,7 +254,7 @@ public class Player : NetworkBehaviour
                 FirePoint.position,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,
-                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint.position));
+                (runner, o) => o.GetComponent<NetworkParabola>().Init(angle, FirePoint));
         }
     }
 }

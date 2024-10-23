@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public MapData mapData;
 
-    public List<NetworkPrefabRef> bombPrefabs;
+    public List<NetworkParabola> bombPrefabs;
 
     private void Awake()
     {
