@@ -1,10 +1,6 @@
 using Fusion;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public enum PlayerState
 {
@@ -26,7 +22,8 @@ public class Player : NetworkBehaviour
     private TickTimer jumpDelay { get; set; }
     private NetworkButtons _networkButtons { get; set; }
 
-    [SerializeField] private NetworkParabola _prefabBall;
+    [SerializeField] private NetworkParabola parabola;
+    [SerializeField] private NetworkPrefabRef ballPre;
 
     [SerializeField] private Transform cameraPivot;
 
@@ -65,7 +62,8 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
-            _prefabBall = GameManager.instance.bombPrefabs[0];
+            ballPre = GameManager.instance.bombPrefabs[0];
+            parabola = GameManager.instance.parabolas[0];
         }
         UpdataState(PlayerState.Playing);       //일단 플레이 중 상태로 설정
     }
@@ -91,8 +89,8 @@ public class Player : NetworkBehaviour
             {
                 CheckAndJump();
             }
-            CheckAndFireProjectile();
         }
+        CheckAndFireProjectile();
     }
 
     public void UpdataState(PlayerState newState)
@@ -172,7 +170,8 @@ public class Player : NetworkBehaviour
                 weaponIndex = 0;
             }
 
-            _prefabBall = GameManager.instance.bombPrefabs[weaponIndex];
+            ballPre = GameManager.instance.bombPrefabs[weaponIndex];
+            parabola = GameManager.instance.parabolas[weaponIndex];
         }
     }
 
@@ -198,11 +197,23 @@ public class Player : NetworkBehaviour
     {
         if (state != PlayerState.Playing) return;
 
+        if (fireDelay.ExpiredOrNotRunning(Runner))
+        {
+            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
+            {
+                fireDelay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
+                _animator.Animator.SetInteger("Fire", 1);
+                StartCoroutine(AnimationDelay());
+                FirePosition();
+            }
+        }
+
+
         if (HasInputAuthority)
         {
             if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
             {
-                Vector3[] point = _prefabBall.Trajectory(angle, FirePoint, cameraPivot);
+                Vector3[] point = parabola.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Length;
                 for (int i = 0; i < point.Length; i++)
                 {
@@ -213,17 +224,6 @@ public class Player : NetworkBehaviour
             else
             {
                 lineRenderer.enabled = false;
-            }
-        }
-
-        if (fireDelay.ExpiredOrNotRunning(Runner))
-        {
-            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
-            {
-                fireDelay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
-                _animator.Animator.SetInteger("Fire", 1);
-                StartCoroutine(AnimationDelay());
-                FirePosition();
             }
         }
     }
@@ -250,7 +250,7 @@ public class Player : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             Vector3 forward = transform.forward;
-            Runner.Spawn(_prefabBall,
+            Runner.Spawn(ballPre,
                 FirePoint.position,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15874797, g: 0.5172019, b: 1.038938, a: 1}
+  m_IndirectSpecularColor: {r: 0.1588333, g: 0.5175132, b: 1.0392519, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -455,10 +455,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapData: {fileID: 11400000, guid: dccbd14b60fd01245b971ca0de49e2b5, type: 2}
-  bombPrefabs:
+  parabolas:
   - {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63, type: 3}
   - {fileID: 2744972758766036483, guid: 35ff380cba735344a87e23c381fd5c13, type: 3}
   - {fileID: 83144185214006769, guid: c3f360c63a6d16741bdf38b5eb7c14ca, type: 3}
+  bombPrefabs:
+  - RawGuidValue: 3ef8333af28ee804d995422ea4686c63
+  - RawGuidValue: 35ff380cba735344a87e23c381fd5c13
+  - RawGuidValue: c3f360c63a6d16741bdf38b5eb7c14ca
 --- !u!4 &1640635622
 Transform:
   m_ObjectHideFlags: 0
