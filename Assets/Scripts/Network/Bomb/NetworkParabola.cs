@@ -17,16 +17,15 @@ public abstract class NetworkParabola : NetworkBehaviour
 
     private protected int knockbackDistance = 3;
 
-    private const float adjustedMinAngle = -30f;     //출력 발사 각도 최소 최대값
-    private const float adjustedMaxAngle = 80f;
+    private const float adjustedMinAngle = -40f;     //출력 발사 각도 최소 최대값
+    private const float adjustedMaxAngle = 80;
 
     private const float minAngle = -75;       //입력 발사 각도 값, 밑의 공식에서 알아보기 쉽도록 적어둠
     private const float maxAngle = 75;
 
     public void Init(float angle, Vector3 firePoint, Quaternion cameraRotation)
     {
-        life = TickTimer.CreateFromSeconds(Runner, 15.0f);      //혹시 모를 상황에 대비해서 시간 체크
-        float newAngle = (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
+        float newAngle = ChangeAngle(angle);
         startPosition = firePoint;
         transform.position = startPosition;
         transform.rotation = cameraRotation;
@@ -39,17 +38,23 @@ public abstract class NetworkParabola : NetworkBehaviour
         float initialY = speed * Mathf.Sin(angle * Mathf.Deg2Rad);
         if(firePoint != null)
         {
-            return firePoint.forward * initialX + firePoint.up * initialY;
+            Vector3 forward = firePoint.forward;
+            forward.y = 0;
+            forward.Normalize();
+            return forward * initialX + Vector3.up * initialY;
         }
         else
         {
-            return transform.forward * initialX + transform.up * initialY;
+            Vector3 forward = transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            return forward * initialX + Vector3.up * initialY;
         }
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (life.Expired(Runner) || transform.position.y < -3)
+        if (transform.position.y < -3)
         {
             Runner.Despawn(Object);
         }
@@ -105,7 +110,7 @@ public abstract class NetworkParabola : NetworkBehaviour
 
     public Vector3[] Trajectory(float angle, Transform firePoint, Transform cameraDirection)
     {
-        float newAngle = (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
+        float newAngle = ChangeAngle(angle);
         Vector3 vel = VelocityCalculate(newAngle, firePoint.position, cameraDirection);
 
         Vector3[] point = new Vector3[10];
@@ -118,6 +123,11 @@ public abstract class NetworkParabola : NetworkBehaviour
         }
 
         return point;
+    }
+
+    private float ChangeAngle(float angle)
+    {
+        return (((angle - minAngle) * (adjustedMaxAngle - adjustedMinAngle)) / (maxAngle - minAngle)) + adjustedMinAngle;
     }
 
 
