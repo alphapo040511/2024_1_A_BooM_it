@@ -128,7 +128,7 @@ public class Player : NetworkBehaviour
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
         _animator.Animator.SetFloat("Speed",Mathf.Abs(moveDirection.magnitude));
-        moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z;
+        moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z * 0.5f;
         _cc.Move(moveDirection);
     }
 
