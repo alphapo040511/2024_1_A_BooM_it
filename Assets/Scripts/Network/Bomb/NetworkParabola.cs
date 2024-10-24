@@ -90,7 +90,7 @@ public abstract class NetworkParabola : NetworkBehaviour
     public virtual void Explosion(Vector3Int blockData)       //Æø¹ß (ºí·° ÆÄ±«) ±â´É
     {
         Vector3Int[] range = ExplosionRange();
-        NetworkLevelManager.instance.DestroyBlocks(blockData, range);
+        BattleManager.Instance.levelManager.DestroyBlocks(blockData, range);
     }
 
     public abstract Vector3Int[] ExplosionRange();

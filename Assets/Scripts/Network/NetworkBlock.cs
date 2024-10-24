@@ -52,7 +52,10 @@ public class NetworkBlock : MonoBehaviour
         blockCollider.enabled = true;
         meshRenderer.enabled = true;
         IsDestroyed = false;
-        levelManager.DisabledBlocks.Remove(this);
+        if (levelManager.DisabledBlocks.Contains(this))
+        {
+            levelManager.DisabledBlocks.Remove(this);
+        }
     }
 
     public void Initialized(Vector3Int Pos, bool isBool, NetworkLevelManager levelManager)

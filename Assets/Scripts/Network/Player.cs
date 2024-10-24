@@ -42,10 +42,6 @@ public class Player : NetworkBehaviour
     public void Init(float angle)
     {
         initTheta = angle;
-        if(HasInputAuthority)
-        {
-            NetworkLevelManager.instance.battleManager.thisPlayerHash = Runner.LocalPlayer.GetHashCode();
-        }
     }
 
     private void Awake()
@@ -65,7 +61,6 @@ public class Player : NetworkBehaviour
             ballPre = GameManager.instance.bombPrefabs[0];
             parabola = GameManager.instance.parabolas[0];
         }
-        UpdataState(PlayerState.Playing);       //일단 플레이 중 상태로 설정
     }
 
     public override void FixedUpdateNetwork()

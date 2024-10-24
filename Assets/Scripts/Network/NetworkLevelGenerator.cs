@@ -7,21 +7,33 @@ public class NetworkLevelGenerator : MonoBehaviour
 {
     public MapData mapData;
 
-    public NetworkLevelManager levelManager;
-
     public Dictionary<Vector3Int, NetworkBlock> blockDictionary = new Dictionary<Vector3Int, NetworkBlock>();
 
+    private bool isFirstGenerate = false;
 
     void Start()
     {
+        //추후 인덱스만 전송 받아서 불러오는걸로 변경
         mapData = GameManager.instance.mapData;
         mapData.LoadFormJson();
-        GenerateInitialBlocks(); // 초기 블록 생성
     }
 
 
+    //맵 처음 로딩
+    public void MapLoading()
+    {
+        if (!isFirstGenerate)
+        {
+            StartCoroutine(GenerateInitialBlocks());
+        }
+        else
+        {
+            StartCoroutine(MapRespawn());
+        }
+    }
 
-    void GenerateInitialBlocks()
+
+    private IEnumerator GenerateInitialBlocks()
     {
         // 3중 for문으로 맵 크기에 해당하는 그리드에 블록 생성
         for (int x = 0; x < mapData.BlockArr.GetLength(0); x++)
@@ -38,8 +50,26 @@ public class NetworkLevelGenerator : MonoBehaviour
                     }
                 }
             }
+            yield return null;
         }
         UpdateSurfaceBlocks(); // 모든 블록 생성 후 표면 블록만 활성화
+        isFirstGenerate = true;
+        MapLoadComplete();
+    }
+
+    private IEnumerator MapRespawn()
+    {
+        foreach (var block in blockDictionary.Values)
+        {
+            block.Respawn();
+            yield return null;
+        }
+        MapLoadComplete();
+    }
+
+    private void MapLoadComplete()
+    {
+        BattleManager.Instance.MapLoadDone();
     }
 
     //해당 블럭이 가장 아래 있는 블럭인지 확인
@@ -64,7 +94,7 @@ public class NetworkLevelGenerator : MonoBehaviour
     {
         GameObject blockInstance = Instantiate(SelectBlockPrefab(blockValue), position, Quaternion.identity, transform);
         NetworkBlock data = blockInstance.GetComponent<NetworkBlock>();
-        data.Initialized(position, isBool, levelManager);
+        data.Initialized(position, isBool, BattleManager.Instance.levelManager);
         blockDictionary[position] = data;
         blockInstance.SetActive(false);
     }

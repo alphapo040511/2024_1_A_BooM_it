@@ -9,21 +9,47 @@ using UnityEngine.SceneManagement;
 // NetworkManager 클래스
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public static NetworkManager instance;
 
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private NetworkRunner _runner;
     private NetworkInputHandler _inputHandler;
     private string _roomName = "TestRoom"; // 기본 방 이름
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     public event Action<bool, int> onPlayerCount;
 
+    private static NetworkManager _instance;
+    public static NetworkManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<NetworkManager>();
+                if (_instance == null)
+                {
+                    GameObject newManager = new GameObject("NetworkManager");
+                    _instance = newManager.AddComponent<NetworkManager>();
+                }
+            }
+            return _instance;
+        }
+    }
+
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);  // 씬 전환 시에도 NetworkManager가 유지되도록 함
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);  // 기존 인스턴스가 있으면 새로 생성된 인스턴스를 파괴
+        }
+
         _inputHandler = gameObject.AddComponent<NetworkInputHandler>();
-        instance = this;
     }
 
     private void OnGUI()
@@ -90,11 +116,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             // 플레이어 스폰 위치 계산을 위한 새로운 로직
             Vector3 spawnPosition = GetNextSpawnPosition();
             Vector3 lookDirection = GetLookDirection(spawnPosition);
-            Debug.Log(lookDirection);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
                             (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
             _spawnedCharacters.Add(player, networkPlayerObject);
-            //onPlayerCount(true, player.GetHashCode());
+            BattleManager.Instance?.PlayerJoin(player);
         }
         Debug.Log($"플레이어 참가: {player}");
     }
@@ -137,6 +162,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
             onPlayerCount(false, player.GetHashCode());
+            BattleManager.Instance?.PlayerLeft(player);
         }
         Debug.Log($"플레이어 퇴장: {player}");
     }

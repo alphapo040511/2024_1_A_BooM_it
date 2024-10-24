@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15889004, g: 0.51735747, b: 1.039093, a: 1}
+  m_IndirectSpecularColor: {r: 0.15898262, g: 0.5174079, b: 1.0390112, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -471,16 +471,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eac01a9f79e47f4abbae21905f9327d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelManager: {fileID: 511824254}
+  levelGenerator: {fileID: 1341239139}
   readyButton: {fileID: 1591229613}
   startButton: {fileID: 1119376923}
   readyText: {fileID: 1551002914}
-  networkManager: {fileID: 0}
   gameState: 0
   maxPlayer: 2
   _players:
     _items: []
-  _playersHash: 
-  thisPlayerHash: 0
 --- !u!4 &941149698
 Transform:
   m_ObjectHideFlags: 0

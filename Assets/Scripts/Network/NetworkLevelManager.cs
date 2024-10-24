@@ -6,18 +6,6 @@ using UnityEngine;
 
 public class NetworkLevelManager : NetworkBehaviour
 {
-    public static NetworkLevelManager instance;
-    
-     private void Awake()
-    {
-        if (instance != null)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        instance = this;
-    }
-
     public List<NetworkBlock> DisabledBlocks = new List<NetworkBlock>();
     public NetworkLevelGenerator levelGenerator;
     public BattleManager battleManager;
