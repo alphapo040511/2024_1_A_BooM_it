@@ -115,9 +115,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             // 플레이어 스폰 위치 계산을 위한 새로운 로직
             Vector3 spawnPosition = GetNextSpawnPosition();
-            Vector3 lookDirection = GetLookDirection(spawnPosition);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.LookRotation(lookDirection), player,
-                            (runner, o) => o.GetComponent<Player>().Init(Quaternion.LookRotation(lookDirection).eulerAngles.y));
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player,
+                            (runner, o) => o.GetComponent<Player>().Init());
             _spawnedCharacters.Add(player, networkPlayerObject);
             BattleManager.Instance?.PlayerJoin(player);
         }
@@ -127,31 +126,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     private Vector3 GetNextSpawnPosition()
     { 
         int playerCount = _spawnedCharacters.Count;
-        GameManager.instance.mapData.LoadFormJson();
-        Vector3Int pos = GameManager.instance.mapData.SpawnPosition[playerCount];
-        pos.y = GameManager.instance.mapData.BlockArr.GetLength(1);
-        for (int y = GameManager.instance.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
-        {
-            if (GameManager.instance.mapData.BlockArr[pos.x, y, pos.z] == 0)
-            {
-                pos.y = y;
-            }
-            else
-            {
-                break;
-            }
-        }
-        return pos;
-    }
-
-    private Vector3 GetLookDirection(Vector3 spawnPosition)
-    {
-        int playerCount = _spawnedCharacters.Count;
-        GameManager.instance.mapData.LoadFormJson();
-        float x = GameManager.instance.mapData.BlockArr.GetLength(0) / 2;
-        float z = GameManager.instance.mapData.BlockArr.GetLength(2) / 2;
-        Vector3 target = new Vector3(x, spawnPosition.y, z);
-        return (target - spawnPosition).normalized;
+        return new Vector3(-playerCount * 5 - 5, 0, -10);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

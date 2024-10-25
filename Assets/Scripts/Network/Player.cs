@@ -5,9 +5,10 @@ using UnityEngine;
 public enum PlayerState
 {
     Ready,         // 준비 중
+    Loading,       // 로딩 중
     Standby,       // 게임 시작 카운트다운
     Playing,       // 게임 중
-    GameOver,      // 게임 종료
+    Die,           // 게임 종료
     Spectating     // 관전
 }
 
@@ -34,26 +35,26 @@ public class Player : NetworkBehaviour
     private GameObject thirdPersonCamera;
     private float cameraDistance;
 
-
-
-    [Networked] public float initTheta { get; set; }
     [Networked] public int weaponIndex { get; set; }
-
-    public void Init(float angle)
-    {
-        initTheta = angle;
-    }
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
     }
 
+    public void Init()
+    {
+        
+    }
+
     public override void Spawned()
     {
         if (HasInputAuthority)
         {
-            thirdPersonCamera = Camera.main.gameObject;
+            if (thirdPersonCamera == null)
+            {
+                thirdPersonCamera = Camera.main.gameObject;
+            }
             thirdPersonCamera.transform.SetParent(cameraPivot.transform);
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
@@ -66,13 +67,18 @@ public class Player : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
-        {   
+        {
+            if(transform.position.y < -3 && state == PlayerState.Playing)
+            {
+                UpdataState(PlayerState.Die);
+                BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
+            }
+
             //인풋 데이터 받아오는 부분
             _networkButtons = data.buttons;
             Vector3 moveDirection = data.direction;
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
-
 
             PlayerMovement(moveDirection);
 
@@ -84,14 +90,25 @@ public class Player : NetworkBehaviour
             {
                 CheckAndJump();
             }
+            CheckAndFireProjectile();
         }
-        CheckAndFireProjectile();
+    }
+
+    public void Respawn(Vector3 posision, Quaternion angle)
+    {
+        transform.position = posision;
+        transform.rotation = angle;
+        thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
+        thirdPersonCamera.transform.localRotation = default;
+        cameraDistance = thirdPersonCamera.transform.localPosition.z;
+        ballPre = GameManager.instance.bombPrefabs[0];
+        parabola = GameManager.instance.parabolas[0];
     }
 
     public void UpdataState(PlayerState newState)
     {
         state = newState;
-        if(newState == PlayerState.Playing || newState == PlayerState.Spectating) 
+        if((int)newState >= 2) 
         {
             Cursor.lockState = CursorLockMode.Locked;           //마우스 커서를 잠그고 숨긴다.
         }
@@ -132,7 +149,7 @@ public class Player : NetworkBehaviour
     {
         if (state != PlayerState.Standby && state != PlayerState.Playing) return;
 
-        transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y + initTheta, 0f));
+        transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y, 0f));
         cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
         angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         if (HasInputAuthority)
