@@ -4,6 +4,7 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 
 // NetworkManager 클래스
@@ -11,13 +12,17 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
 
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    private NetworkRunner _runner;
+    public NetworkRunner _runner;
     private NetworkInputHandler _inputHandler;
     private string _roomName = "TestRoom"; // 기본 방 이름
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
     public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    public Action<List<SessionInfo>> updateSessions;
+
     public event Action<bool, int> onPlayerCount;
+
+    private int playersCount = 2;
 
     private static NetworkManager _instance;
     public static NetworkManager Instance
@@ -52,6 +57,22 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         _inputHandler = gameObject.AddComponent<NetworkInputHandler>();
     }
 
+    public NetworkRunner NewRunner()
+    {
+        _runner = gameObject.AddComponent<NetworkRunner>();
+        _runner.ProvideInput = true;
+        return _runner;
+    }
+
+    public async Task JoinLobby()
+    {
+        var result = await _runner.JoinSessionLobby(SessionLobby.ClientServer);
+        if(result.Ok)
+        {
+            Debug.Log("로비에 입장");
+        }
+    }
+
     private void OnGUI()
     {
         if (_runner == null)
@@ -64,23 +85,19 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             // 호스트 버튼
             if (GUILayout.Button("호스트"))
             {
-                StartGame(GameMode.Host);
+                StartGame(GameMode.Host,"");
             }
             // 참가 버튼
             if (GUILayout.Button("참가"))
             {
-                StartGame(GameMode.Client);
+                StartGame(GameMode.Client,"");
             }
             GUILayout.EndArea();
         }
     }
 
-    async void StartGame(GameMode mode)
+    public async void StartGame(GameMode mode, string roomName)
     {
-        // Fusion 러너를 생성하고 사용자 입력을 제공할 것임을 알림
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
-
         // 게임 씬의 빌드 인덱스 찾기
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_gameSceneName);
         if (sceneIndex == -1)
@@ -103,8 +120,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = _roomName, // 사용자가 입력한 방 이름 사용
+            SessionName = roomName, // 사용자가 입력한 방 이름 사용
             Scene = gameScene,
+            PlayerCount = playersCount,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
     }
@@ -166,7 +184,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log($"연결 실패: {reason}");
     }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    {
+        updateSessions(sessionList);
+    }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
