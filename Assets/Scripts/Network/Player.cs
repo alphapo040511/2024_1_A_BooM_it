@@ -94,15 +94,9 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void Respawn(Vector3 posision, Quaternion angle)
+    public void Respawn(Vector3 position, Quaternion angle)
     {
-        transform.position = posision;
-        transform.rotation = angle;
-        thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
-        thirdPersonCamera.transform.localRotation = default;
-        cameraDistance = thirdPersonCamera.transform.localPosition.z;
-        ballPre = GameManager.instance.bombPrefabs[0];
-        parabola = GameManager.instance.parabolas[0];
+        _cc.Teleport(position, angle);
     }
 
     public void UpdataState(PlayerState newState)

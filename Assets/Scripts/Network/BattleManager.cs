@@ -156,9 +156,9 @@ public class BattleManager : NetworkBehaviour
             case GameState.MapLoading:                                          //맵 로딩중 일때
                 if (count >= players.Count)                                     //모든 플레이어가 로딩 완료 했다면
                 {
+                    PlayerPositionChange();
                     gameState = GameState.Countdown;                            //카운트다운 중으로 상태 변경
                     UpdateAllPlayersState(PlayerState.Standby);                 //모든 플레이어의 상태를 대기중(카운트다운)으로 변경
-                    PlayerSpawn();
                     StartCoroutine(Countdown());
                     AllPlayerValueReset();                                      //모든 플레이어의 Value 값 false로 변경
                 }
@@ -282,18 +282,15 @@ public class BattleManager : NetworkBehaviour
         }
     }
 
-    public void PlayerSpawn()
+    public void PlayerPositionChange()
     {
         int count = 0;
         foreach (var kvp in players)
         {
-            if (kvp.Key == Runner.LocalPlayer)
-            {
-                Vector3 position = GetNextSpawnPosition(count);
-                Quaternion lookDir = GetLookDirection(position);
-                Player player = GetPlayerObject(kvp.Key);
-                player.Respawn(position, lookDir);
-            }
+            Vector3 position = GetNextSpawnPosition(count);
+            Quaternion lookDir = GetLookDirection(position);
+            Player player = GetPlayerObject(kvp.Key);
+            player.Respawn(position, lookDir);
             count++;
         }
     }
