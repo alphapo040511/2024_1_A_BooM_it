@@ -124,7 +124,10 @@ public class BattleManager : NetworkBehaviour
     public void MapLoadDone()
     {
         nowLoading = false;
-        RPC_PlayerValueChange(Runner.LocalPlayer);
+        if (HasInputAuthority)
+        {
+            RPC_PlayerValueChange(Runner.LocalPlayer);
+        }
     }
 
 
@@ -186,6 +189,7 @@ public class BattleManager : NetworkBehaviour
                             }
                             else
                             {
+                                Debug.Log("게임 재시작");
                                 RPC_GameStart();                                            //다시 게임 시작
                             }
                         }

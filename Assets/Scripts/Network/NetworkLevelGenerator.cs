@@ -62,9 +62,9 @@ public class NetworkLevelGenerator : MonoBehaviour
         foreach (var block in blockDictionary.Values)
         {
             block.Respawn();
-            yield return null;
         }
         MapLoadComplete();
+        yield break;
     }
 
     private void MapLoadComplete()

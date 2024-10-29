@@ -14,15 +14,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     public NetworkRunner _runner;
     private NetworkInputHandler _inputHandler;
-    private string _roomName = "TestRoom"; // 기본 방 이름
     [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
     public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     public Action<List<SessionInfo>> updateSessions;
 
     public event Action<bool, int> onPlayerCount;
-
-    private int playersCount = 2;
 
     private static NetworkManager _instance;
     public static NetworkManager Instance
@@ -73,30 +70,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    private void OnGUI()
-    {
-        if (_runner == null)
-        {
-            // 방 이름 입력 필드
-            GUILayout.BeginArea(new Rect(10, 10, 300, 300));
-            GUILayout.Label("방 번호:");
-            _roomName = GUILayout.TextField(_roomName);
-
-            // 호스트 버튼
-            if (GUILayout.Button("호스트"))
-            {
-                StartGame(GameMode.Host,"");
-            }
-            // 참가 버튼
-            if (GUILayout.Button("참가"))
-            {
-                StartGame(GameMode.Client,"");
-            }
-            GUILayout.EndArea();
-        }
-    }
-
-    public async void StartGame(GameMode mode, string roomName)
+    public async void StartGame(GameMode mode, string roomName, int playerCount)
     {
         // 게임 씬의 빌드 인덱스 찾기
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_gameSceneName);
@@ -122,7 +96,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = mode,
             SessionName = roomName, // 사용자가 입력한 방 이름 사용
             Scene = gameScene,
-            PlayerCount = playersCount,
+            PlayerCount = playerCount,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
     }

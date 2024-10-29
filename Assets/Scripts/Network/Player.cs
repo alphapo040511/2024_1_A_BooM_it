@@ -66,14 +66,17 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData data))
+        if (transform.position.y < -3 && state == PlayerState.Playing)
         {
-            if (transform.position.y < -3 && state == PlayerState.Playing)
+            UpdataState(PlayerState.Die);
+            if (HasInputAuthority)
             {
-                UpdataState(PlayerState.Die);
                 BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
             }
+        }
 
+        if (GetInput(out NetworkInputData data))
+        {
             //인풋 데이터 받아오는 부분
             _networkButtons = data.buttons;
             Vector3 moveDirection = data.direction;
@@ -102,7 +105,10 @@ public class Player : NetworkBehaviour
     public void UpdataState(PlayerState newState)
     {
         state = newState;
-        RPC_ChangeMouseMode((int)newState >= 2);
+        if (HasStateAuthority)
+        {
+            RPC_ChangeMouseMode((int)newState >= 2);
+        }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
