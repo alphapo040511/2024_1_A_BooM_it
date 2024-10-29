@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_0"
+      name: MainMenuButtons_0
       rect:
         serializedVersion: 2
         x: 280
@@ -124,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5c2dd4015ff2354085a84ca2c62d874
-      internalID: -1769936368
+      spriteID: 983a3d36b8c1ccb4082b450a36ee4d7d
+      internalID: -1501621683
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_1"
+      name: MainMenuButtons_1
       rect:
         serializedVersion: 2
         x: 628
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7a6a008049359245b0bc0d9b32fdf6a
-      internalID: 266731182
+      spriteID: 351e38f144c52d8499b143b213ecd1c5
+      internalID: 170115271
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_2"
+      name: MainMenuButtons_2
       rect:
         serializedVersion: 2
         x: 190
@@ -166,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa9b955c846549741bd1c1e5718b6921
-      internalID: -624790112
+      spriteID: 662f8a902179adb49a20f64bf9c98399
+      internalID: -2121419394
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_3"
+      name: MainMenuButtons_3
       rect:
         serializedVersion: 2
         x: 146
@@ -187,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0615e0f7ef06f0544ab7a62d7a46584e
-      internalID: -299220963
+      spriteID: a4cb9363d6302a245bfc6ff74c40858d
+      internalID: -714784230
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_4"
+      name: MainMenuButtons_4
       rect:
         serializedVersion: 2
         x: 101
@@ -208,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2a336501daaaf14b909a78034b7477f
-      internalID: 1706463657
+      spriteID: d4906c389b54b3d43928ad96e1b708f0
+      internalID: -1016025415
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBC84\uD2BC_5"
+      name: MainMenuButtons_5
       rect:
         serializedVersion: 2
         x: 541
@@ -229,8 +229,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35c7346d9a8e6714c812f333ce1bd895
-      internalID: -1189746834
+      spriteID: fe6a2e8fd9644194d97633fff6a70a20
+      internalID: -1952887664
       vertices: []
       indices: 
       edges: []
@@ -246,12 +246,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\uBC84\uD2BC_0": -1769936368
-      "\uBC84\uD2BC_1": 266731182
-      "\uBC84\uD2BC_2": -624790112
-      "\uBC84\uD2BC_3": -299220963
-      "\uBC84\uD2BC_4": 1706463657
-      "\uBC84\uD2BC_5": -1189746834
+      MainMenuButtons_0: -1501621683
+      MainMenuButtons_1: 170115271
+      MainMenuButtons_2: -2121419394
+      MainMenuButtons_3: -714784230
+      MainMenuButtons_4: -1016025415
+      MainMenuButtons_5: -1952887664
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
