@@ -87,6 +87,7 @@ public class BattleManager : NetworkBehaviour
     {
         if (players.ContainsKey(player))            //해당 키 값이 있을때
         {
+            Debug.Log(player + "상태 변경됨");
             players.Set(player, value);             //플레이어 상태를 변경 (기본은 true)
         }
         GetReadyCount();                            //true 값에 해당하는 인원 수 체크
@@ -124,17 +125,14 @@ public class BattleManager : NetworkBehaviour
     public void MapLoadDone()
     {
         nowLoading = false;
-        if (HasInputAuthority)
-        {
-            RPC_PlayerValueChange(Runner.LocalPlayer);
-        }
+        RPC_PlayerValueChange(Runner.LocalPlayer);
     }
 
 
     //레디 상태 체크
     private void GetReadyCount()
     {
-        if (isPlayAble == false) return;                        //플레이 가능할 인원이 아닐 경우 리턴
+        if (isPlayAble == false || HasStateAuthority) return;                        //플레이 가능할 인원이 아닐 경우 리턴
 
         int count = 0;                                          //준비 (Value == true) 인원을 파악할 int
         List<PlayerRef> alivePlayers = new List<PlayerRef>();   //살아있는 인원을 저장할 List (추후 3인 이상 플레이 시 사용)
