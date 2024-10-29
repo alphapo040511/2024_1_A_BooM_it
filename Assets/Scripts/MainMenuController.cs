@@ -50,8 +50,11 @@ public class MainMenuController : MonoBehaviour
 
     private void TabMove(GameObject nowTab, GameObject newTab)
     {
+        this.nowTab = newTab;
+
+        if (nowTab == newTab) return;
+
         nowTab.GetComponent<RectTransform>().transform.DOMoveX(1920, 0.5f).SetEase(Ease.OutCubic);
         newTab.GetComponent<RectTransform>().transform.DOMoveX(960, 0.5f).SetEase(Ease.OutCubic);
-        this.nowTab = newTab;
     }
 }
