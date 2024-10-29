@@ -68,7 +68,7 @@ public class Player : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            if(transform.position.y < -3 && state == PlayerState.Playing)
+            if (transform.position.y < -3 && state == PlayerState.Playing)
             {
                 UpdataState(PlayerState.Die);
                 BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
@@ -102,14 +102,13 @@ public class Player : NetworkBehaviour
     public void UpdataState(PlayerState newState)
     {
         state = newState;
-        if((int)newState >= 2) 
-        {
-            Cursor.lockState = CursorLockMode.Locked;           //마우스 커서를 잠그고 숨긴다.
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
+        RPC_ChangeMouseMode((int)newState >= 2);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_ChangeMouseMode(bool isLock)
+    {
+        Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     public void Knockback(Vector3 bombPos)

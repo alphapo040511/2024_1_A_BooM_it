@@ -35,7 +35,7 @@ public class NetworkRoomLoader : MonoBehaviour
 
     public void JoinGame()
     {
-        _networkManager.StartGame(GameMode.Client, room);
+        _networkManager.StartGame(GameMode.Client, "test");
     }
 
     public void UpdateRooms(List<SessionInfo> sessions)

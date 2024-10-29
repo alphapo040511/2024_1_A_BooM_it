@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using System;
 using System.Collections;
@@ -147,6 +148,8 @@ public class BattleManager : NetworkBehaviour
             }
         }
 
+        Debug.Log(count);
+
         switch (gameState)                                                      //현재 게임 상태
         {
             case GameState.Standby:                                             //준비중 일때
@@ -167,15 +170,23 @@ public class BattleManager : NetworkBehaviour
             case GameState.InGame:                                              //게임 진행중 일때
                 if (count >= players.Count - 1)                                 //살아남은 인원이 1명일 때(1명 빼고 모두 죽었을 때)
                 {
+                    Debug.Log("누군가 사망");
                     gameState = GameState.RoundOver;                            //게임 상태를 라운드 종료로 변경
                     foreach (var kvp in players)                                //살아있는 플레이어 검색(2인 이하 플레이시)
                     {
                         if (players[kvp.Key] == false)                          //살아있는 경우
                         {
-                            playerPoints.Set(kvp.Key, +1);                      //해당 플레이어의 점수 + 1
+                            int point = playerPoints.Get(kvp.Key);
+                            playerPoints.Set(kvp.Key, point + 1);               //해당 플레이어의 점수 + 1
+                            Debug.Log(kvp.Key + "플레이어 +1 점");
                             if (playerPoints[kvp.Key] >= 3)                     //플레이어의 점수가 3점을 달성 했다면
                             {
                                 gameState = GameState.GameOver;                 //게임 상태 게임 종료로 변경
+                                Debug.Log(kvp.Key + "플레이어 승리");
+                            }
+                            else
+                            {
+                                RPC_GameStart();                                            //다시 게임 시작
                             }
                         }
                     }
@@ -184,8 +195,6 @@ public class BattleManager : NetworkBehaviour
                 }
                 break;
         }
-
-        Debug.Log(gameState);
     }
 
     private IEnumerator Countdown()
