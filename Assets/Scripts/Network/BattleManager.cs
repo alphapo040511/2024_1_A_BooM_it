@@ -3,7 +3,6 @@ using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +25,10 @@ public class BattleManager : NetworkBehaviour
     public Button readyButton;
     public Button startButton;
 
-    public TextMeshProUGUI readyText;
+    public CanvasGroup menuCanvas;
+    public TextMeshProUGUI readyCount;
+
+    public GameObject[] countdownImage = new GameObject[4];
 
     public GameState gameState = GameState.Standby;
 
@@ -66,6 +68,8 @@ public class BattleManager : NetworkBehaviour
         {
             startButton.gameObject.SetActive(false);
         }
+
+        GetReadyCount();
     }
 
 
@@ -76,7 +80,6 @@ public class BattleManager : NetworkBehaviour
         if (players.ContainsKey(player))                //해당 키 값이 있을때
         {
             bool nowState = players.Get(player);        //해당 플레이어의 준비 값 
-            readyButton.image.color = nowState ? Color.red : Color.white;
             RPC_PlayerValueChange(player, !nowState);   //플레이어 딕셔너리의 bool(준비) 값 변경
         }
     }
@@ -108,7 +111,31 @@ public class BattleManager : NetworkBehaviour
     {
         gameState = GameState.MapLoading;               //게임 상태 맵 로딩중으로 변경
         UpdateAllPlayersState(PlayerState.Loading);     //모든 플레이어의 상태를 '로딩중'으로 변경
+        StartCoroutine(FadeCanvas(menuCanvas, false));
         MapLoad();                                      //맵 로딩 시작
+    }
+
+
+    
+
+    private IEnumerator FadeCanvas(CanvasGroup target, bool fadeIn)
+    {
+        if(fadeIn)
+        {
+            while(target.alpha < 1.0f)
+            {
+                target.alpha += Runner.DeltaTime;
+                yield return Runner.DeltaTime;
+            }
+        }
+        else
+        {
+            while (target.alpha > 0)
+            {
+                target.alpha -= Runner.DeltaTime;
+                yield return Runner.DeltaTime;
+            }
+        }
     }
 
     //맵 로딩 시작
@@ -132,8 +159,6 @@ public class BattleManager : NetworkBehaviour
     //레디 상태 체크
     private void GetReadyCount()
     {
-        if (isPlayAble == false) return;                        //플레이 가능할 인원이 아닐 경우 리턴
-
         int count = 0;                                          //준비 (Value == true) 인원을 파악할 int
         List<PlayerRef> alivePlayers = new List<PlayerRef>();   //살아있는 인원을 저장할 List (추후 3인 이상 플레이 시 사용)
 
@@ -148,6 +173,12 @@ public class BattleManager : NetworkBehaviour
                 alivePlayers.Add(kvp.Key);
             }
         }
+        if (HasStateAuthority)
+        {
+            RPC_ReadyCountUI(count);
+        }
+
+        if (isPlayAble == false) return;                        //플레이 가능할 인원이 아닐 경우 리턴
 
         switch (gameState)                                                      //현재 게임 상태
         {
@@ -194,8 +225,13 @@ public class BattleManager : NetworkBehaviour
                 }
                 break;
         }
+    }
 
-        Debug.Log(gameState);
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_ReadyCountUI(int count)
+    {
+        readyCount.text = $"{count}/{Runner.SessionInfo.PlayerCount}";
     }
 
     private IEnumerator Countdown()
@@ -210,8 +246,8 @@ public class BattleManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Countdown(int i)
     {
-        Debug.Log(i);
-        if(i == 0)
+        countdownImage[i].SetActive(true);
+        if (i == 0)
         {
             UpdateAllPlayersState(PlayerState.Playing);
             gameState = GameState.InGame;
@@ -256,6 +292,8 @@ public class BattleManager : NetworkBehaviour
         {
             isPlayAble = false;
         }
+
+        GetReadyCount();
     }
 
 
