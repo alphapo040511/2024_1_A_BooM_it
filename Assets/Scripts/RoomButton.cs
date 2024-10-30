@@ -14,7 +14,8 @@ public class RoomButton : MonoBehaviour
 
     public event Action<SessionInfo> selectRoom;
 
-    private SessionInfo sessionInfo;
+    private bool dataExists = false;
+    private SessionInfo sessionInfo = default;
 
 
     void Start()
@@ -22,10 +23,11 @@ public class RoomButton : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(OnClickButton);
     }
 
-    public void SetData(int number, SessionInfo newSession = null)
+    public void SetData(int number, bool dataExists, SessionInfo newSession = default)
     {
         roomNumber.text = number.ToString();
-        if (newSession != null)
+        this.dataExists = dataExists;
+        if (dataExists)
         {
             sessionInfo = newSession;
             roomName.text = sessionInfo.Name;
@@ -41,7 +43,7 @@ public class RoomButton : MonoBehaviour
 
     public void OnClickButton()
     {
-        if (selectRoom != null)
+        if (dataExists)
         {
             Debug.Log(sessionInfo.Name + "¿Ã º±≈√µ ");
             selectRoom(sessionInfo);

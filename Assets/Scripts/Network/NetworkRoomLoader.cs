@@ -36,6 +36,11 @@ public class NetworkRoomLoader : MonoBehaviour
             roomButtons[i].selectRoom += SelectRoom;
         }
 
+        for (int i = 0; i < roomButtons.Count; i++)
+        {
+            roomButtons[i].SetData(i + 1, false);
+        }
+
         JoinLobby();
         _networkManager.updateSessions += UpdateRooms;
     }
@@ -78,10 +83,13 @@ public class NetworkRoomLoader : MonoBehaviour
 
     public void JoinGame()
     {
-        _networkManager.StartGame(GameMode.Client, _roomName, playerCount);
+        if (_roomName != null)
+        {
+            _networkManager.StartGame(GameMode.Client, _roomName, playerCount);
+        }
     }
 
-    public void UpdateRooms(List<SessionInfo> sessions = null)
+    public void UpdateRooms(List<SessionInfo> sessions = default)
     {
         this.sessions = sessions;
         int count = Mathf.Min(sessions.Count, roomButtons.Count);
@@ -89,11 +97,11 @@ public class NetworkRoomLoader : MonoBehaviour
         {
             if(i < count)
             {
-                roomButtons[i].SetData(i + 1, sessions[i]);
+                roomButtons[i].SetData(i + 1, true, sessions[i]);
             }
             else
             {
-                roomButtons[i].SetData(i + 1);
+                roomButtons[i].SetData(i + 1, false);
             }
         }    
     }

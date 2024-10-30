@@ -7,8 +7,10 @@ public class MainMenuController : MonoBehaviour
 {
     public GameObject mainMenu;
 
-    public GameObject nowTab;
-    public Stack<GameObject> tabStack = new Stack<GameObject>();
+    public RectTransform selectBar;
+
+    private GameObject nowTab;
+    private Stack<GameObject> tabStack = new Stack<GameObject>();
 
     void Start()
     {
@@ -23,10 +25,22 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    public void SelectButton(RectTransform newTransform)
+    {
+        selectBar.gameObject.SetActive(true);
+        selectBar.anchoredPosition = newTransform.anchoredPosition - Vector2.right * 10;
+        selectBar.sizeDelta = newTransform.sizeDelta + Vector2.right * 30;
+    }
+
     public void NewTab(GameObject newTab)
     {
         tabStack.Push(nowTab);
         TabMove(nowTab, newTab);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     public void Back()
@@ -54,7 +68,7 @@ public class MainMenuController : MonoBehaviour
 
         if (nowTab == newTab) return;
 
-        nowTab.GetComponent<RectTransform>().transform.DOMoveX(1920, 0.5f).SetEase(Ease.OutCubic);
+        nowTab.GetComponent<RectTransform>().transform.DOMoveX(2580, 0.5f).SetEase(Ease.OutCubic);
         newTab.GetComponent<RectTransform>().transform.DOMoveX(960, 0.5f).SetEase(Ease.OutCubic);
     }
 }

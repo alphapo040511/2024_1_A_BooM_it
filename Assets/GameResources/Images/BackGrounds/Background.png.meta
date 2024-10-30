@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b7af729c1f28e442f881a8ed51f9ca80
+guid: 3da537ff45331428e89f43a151a6e0fa
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,128 +108,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: button4_0
-      rect:
-        serializedVersion: 2
-        x: 241
-        y: 673
-        width: 538
-        height: 90
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: caab733499f53554baee77f43b5fea4b
-      internalID: 119487217
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button4_2
-      rect:
-        serializedVersion: 2
-        x: 495
-        y: 576
-        width: 284
-        height: 92
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b63205a82d19a8478ffd064544f9579
-      internalID: -2144571295
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button4_3
-      rect:
-        serializedVersion: 2
-        x: 460
-        y: 479
-        width: 320
-        height: 94
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 75371230553a34c46a0e1bafdb25d8f0
-      internalID: 1807298237
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button4_4
-      rect:
-        serializedVersion: 2
-        x: 419
-        y: 358
-        width: 360
-        height: 110
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 87ed968ab88c66a439c39669f08497dd
-      internalID: 1609215515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: button4_1
-      rect:
-        serializedVersion: 2
-        x: 573
-        y: 264
-        width: 206
-        height: 94
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4436d168f2cfd004dad93a343f560f03
-      internalID: 995886359
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 81064002ab2d8684f97d615c2a77e994
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      button4_0: 119487217
-      button4_1: 995886359
-      button4_2: -2144571295
-      button4_3: 1807298237
-      button4_4: 1609215515
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
