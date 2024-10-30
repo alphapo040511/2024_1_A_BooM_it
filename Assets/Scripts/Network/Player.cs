@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum PlayerState
 {
@@ -15,6 +16,8 @@ public enum PlayerState
 public class Player : NetworkBehaviour
 {
     [Networked] public float angle { get; set; }
+    [Networked] public float rotateAngle { get; set; }
+    [Networked] public Vector2 mouseInput { get; set; }
     [Networked] public PlayerState state { get; set; }
 
     private NetworkCharacterController _cc;
@@ -97,9 +100,12 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void Respawn(Vector3 position, Quaternion angle)
+    public void Respawn(Vector3 position, Quaternion lookDir)
     {
-        _cc.Teleport(position, angle);
+        _cc.Teleport(position, Quaternion.identity);
+        cameraPivot.localRotation = Quaternion.identity;
+        rotateAngle = lookDir.eulerAngles.y;
+        angle = 0;
     }
 
     public void UpdataState(PlayerState newState)
@@ -108,7 +114,18 @@ public class Player : NetworkBehaviour
         if (HasStateAuthority)
         {
             RPC_ChangeMouseMode((int)newState >= 2);
+            ResetParameters();
         }
+    }
+
+    private void ResetParameters()
+    {
+        _animator.Animator.SetFloat("HorizontalSpeed", 0);
+        _animator.Animator.SetFloat("VerticalSpeed", 0);
+        _animator.Animator.SetFloat("Speed", 0);
+        _animator.Animator.SetBool("Jump", false);
+        _animator.Animator.SetBool("Falling", false);
+        _animator.Animator.SetInteger("Fire", 0);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -146,10 +163,18 @@ public class Player : NetworkBehaviour
     //카메라 움직임
     private void CameraMovement(Vector2 mouseDirection)
     {
-        if (state != PlayerState.Standby && state != PlayerState.Playing) return;
+        Vector2 mouseDir = default;
+        if (state == PlayerState.Playing)
+        {
+            mouseDir = mouseDirection - mouseInput;
+        }
+        else
+        {
+            mouseInput = mouseDirection;
+        }
 
-        transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDirection.y, 0f));
-        cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDirection.x, 0f, 0f));
+        transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDir.y + rotateAngle, 0f));
+        cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDir.x, 0f, 0f));
         angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         if (HasInputAuthority)
         {
