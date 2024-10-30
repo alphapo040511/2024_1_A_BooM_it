@@ -59,12 +59,18 @@ public class NetworkLevelGenerator : MonoBehaviour
 
     private IEnumerator MapRespawn()
     {
+        int count = 0;
         foreach (var block in blockDictionary.Values)
         {
             block.Respawn();
+            count++;
+            if(count >= 50)
+            {
+                count = 0;
+                yield return null;
+            }
         }
         MapLoadComplete();
-        yield break;
     }
 
     private void MapLoadComplete()

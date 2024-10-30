@@ -69,7 +69,7 @@ public class Player : NetworkBehaviour
         if (transform.position.y < -3 && state == PlayerState.Playing)
         {
             UpdataState(PlayerState.Die);
-            if (HasStateAuthority)
+            if (HasInputAuthority)
             {
                 BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
             }

@@ -132,7 +132,7 @@ public class BattleManager : NetworkBehaviour
     //레디 상태 체크
     private void GetReadyCount()
     {
-        if (isPlayAble == false || HasStateAuthority) return;                        //플레이 가능할 인원이 아닐 경우 리턴
+        if (isPlayAble == false) return;                        //플레이 가능할 인원이 아닐 경우 리턴
 
         int count = 0;                                          //준비 (Value == true) 인원을 파악할 int
         List<PlayerRef> alivePlayers = new List<PlayerRef>();   //살아있는 인원을 저장할 List (추후 3인 이상 플레이 시 사용)
@@ -148,8 +148,6 @@ public class BattleManager : NetworkBehaviour
                 alivePlayers.Add(kvp.Key);
             }
         }
-
-        Debug.Log(count);
 
         switch (gameState)                                                      //현재 게임 상태
         {
@@ -171,7 +169,6 @@ public class BattleManager : NetworkBehaviour
             case GameState.InGame:                                              //게임 진행중 일때
                 if (count >= players.Count - 1)                                 //살아남은 인원이 1명일 때(1명 빼고 모두 죽었을 때)
                 {
-                    Debug.Log("누군가 사망");
                     gameState = GameState.RoundOver;                            //게임 상태를 라운드 종료로 변경
                     foreach (var kvp in players)                                //살아있는 플레이어 검색(2인 이하 플레이시)
                     {
@@ -193,10 +190,12 @@ public class BattleManager : NetworkBehaviour
                         }
                     }
                     UpdataPoints();                                             //점수 표시 업데이트
-                    AllPlayerValueReset();                                      //모든 플레이어의 상태 초기화
+                    AllPlayerValueReset();
                 }
                 break;
         }
+
+        Debug.Log(gameState);
     }
 
     private IEnumerator Countdown()
