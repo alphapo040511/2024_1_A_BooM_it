@@ -62,7 +62,7 @@ public class NetworkInputHandler : MonoBehaviour
 
         //수직 회전 처리
         targetVecticalRotation -= mouseY;
-        targetVecticalRotation = Mathf.Clamp(targetVecticalRotation, yMinLimit, yMaxLimit);     //수직 회전 제한
+        //targetVecticalRotation = Mathf.Clamp(targetVecticalRotation, yMinLimit, yMaxLimit);     //수직 회전 제한
         phi = targetVecticalRotation;       //속도를 일정하게 해주는 부분인데 일단 제외
         //phi = Mathf.MoveTowards(phi, targetVecticalRotation, verticalRotationSpeed * Time.DeltaTime);
 

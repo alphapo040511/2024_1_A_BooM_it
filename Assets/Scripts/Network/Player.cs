@@ -111,10 +111,10 @@ public class Player : NetworkBehaviour
     public void UpdataState(PlayerState newState)
     {
         state = newState;
+        ResetParameters();
         if (HasStateAuthority)
         {
             RPC_ChangeMouseMode((int)newState >= 2);
-            ResetParameters();
         }
     }
 
@@ -172,6 +172,8 @@ public class Player : NetworkBehaviour
         {
             mouseInput = mouseDirection;
         }
+
+        mouseDir.x = Mathf.Clamp(mouseDir.x, -75, 75);
 
         transform.rotation = Quaternion.Euler(new Vector3(0f, mouseDir.y + rotateAngle, 0f));
         cameraPivot.localRotation = Quaternion.Euler(new Vector3(mouseDir.x, 0f, 0f));

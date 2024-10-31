@@ -21,6 +21,7 @@ public class BattleManager : NetworkBehaviour
 {
     public NetworkLevelManager levelManager;
     public NetworkLevelGenerator levelGenerator;
+    public PointsUIManager pointsUI;
 
     public Button readyButton;
     public Button startButton;
@@ -90,7 +91,6 @@ public class BattleManager : NetworkBehaviour
     {
         if (players.ContainsKey(player))            //해당 키 값이 있을때
         {
-            Debug.Log(player + "상태 변경됨");
             players.Set(player, value);             //플레이어 상태를 변경 (기본은 true)
         }
         GetReadyCount();                            //true 값에 해당하는 인원 수 체크
@@ -213,15 +213,17 @@ public class BattleManager : NetworkBehaviour
                                 gameState = GameState.GameOver;                 //게임 상태 게임 종료로 변경
                                 Debug.Log(kvp.Key + "플레이어 승리");
                             }
-                            else
-                            {
-                                Debug.Log("게임 재시작");
-                                RPC_GameStart();                                            //다시 게임 시작
-                            }
+                            RPC_UpdatePoint(kvp.Key, playerPoints[kvp.Key]);
                         }
                     }
-                    UpdataPoints();                                             //점수 표시 업데이트
                     AllPlayerValueReset();
+                }
+                break;
+            case GameState.RoundOver:                                           //라운드 종료 상태일 경우
+                if (count >= players.Count)                                     //모든 연출이 종료 되었다면
+                {
+                    AllPlayerValueReset();
+                    RPC_GameStart();                                            //게임 재시작
                 }
                 break;
         }
@@ -254,9 +256,15 @@ public class BattleManager : NetworkBehaviour
         }
     }
 
-    private void UpdataPoints()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_UpdatePoint(PlayerRef target, int point)
     {
-        //점수 표시     RPC로 전체에 뿌리게 변경
+        pointsUI.AddPoint(target == Runner.LocalPlayer, point);
+    }
+
+    public void UpdatePointComplete()
+    {
+        RPC_PlayerValueChange(Runner.LocalPlayer);
     }
 
     //플레이어 참가
