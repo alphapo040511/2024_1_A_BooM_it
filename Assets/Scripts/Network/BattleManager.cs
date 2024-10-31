@@ -3,6 +3,7 @@ using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class BattleManager : NetworkBehaviour
 {
     public NetworkLevelManager levelManager;
     public NetworkLevelGenerator levelGenerator;
-    public PointsUIManager pointsUI;
+    public HUDManager hudManager;
 
     public Button readyButton;
     public Button startButton;
@@ -120,7 +121,9 @@ public class BattleManager : NetworkBehaviour
 
     private IEnumerator FadeCanvas(CanvasGroup target, bool fadeIn)
     {
-        if(fadeIn)
+        yield return new WaitForSeconds(0.5f);
+        hudManager.finish.position = new Vector3(-960, 255, 0);             //종료 UI 초기화 (나중에 다시 정리)
+        if (fadeIn)
         {
             while(target.alpha < 1.0f)
             {
@@ -226,9 +229,19 @@ public class BattleManager : NetworkBehaviour
                     RPC_GameStart();                                            //게임 재시작
                 }
                 break;
+            case GameState.GameOver:
+                RPC_Shutdown();
+                break;
         }
     }
 
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Shutdown()
+    {
+        Debug.Log("게임종료");
+        Cursor.lockState = CursorLockMode.None;
+        Runner.LoadScene("LobbyScene");
+    }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_ReadyCountUI(int count)
@@ -238,7 +251,9 @@ public class BattleManager : NetworkBehaviour
 
     private IEnumerator Countdown()
     {
-        for(int i = 3; i >= 0; i--)
+        yield return new WaitForSeconds(1);
+
+        for (int i = 3; i >= 0; i--)
         {
             RPC_Countdown(i);
             yield return new WaitForSeconds(1);
@@ -259,7 +274,7 @@ public class BattleManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_UpdatePoint(PlayerRef target, int point)
     {
-        pointsUI.AddPoint(target == Runner.LocalPlayer, point);
+        hudManager.AddPoint(target == Runner.LocalPlayer, point);
     }
 
     public void UpdatePointComplete()

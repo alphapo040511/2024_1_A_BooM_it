@@ -69,12 +69,20 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (transform.position.y < -3 && state == PlayerState.Playing)
+        if (transform.position.y < -3)
         {
-            UpdataState(PlayerState.Die);
-            if (HasInputAuthority)
+            if (state == PlayerState.Playing)
             {
-                BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
+                UpdataState(PlayerState.Die);
+                if (HasInputAuthority)
+                {
+                    BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
+                }
+                thirdPersonCamera.transform.SetParent(null);
+            }
+            if (state == PlayerState.Die && HasInputAuthority)
+            {
+                thirdPersonCamera.transform.LookAt(cameraPivot);
             }
         }
 
@@ -114,7 +122,7 @@ public class Player : NetworkBehaviour
         ResetParameters();
         if (HasStateAuthority)
         {
-            RPC_ChangeMouseMode((int)newState >= 2);
+            RPC_ChangeMouseMode((int)newState);
         }
     }
 
@@ -129,9 +137,21 @@ public class Player : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_ChangeMouseMode(bool isLock)
+    public void RPC_ChangeMouseMode(int stateIndex)
     {
-        Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.lockState = stateIndex >= 2 ? CursorLockMode.Locked : CursorLockMode.None;
+        if(stateIndex == 2)
+        {
+            if (HasInputAuthority)
+            {
+                thirdPersonCamera.transform.SetParent(cameraPivot.transform);
+                thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
+                thirdPersonCamera.transform.localRotation = default;
+                cameraDistance = thirdPersonCamera.transform.localPosition.z;
+                ballPre = GameManager.instance.bombPrefabs[0];
+                parabola = GameManager.instance.parabolas[0];
+            }
+        }
     }
 
     public void Knockback(Vector3 bombPos)
@@ -150,7 +170,16 @@ public class Player : NetworkBehaviour
     //캐릭터 움직임
     private void PlayerMovement(Vector3 moveDirection)
     {
-        if (state != PlayerState.Playing) return;
+        if (state == PlayerState.Die)
+        {
+            _animator.Animator.SetFloat("Speed", Mathf.Abs(moveDirection.magnitude));
+            _cc.Move(default);
+        }
+
+        if (state != PlayerState.Playing)
+        {
+            return;
+        }
 
         //애니메이션 동기화
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
@@ -171,6 +200,10 @@ public class Player : NetworkBehaviour
         else
         {
             mouseInput = mouseDirection;
+            if(state == PlayerState.Die)
+            {
+                return;
+            }
         }
 
         mouseDir.x = Mathf.Clamp(mouseDir.x, -75, 75);
