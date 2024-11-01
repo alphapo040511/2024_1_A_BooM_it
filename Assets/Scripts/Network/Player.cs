@@ -69,7 +69,7 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (transform.position.y < -3)
+        if (transform.position.y < -5)
         {
             if (state == PlayerState.Playing)
             {
