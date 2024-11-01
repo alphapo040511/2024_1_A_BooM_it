@@ -139,7 +139,7 @@ public class Player : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_ChangeMouseMode(int stateIndex)
     {
-        Cursor.lockState = stateIndex >= 2 ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
         if(stateIndex == 2)
         {
             if (HasInputAuthority)

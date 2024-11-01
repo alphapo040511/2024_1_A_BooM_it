@@ -52,6 +52,19 @@ public class HUDManager : MonoBehaviour
 
     private IEnumerator StarTurnOn(RectTransform target, int point)
     {
+        if (isOver)
+        {
+            if (isWin)
+            {
+                win.gameObject.SetActive(true);
+            }
+            else
+            {
+                lose.gameObject.SetActive(true);
+            }
+
+        }
+
         finish.DOMove(new Vector3(960, 540, 0), 1f);
         yield return new WaitForSeconds(1);
 
@@ -65,21 +78,9 @@ public class HUDManager : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(isOver ? 3 : 1);
 
-        if(isOver)
-        {
-            if(isWin)
-            {
-                win.gameObject.SetActive(true);
-            }
-            else
-            {
-                lose.gameObject.SetActive(true);
-            }
-
-            yield return new WaitForSeconds(2);
-        }
+        
 
         battleManager.UpdatePointComplete();
         yield break;
