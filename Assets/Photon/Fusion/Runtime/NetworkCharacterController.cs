@@ -82,7 +82,7 @@ namespace Fusion {
             knockbackVel = newVel;
         }
 
-    public void Move(Vector3 direction) {
+    public void Move(Vector3 direction, bool enforce = false){
       var deltaTime    = Runner.DeltaTime;
       var previousPos  = transform.position;
       var moveVelocity = Data.Velocity;
@@ -93,7 +93,7 @@ namespace Fusion {
         moveVelocity.y = 0f;
       }
 
-      if(moveVelocity.y > maxSpeed * 2)
+      if(moveVelocity.y > maxSpeed * 2 )
         {
             moveVelocity.y = maxSpeed * 2;
         }
@@ -110,7 +110,7 @@ namespace Fusion {
         }
         else 
         {
-            horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
+            horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime * (enforce ? 1.5f : 1), maxSpeed * (enforce ? 1.5f : 1));
             //플레이어 회전 임시 해제
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
         }

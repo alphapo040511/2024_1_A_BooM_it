@@ -34,7 +34,7 @@ public class BattleManager : NetworkBehaviour
 
     public GameState gameState = GameState.Standby;
 
-    const int minPlayer = 2;        //최소 플레이어 수
+    const int minPlayer = 1;        //최소 플레이어 수
     public int maxPlayer = 2;       //최대 플레이어 수
 
     private bool nowLoading = false;
@@ -138,6 +138,7 @@ public class BattleManager : NetworkBehaviour
                 target.alpha -= Runner.DeltaTime;
                 yield return Runner.DeltaTime;
             }
+            target.gameObject.SetActive(false);
         }
     }
 

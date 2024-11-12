@@ -2,6 +2,7 @@ using Fusion;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
 public enum PlayerState
 {
@@ -13,12 +14,22 @@ public enum PlayerState
     Spectating     // 관전
 }
 
+public enum SkillState
+{
+    None,           //아무 효과 없음
+    Shield,         //쉴드 보유 상태
+    SpeedUp         //속도 증가 상태
+}
+
 public class Player : NetworkBehaviour
 {
+    public Item item;
+
     [Networked] public float angle { get; set; }
     [Networked] public float rotateAngle { get; set; }
     [Networked] public Vector2 mouseInput { get; set; }
     [Networked] public PlayerState state { get; set; }
+    [Networked] public SkillState skillState { get; set; }
 
     private NetworkCharacterController _cc;
 
@@ -126,6 +137,12 @@ public class Player : NetworkBehaviour
         }
     }
 
+    public void UpdateSkillState(SkillState state)
+    {
+        skillState = state;
+        Debug.Log(skillState);
+    }
+
     private void ResetParameters()
     {
         _animator.Animator.SetFloat("HorizontalSpeed", 0);
@@ -186,7 +203,7 @@ public class Player : NetworkBehaviour
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
         _animator.Animator.SetFloat("Speed",Mathf.Abs(moveDirection.magnitude));
         moveDirection = transform.forward * moveDirection.x + transform.right * moveDirection.z * 0.5f;
-        _cc.Move(moveDirection);
+        _cc.Move(moveDirection, skillState == SkillState.SpeedUp);
     }
 
     //카메라 움직임
@@ -279,10 +296,14 @@ public class Player : NetworkBehaviour
             }
         }
 
-
-        if (HasInputAuthority)
+        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
         {
-            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
+            if (HasStateAuthority)
+            {
+                item.UseItem(this);
+            }
+             
+            if (HasInputAuthority)
             {
                 Vector3[] point = parabola.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Length;
@@ -292,10 +313,10 @@ public class Player : NetworkBehaviour
                 }
                 lineRenderer.enabled = true;
             }
-            else
-            {
-                lineRenderer.enabled = false;
-            }
+        }
+        else
+        {
+            lineRenderer.enabled = false;
         }
     }
 

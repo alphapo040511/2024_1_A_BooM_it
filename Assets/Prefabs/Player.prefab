@@ -113,8 +113,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea1ed3400c200a94aba2d9e4b4d83aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   _angle: 0
+  _rotateAngle: 0
+  _mouseInput: {x: 0, y: 0}
   _state: 0
+  _skillState: 0
   parabola: {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63,
     type: 3}
   ballPre:
@@ -123,7 +127,6 @@ MonoBehaviour:
   _animator: {fileID: 8637261848777380372}
   FirePoint: {fileID: 7854653979831548048}
   lineRenderer: {fileID: 4794983823603032041}
-  _initTheta: 0
   _weaponIndex: 0
 --- !u!114 &7637000873822231789
 MonoBehaviour:
