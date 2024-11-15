@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class Item : MonoBehaviour
     public int itemNumber;                     // 아이템 번호
     public ItemType itemType;                  // 아이템 타입
     public Texture2D itemTexture;                // 아이템 UI 텍스처
+    public NetworkPrefabRef bombPrefab;         //폭탄 프리팹
+    public NetworkParabola bombParabola;
     public bool isUsable = true;               // 사용 가능한 상태
     public int maxUses = 1;                    // 사용 가능 횟수
     public float cooldownTime = 5f;            // 아이템 쿨타임 (초 단위)
@@ -33,22 +36,25 @@ public class Item : MonoBehaviour
     public void UseItem(Player player)
     {
         // 아이템이 사용 가능하고 쿨타임 중이 아닐 경우에만 사용
-        if (isUsable && !isOnCooldown && remainingUses > 0)
+        if (isUsable && !isOnCooldown)
         {
-            Debug.Log("Item used: " + itemNumber);
-
-            // 아이템 사용 로직 추가 (예: 플레이어 체력 회복, 무기 발사 등)
-            PerformItemAction(player);
-
-            remainingUses--; // 사용 횟수 감소
-
-            if (remainingUses <= 0)
+            if (remainingUses > 0 || itemType == ItemType.Weapon)
             {
-                isUsable = false; // 더 이상 사용 불가
-            }
-            else
-            {
-                StartCoroutine(StartCooldown()); // 쿨타임 시작
+                Debug.Log("Item used: " + itemNumber);
+
+                // 아이템 사용 로직 추가 (예: 플레이어 체력 회복, 무기 발사 등)
+                PerformItemAction(player);
+
+                remainingUses--; // 사용 횟수 감소
+
+                if (remainingUses <= 0)
+                {
+                    isUsable = false; // 더 이상 사용 불가
+                }
+                else
+                {
+                    StartCoroutine(StartCooldown()); // 쿨타임 시작
+                }
             }
         }
         else
@@ -65,6 +71,7 @@ public class Item : MonoBehaviour
         {
             case ItemType.Weapon:
                 //무기 사용
+                Fire(player);
                 break;
             case ItemType.SpeedUp:
                 // 이동속도 증가
@@ -75,6 +82,11 @@ public class Item : MonoBehaviour
                 Shield(player);
                 break;
         }
+    }
+
+    private void Fire(Player player)
+    {
+        player.FirePosition(bombPrefab);
     }
 
     private void SpeedUp(Player player)

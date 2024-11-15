@@ -23,6 +23,7 @@ public enum SkillState
 public class Player : NetworkBehaviour
 {
     public Item item;
+    public Item weapon;
 
     [Networked] public float angle { get; set; }
     [Networked] public float rotateAngle { get; set; }
@@ -35,9 +36,6 @@ public class Player : NetworkBehaviour
     private TickTimer fireDelay { get; set; }
     private TickTimer jumpDelay { get; set; }
     private NetworkButtons _networkButtons { get; set; }
-
-    [SerializeField] private NetworkParabola parabola;
-    [SerializeField] private NetworkPrefabRef ballPre;
 
     [SerializeField] private Transform cameraPivot;
 
@@ -53,7 +51,6 @@ public class Player : NetworkBehaviour
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
-        item = GetComponent<Item>();
     }
 
     public void Init()
@@ -73,8 +70,6 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
-            ballPre = GameManager.instance.bombPrefabs[0];
-            parabola = GameManager.instance.parabolas[0];
         }
     }
 
@@ -166,8 +161,6 @@ public class Player : NetworkBehaviour
                 thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
                 thirdPersonCamera.transform.localRotation = default;
                 cameraDistance = thirdPersonCamera.transform.localPosition.z;
-                ballPre = GameManager.instance.bombPrefabs[0];
-                parabola = GameManager.instance.parabolas[0];
             }
         }
     }
@@ -245,6 +238,8 @@ public class Player : NetworkBehaviour
 
     private void ChangeWeapon(float wheel)
     {
+        return;             //임시로 무기 교체 제외
+
         if(HasInputAuthority)
         {
             if(wheel > 0)
@@ -264,9 +259,6 @@ public class Player : NetworkBehaviour
             {
                 weaponIndex = 0;
             }
-
-            ballPre = GameManager.instance.bombPrefabs[weaponIndex];
-            parabola = GameManager.instance.parabolas[weaponIndex];
         }
     }
 
@@ -292,14 +284,11 @@ public class Player : NetworkBehaviour
     {
         if (state != PlayerState.Playing) return;
 
-        if (fireDelay.ExpiredOrNotRunning(Runner))
+        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))        //버튼 선언한 것 가져와서 진행한다.
+            if (weapon.isUsable)        //버튼 선언한 것 가져와서 진행한다.
             {
-                fireDelay = TickTimer.CreateFromSeconds(Runner, 0.5f);          //0.5초 간격으로 쏜다.
-                _animator.Animator.SetInteger("Fire", 1);
-                StartCoroutine(AnimationDelay());
-                FirePosition();
+                weapon.UseItem(this);
             }
         }
 
@@ -307,7 +296,7 @@ public class Player : NetworkBehaviour
         {
             if (HasInputAuthority)
             {
-                Vector3[] point = parabola.Trajectory(angle, FirePoint, cameraPivot);
+                Vector3[] point = weapon.bombParabola.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Length;
                 for (int i = 0; i < point.Length; i++)
                 {
@@ -352,12 +341,16 @@ public class Player : NetworkBehaviour
         _animator.Animator.SetInteger("Fire", 0);
     }
 
-    private void FirePosition()                                             //발사체 생성 함수
+    public void FirePosition(NetworkPrefabRef bomb)                                             //발사체 생성 함수
     {
         if (Object.HasStateAuthority)
         {
+            _animator.Animator.SetInteger("Fire", 1);
+            StartCoroutine(AnimationDelay());
+
+
             Vector3 forward = transform.forward;
-            Runner.Spawn(ballPre,
+            Runner.Spawn(bomb,
                 FirePoint.position,
                 Quaternion.LookRotation(forward),
                 Object.InputAuthority,
