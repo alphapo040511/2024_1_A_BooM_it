@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 7941044745138330048}
   - component: {fileID: 8637261848777380372}
   - component: {fileID: 4794983823603032041}
+  - component: {fileID: -730802854710321158}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -314,6 +315,24 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-730802854710321158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9008056962130677397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemNumber: 0
+  itemType: 2
+  itemTexture: {fileID: 0}
+  isUsable: 1
+  maxUses: 3
+  cooldownTime: 5
 --- !u!1001 &1708455877267102823
 PrefabInstance:
   m_ObjectHideFlags: 0

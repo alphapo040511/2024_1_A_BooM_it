@@ -2,7 +2,6 @@ using Fusion;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEditor.Progress;
 
 public enum PlayerState
 {
@@ -17,8 +16,8 @@ public enum PlayerState
 public enum SkillState
 {
     None,           //아무 효과 없음
-    Shield,         //쉴드 보유 상태
-    SpeedUp         //속도 증가 상태
+    Resisting,         //쉴드 보유 상태
+    SpeedUp,        //속도 증가 상태
 }
 
 public class Player : NetworkBehaviour
@@ -54,6 +53,7 @@ public class Player : NetworkBehaviour
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
+        item = GetComponent<Item>();
     }
 
     public void Init()
@@ -116,6 +116,7 @@ public class Player : NetworkBehaviour
                 CheckAndJump();
             }
             CheckAndFireProjectile();
+            UseItem();
         }
     }
 
@@ -175,6 +176,12 @@ public class Player : NetworkBehaviour
     {
         if (HasStateAuthority)
         {
+            if(skillState == SkillState.Resisting)
+            {
+                UpdateSkillState(SkillState.None);
+                return;
+            }
+
             Vector3 knockback = (transform.position - bombPos).normalized * 10;
             if (knockback.y < 0)
             {
@@ -271,7 +278,7 @@ public class Player : NetworkBehaviour
 
         if (jumpDelay.ExpiredOrNotRunning(Runner))
         {
-            if (_networkButtons.IsSet(NetworkInputData.KEYBOARDSPACE))
+            if (_networkButtons.IsSet(NetworkInputData.KEYCODESPACE))
             {
                 jumpDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
                 _animator.Animator.SetBool("Jump", true);
@@ -298,11 +305,6 @@ public class Player : NetworkBehaviour
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
         {
-            if (HasStateAuthority)
-            {
-                item.UseItem(this);
-            }
-             
             if (HasInputAuthority)
             {
                 Vector3[] point = parabola.Trajectory(angle, FirePoint, cameraPivot);
@@ -317,6 +319,19 @@ public class Player : NetworkBehaviour
         else
         {
             lineRenderer.enabled = false;
+        }
+    }
+
+    private void UseItem()
+    {
+        if (state != PlayerState.Playing || !HasInputAuthority) return;
+
+        if (_networkButtons.IsSet(NetworkInputData.KEYCODER))
+        {
+            if (item.isUsable)
+            {
+                item.UseItem(this);
+            }
         }
     }
 

@@ -9,7 +9,8 @@ public struct NetworkInputData : INetworkInput
 {
     public const byte MOUSEBUTTON0 = 0x01;
     public const byte MOUSEBUTTON1 = 0x02;
-    public const byte KEYBOARDSPACE = 0x03;
+    public const byte KEYCODESPACE = 0x03;
+    public const byte KEYCODER= 0x04;
     public NetworkButtons buttons;
     public Vector3 direction;
     public Vector2 lookDirection;
@@ -46,7 +47,8 @@ public class NetworkInputHandler : MonoBehaviour
 
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButton(0));
         data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButton(1));
-        data.buttons.Set(NetworkInputData.KEYBOARDSPACE, Input.GetKey(KeyCode.Space));
+        data.buttons.Set(NetworkInputData.KEYCODESPACE, Input.GetKey(KeyCode.Space));
+        data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKeyDown(KeyCode.R));
 
         return data;
     }

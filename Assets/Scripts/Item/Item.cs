@@ -20,7 +20,7 @@ public class Item : MonoBehaviour
     public float cooldownTime = 5f;            // 아이템 쿨타임 (초 단위)
 
     private int remainingUses;                 // 남은 사용 가능 횟수
-    public bool isOnCooldown = false;         // 쿨타임 상태
+    private bool isOnCooldown = false;         // 쿨타임 상태
 
     private void Start()
     {
@@ -72,6 +72,7 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.Shield:
                 // 방어막 기능 추가
+                Shield(player);
                 break;
         }
     }
@@ -81,12 +82,16 @@ public class Item : MonoBehaviour
         player.UpdateSkillState(SkillState.SpeedUp);
     }
 
+    private void Shield(Player player)
+    {
+        player.UpdateSkillState(SkillState.Resisting);
+    }
+
     // 쿨타임을 관리하는 코루틴
     private IEnumerator StartCooldown()
     {
         isOnCooldown = true;
         yield return new WaitForSeconds(cooldownTime);
         isOnCooldown = false;
-        Debug.Log("Item cooldown completed.");
     }
 }
