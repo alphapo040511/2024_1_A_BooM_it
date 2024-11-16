@@ -13,7 +13,7 @@ public enum ItemType
 public class Item : MonoBehaviour
 {
     // 아이템 속성
-    public int itemNumber;                     // 아이템 번호
+    public string itemNumber;                     // 아이템 이름
     public ItemType itemType;                  // 아이템 타입
     public Texture2D itemTexture;                // 아이템 UI 텍스처
     public NetworkPrefabRef bombPrefab;         //폭탄 프리팹
@@ -47,7 +47,7 @@ public class Item : MonoBehaviour
 
                 remainingUses--; // 사용 횟수 감소
 
-                if (remainingUses <= 0)
+                if (remainingUses <= 0 && itemType != ItemType.Weapon)
                 {
                     isUsable = false; // 더 이상 사용 불가
                 }

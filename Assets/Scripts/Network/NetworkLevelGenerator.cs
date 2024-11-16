@@ -1,7 +1,9 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 public class NetworkLevelGenerator : MonoBehaviour
 {
@@ -11,20 +13,22 @@ public class NetworkLevelGenerator : MonoBehaviour
 
     private bool isFirstGenerate = false;
 
-    void Start()
+    public void MapDataLoad(string index)
     {
         //추후 인덱스만 전송 받아서 불러오는걸로 변경
-        mapData = GameManager.instance.mapData;
+        string path = Path.Combine("CompletedData", index);
+        mapData = Resources.Load<MapData>(path);
         mapData.LoadFormJson();
+        StartCoroutine(GenerateInitialBlocks());
     }
 
 
     //맵 처음 로딩
-    public void MapLoading()
+    public void MapLoading(string index)
     {
         if (!isFirstGenerate)
         {
-            StartCoroutine(GenerateInitialBlocks());
+            MapDataLoad(index);
         }
         else
         {

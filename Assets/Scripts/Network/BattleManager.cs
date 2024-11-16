@@ -57,6 +57,7 @@ public class BattleManager : NetworkBehaviour
         }
     }
 
+
     // 처음 시작시 실행
     public override void Spawned()
     {
@@ -73,7 +74,6 @@ public class BattleManager : NetworkBehaviour
 
         GetReadyCount();
     }
-
 
     //레디 버튼을 눌렀을 때
     public void OnClickReadyButton()
@@ -113,7 +113,7 @@ public class BattleManager : NetworkBehaviour
         gameState = GameState.MapLoading;               //게임 상태 맵 로딩중으로 변경
         UpdateAllPlayersState(PlayerState.Loading);     //모든 플레이어의 상태를 '로딩중'으로 변경
         StartCoroutine(FadeCanvas(menuCanvas, false));
-        MapLoad();                                      //맵 로딩 시작
+        MapLoad(GameManager.Instance.mapIndex);                                      //맵 로딩 시작
     }
 
 
@@ -143,12 +143,12 @@ public class BattleManager : NetworkBehaviour
     }
 
     //맵 로딩 시작
-    public void MapLoad()
+    public void MapLoad(string index)
     {
         if (!nowLoading)
         {
             nowLoading = true;
-            levelGenerator.MapLoading();
+            levelGenerator.MapLoading(index);
         }
     }
 
@@ -369,11 +369,11 @@ public class BattleManager : NetworkBehaviour
 
     private Vector3 GetNextSpawnPosition(int playerNum)
     {
-        Vector3Int pos = GameManager.instance.mapData.SpawnPosition[playerNum];
-        pos.y = GameManager.instance.mapData.BlockArr.GetLength(1);
-        for (int y = GameManager.instance.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
+        Vector3Int pos = levelGenerator.mapData.SpawnPosition[playerNum];
+        pos.y = levelGenerator.mapData.BlockArr.GetLength(1);
+        for (int y = levelGenerator.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
         {
-            if (GameManager.instance.mapData.BlockArr[pos.x, y, pos.z] == 0)
+            if (levelGenerator.mapData.BlockArr[pos.x, y, pos.z] == 0)
             {
                 pos.y = y;
             }
@@ -387,8 +387,8 @@ public class BattleManager : NetworkBehaviour
 
     private Quaternion GetLookDirection(Vector3 spawnPosition)
     {
-        float x = GameManager.instance.mapData.BlockArr.GetLength(0) / 2;
-        float z = GameManager.instance.mapData.BlockArr.GetLength(2) / 2;
+        float x = levelGenerator.mapData.BlockArr.GetLength(0) / 2;
+        float z = levelGenerator.mapData.BlockArr.GetLength(2) / 2;
         Vector3 target = new Vector3(x, spawnPosition.y, z);
         return Quaternion.LookRotation(target - spawnPosition).normalized;
     }

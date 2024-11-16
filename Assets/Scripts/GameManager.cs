@@ -5,21 +5,33 @@ using Fusion;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance { get; private set; }
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+            }
+            return instance;
+        }
+    }
 
-    public MapData mapData;
+    public string mapIndex;
 
-    public List<NetworkParabola> parabolas;
-    public List<NetworkPrefabRef> bombPrefabs;
-
+    public string[] weaponIndex = new string[3];
+    public string itemIndex;
     private void Awake()
     {
-        if(instance != null)
+        if(Instance != this)
         {
             Destroy(this.gameObject);
             return;
         }
-        instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        else
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11150678, g: 0.30004722, b: 0.6361853, a: 1}
+  m_IndirectSpecularColor: {r: 0.111432016, g: 0.29989094, b: 0.6360639, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5007,15 +5007,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb547e77ed0168748901948c6f0c6458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapData: {fileID: 11400000, guid: dccbd14b60fd01245b971ca0de49e2b5, type: 2}
-  parabolas:
-  - {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63, type: 3}
-  - {fileID: 2744972758766036483, guid: 35ff380cba735344a87e23c381fd5c13, type: 3}
-  - {fileID: 83144185214006769, guid: c3f360c63a6d16741bdf38b5eb7c14ca, type: 3}
-  bombPrefabs:
-  - RawGuidValue: 3ef8333af28ee804d995422ea4686c63
-  - RawGuidValue: 35ff380cba735344a87e23c381fd5c13
-  - RawGuidValue: c3f360c63a6d16741bdf38b5eb7c14ca
+  mapIndex: Plane_01
+  weaponIndex:
+  - BasicBomb
+  - CrossBomb
+  - StraightBomb
+  itemIndex: SpeedUp
 --- !u!4 &1640635622
 Transform:
   m_ObjectHideFlags: 0

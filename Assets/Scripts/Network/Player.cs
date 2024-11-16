@@ -2,6 +2,7 @@ using Fusion;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.IO;
 
 public enum PlayerState
 {
@@ -22,9 +23,6 @@ public enum SkillState
 
 public class Player : NetworkBehaviour
 {
-    public Item item;
-    public Item weapon;
-
     [Networked] public float angle { get; set; }
     [Networked] public float rotateAngle { get; set; }
     [Networked] public Vector2 mouseInput { get; set; }
@@ -46,7 +44,10 @@ public class Player : NetworkBehaviour
     private GameObject thirdPersonCamera;
     private float cameraDistance;
 
-    [Networked] public int weaponIndex { get; set; }
+    [Networked] public int currentWeapon { get; set; }
+
+    public Item item;
+    public Item[] weapon = new Item[3];
 
     private void Awake()
     {
@@ -70,7 +71,23 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
+            RPC_ItemSpawn(GameManager.Instance.weaponIndex, GameManager.Instance.itemIndex);
         }
+    }
+
+    [Rpc(RpcSources.All , RpcTargets.All)]
+    public void RPC_ItemSpawn(string[] weaponIndex, string itemIndex)
+    {
+        for (int i = 0; i < weapon.Length; i++)
+        {
+            string weaponPath = Path.Combine("Weapons", weaponIndex[i]);
+            GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath));
+            weapon[i] = bomb.GetComponent<Item>();
+        }
+
+        string path = Path.Combine("Items", itemIndex);
+        GameObject temp = Instantiate(Resources.Load<GameObject>(path));
+        item = temp.GetComponent<Item>();
     }
 
     public override void FixedUpdateNetwork()
@@ -239,27 +256,6 @@ public class Player : NetworkBehaviour
     private void ChangeWeapon(float wheel)
     {
         return;             //임시로 무기 교체 제외
-
-        if(HasInputAuthority)
-        {
-            if(wheel > 0)
-            {
-                weaponIndex++;
-            }
-            else
-            {
-                weaponIndex--;
-            }
-
-            if (weaponIndex >= GameManager.instance.bombPrefabs.Count)
-            {
-                weaponIndex = GameManager.instance.bombPrefabs.Count - 1;
-            }
-            else if(weaponIndex < 0)
-            {
-                weaponIndex = 0;
-            }
-        }
     }
 
 
@@ -286,9 +282,9 @@ public class Player : NetworkBehaviour
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (weapon.isUsable)        //버튼 선언한 것 가져와서 진행한다.
+            if (weapon[0].isUsable)        //버튼 선언한 것 가져와서 진행한다.
             {
-                weapon.UseItem(this);
+                weapon[0].UseItem(this);
             }
         }
 
@@ -296,7 +292,7 @@ public class Player : NetworkBehaviour
         {
             if (HasInputAuthority)
             {
-                Vector3[] point = weapon.bombParabola.Trajectory(angle, FirePoint, cameraPivot);
+                Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Length;
                 for (int i = 0; i < point.Length; i++)
                 {
