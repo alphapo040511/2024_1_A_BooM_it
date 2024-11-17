@@ -31,7 +31,7 @@ public class Player : NetworkBehaviour
 
     private NetworkCharacterController _cc;
 
-    private TickTimer fireDelay { get; set; }
+    private TickTimer changeDelay { get; set; }
     private TickTimer jumpDelay { get; set; }
     private NetworkButtons _networkButtons { get; set; }
 
@@ -81,7 +81,7 @@ public class Player : NetworkBehaviour
         for (int i = 0; i < weapon.Length; i++)
         {
             string weaponPath = Path.Combine("Weapons", weaponIndex[i]);
-            GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath));
+            GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath), default, default, transform);
             weapon[i] = bomb.GetComponent<Item>();
         }
 
@@ -255,7 +255,12 @@ public class Player : NetworkBehaviour
 
     private void ChangeWeapon(float wheel)
     {
-        return;             //임시로 무기 교체 제외
+        if(changeDelay.ExpiredOrNotRunning(Runner))
+        {
+            currentWeapon += wheel > 0 ? 1 : -1;
+            currentWeapon = (int)Mathf.Repeat(currentWeapon, weapon.Length);
+            changeDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
+        }
     }
 
 
