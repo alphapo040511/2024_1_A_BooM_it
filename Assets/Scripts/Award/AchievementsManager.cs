@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AwardManager : MonoBehaviour
+public class AchievementsManager : MonoBehaviour
 {
-    public static AwardManager instance { get; private set; }
+    public static AchievementsManager instance { get; private set; }
 
     void Awake()
     {
@@ -21,15 +21,19 @@ public class AwardManager : MonoBehaviour
 
     public void ProgressAchievement(string awardName, int value)
     {
+        Debug.Log(awardName + "달성");
         if(AwardList.awardList.ContainsKey(awardName))
         {
-            AwardList.awardList[awardName].currentValue += value;
+            AwardList.awardList[awardName].currentValue += value;                                                   //최대치를 넘기더라도 저장
             if(AwardList.awardList[awardName].currentValue >= AwardList.awardList[awardName].goalValue)
             {
                 AwardList.awardList[awardName].isAchieved = true;
             }
 
-            //업적 관련 팝업 UI 기능 추가
+            if (AchievementFloatingUI.instance != null && AwardList.awardList[awardName].isAchieved == false)
+            {
+                AchievementFloatingUI.instance.ShowAchievementPopup(awardName, AwardList.awardList[awardName].currentValue, AwardList.awardList[awardName].goalValue);
+            }
         }
     }
 }

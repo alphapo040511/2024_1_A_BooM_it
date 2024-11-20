@@ -8,7 +8,7 @@ public class AwardList
             "Kill",
             new AwardData
             {
-                awardName = "싸움광",
+                awardName = "학살자",
                 awardDescription = "멀티플레이에서 상대방을 100 회 처치하기",
                 isAchieved = false,
                 goalValue = 100,
