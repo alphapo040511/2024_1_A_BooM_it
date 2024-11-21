@@ -14,8 +14,9 @@ public class Item : MonoBehaviour
 {
     // 아이템 속성
     public string itemNumber;                     // 아이템 이름
+    public string Description;              //아이템 설명
     public ItemType itemType;                  // 아이템 타입
-    public Texture2D itemTexture;                // 아이템 UI 텍스처
+    public Sprite itemImage;                // 아이템 UI 텍스처
     public NetworkPrefabRef bombPrefab;         //폭탄 프리팹
     public NetworkParabola bombParabola;
     public bool isUsable = true;               // 사용 가능한 상태
