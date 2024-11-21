@@ -113,7 +113,7 @@ public class BattleManager : NetworkBehaviour
         gameState = GameState.MapLoading;               //게임 상태 맵 로딩중으로 변경
         UpdateAllPlayersState(PlayerState.Loading);     //모든 플레이어의 상태를 '로딩중'으로 변경
         StartCoroutine(FadeCanvas(menuCanvas, false));
-        MapLoad(GameManager.Instance.mapIndex);                                      //맵 로딩 시작
+        MapLoad(GameManager.instance.mapIndex);                                      //맵 로딩 시작
     }
 
 

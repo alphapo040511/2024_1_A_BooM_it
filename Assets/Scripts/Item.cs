@@ -13,7 +13,8 @@ public enum ItemType
 public class Item : MonoBehaviour
 {
     // 아이템 속성
-    public string itemNumber;                     // 아이템 이름
+    public string itemIndex;                     // 아이템 인덱스
+    public string itemName;                 //아이템 이름
     public string Description;              //아이템 설명
     public ItemType itemType;                  // 아이템 타입
     public Sprite itemImage;                // 아이템 UI 텍스처
@@ -41,7 +42,7 @@ public class Item : MonoBehaviour
         {
             if (remainingUses > 0 || itemType == ItemType.Weapon)
             {
-                Debug.Log("Item used: " + itemNumber);
+                Debug.Log("Item used: " + itemIndex);
 
                 // 아이템 사용 로직 추가 (예: 플레이어 체력 회복, 무기 발사 등)
                 PerformItemAction(player);

@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour
             if (weaponIndex[i] == name)
             {
                 weaponIndex[i] = null;
+                if(i == index)
+                {
+                    return;
+                }
             }
         }
 
@@ -44,13 +48,10 @@ public class GameManager : MonoBehaviour
         if(itemIndex == name)
         {
             itemIndex = null;
-            return;
         }
         else
         {
             itemIndex = name;
-            return; 
         }
-    }
     }
 }

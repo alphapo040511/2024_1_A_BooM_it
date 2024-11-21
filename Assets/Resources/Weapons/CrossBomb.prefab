@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemNumber: CrossBomb
+  itemIndex: CrossBomb
+  itemName: "X \uD3ED\uD0C4"
+  Description: "X\uC790 \uBAA8\uC591\uC73C\uB85C \uD130\uC9C0\uB294 \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
   itemType: 0
-  itemTexture: {fileID: 0}
+  itemImage: {fileID: 0}
   bombPrefab:
     RawGuidValue: 35ff380cba735344a87e23c381fd5c13
   bombParabola: {fileID: 2744972758766036483, guid: 35ff380cba735344a87e23c381fd5c13,

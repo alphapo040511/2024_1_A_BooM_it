@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemNumber: SpeedUp
+  itemIndex: SpeedUp
+  itemName: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
+  Description: "10\uCD08\uB3D9\uC548 \uC774\uB3D9\uC18D\uB3C4\uAC00 \uC870\uAE08
+    \uC0C1\uC2B9\uD569\uB2C8"
   itemType: 1
-  itemTexture: {fileID: 0}
+  itemImage: {fileID: 0}
   bombPrefab:
     RawGuidValue: 00000000000000000000000000000000
   bombParabola: {fileID: 0}

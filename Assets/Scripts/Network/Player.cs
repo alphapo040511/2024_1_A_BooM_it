@@ -71,7 +71,7 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
-            RPC_ItemSpawn(GameManager.Instance.weaponIndex, GameManager.Instance.itemIndex);
+            RPC_ItemSpawn(GameManager.instance.weaponIndex, GameManager.instance.itemIndex);
         }
     }
 

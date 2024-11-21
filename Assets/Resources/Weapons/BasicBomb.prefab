@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemNumber: BasicBomb
+  itemIndex: BasicBomb
+  itemName: "\uAE30\uBCF8 \uD3ED\uD0C4"
+  Description: "\uAE30\uBCF8\uC801\uC778 \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
   itemType: 0
-  itemTexture: {fileID: 0}
+  itemImage: {fileID: 0}
   bombPrefab:
     RawGuidValue: 3ef8333af28ee804d995422ea4686c63
   bombParabola: {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63,
