@@ -79,9 +79,6 @@ public class HUDManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(isOver ? 3 : 1);
-
-        
-
         battleManager.UpdatePointComplete();
         yield break;
     }

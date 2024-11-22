@@ -241,6 +241,7 @@ public class BattleManager : NetworkBehaviour
     {
         Debug.Log("게임종료");
         Cursor.lockState = CursorLockMode.None;
+        Runner.Shutdown();
         Runner.LoadScene("LobbyScene");
     }
 
