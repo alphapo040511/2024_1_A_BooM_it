@@ -78,6 +78,8 @@ public class ItemManager : MonoBehaviour
 
     private void ManagerItemCheck(string key)
     {
+        if (key == null) return;
+
         bool isActive = (GameManager.instance.weaponIndex.Contains(key) || GameManager.instance.itemIndex == key);
         itemButtonManager.CheckSelected(key, isActive);
     }
