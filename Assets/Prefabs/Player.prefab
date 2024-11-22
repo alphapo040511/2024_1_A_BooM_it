@@ -77,8 +77,6 @@ GameObject:
   - component: {fileID: 7941044745138330048}
   - component: {fileID: 8637261848777380372}
   - component: {fileID: 4794983823603032041}
-  - component: {fileID: -730802854710321158}
-  - component: {fileID: 5084620420621027023}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -115,8 +113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea1ed3400c200a94aba2d9e4b4d83aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: -730802854710321158}
-  weapon: {fileID: 5084620420621027023}
   _angle: 0
   _rotateAngle: 0
   _mouseInput: {x: 0, y: 0}
@@ -126,7 +122,12 @@ MonoBehaviour:
   _animator: {fileID: 8637261848777380372}
   FirePoint: {fileID: 7854653979831548048}
   lineRenderer: {fileID: 4794983823603032041}
-  _weaponIndex: 0
+  _currentWeapon: 0
+  item: {fileID: 0}
+  weapon:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &7637000873822231789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,49 +314,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &-730802854710321158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9008056962130677397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemNumber: 0
-  itemType: 2
-  itemTexture: {fileID: 0}
-  bombPrefab:
-    RawGuidValue: 00000000000000000000000000000000
-  bombParabola: {fileID: 0}
-  isUsable: 1
-  maxUses: 3
-  cooldownTime: 5
---- !u!114 &5084620420621027023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9008056962130677397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemNumber: 0
-  itemType: 0
-  itemTexture: {fileID: 0}
-  bombPrefab:
-    RawGuidValue: 3ef8333af28ee804d995422ea4686c63
-  bombParabola: {fileID: 2972372033933623554, guid: 3ef8333af28ee804d995422ea4686c63,
-    type: 3}
-  isUsable: 1
-  maxUses: 1
-  cooldownTime: 5
 --- !u!1001 &1708455877267102823
 PrefabInstance:
   m_ObjectHideFlags: 0

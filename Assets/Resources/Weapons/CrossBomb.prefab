@@ -50,8 +50,8 @@ MonoBehaviour:
   itemType: 0
   itemImage: {fileID: 0}
   bombPrefab:
-    RawGuidValue: 35ff380cba735344a87e23c381fd5c13
-  bombParabola: {fileID: 2744972758766036483, guid: 35ff380cba735344a87e23c381fd5c13,
+    RawGuidValue: 78cc27bf74fd62044a5dab1d2fe72846
+  bombParabola: {fileID: 3126413873593658148, guid: 78cc27bf74fd62044a5dab1d2fe72846,
     type: 3}
   isUsable: 1
   maxUses: 3

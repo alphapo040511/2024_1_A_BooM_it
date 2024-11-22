@@ -12,7 +12,7 @@ public class CrossBomb : NetworkParabola
         {
             for (int z = -3; z <= 3; z++)
             {
-                if (Mathf.Abs(x) - Mathf.Abs(z) == 0)
+                if (x == 0 || z == 0)
                     explosionRange[temp++] = new Vector3Int(x, 0, z);
             }
         }

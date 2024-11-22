@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class StraightBomb : NetworkParabola
 {
-    public override Vector3Int[] ExplosionRange()       //일단 z축으로 터지지만 플레이어의 시점 기준으로 변경하기
+    public override Vector3Int[] ExplosionRange()
     {
-        Vector3Int[] explosionRange = new Vector3Int[9];
+        Vector3Int[] explosionRange = new Vector3Int[13];
+
+        Vector3 referenceDirection = Vector3.right;
+        Vector3 forwardDirection = transform.forward;
+
+        float angle = Vector3.Angle(forwardDirection, referenceDirection);
+
         int temp = 0;
-        for (int z = -4; z <= 4; z++)
+        for (int i = -6; i <= 6; i++)
         {
-            explosionRange[temp++] = new Vector3Int(0, 0, z);
+            if (angle <= 45 || angle >= 135f)
+            {
+                explosionRange[temp++] = new Vector3Int(0, 0, i);
+            }
+            else
+            {
+                explosionRange[temp++] = new Vector3Int(i, 0, 0);
+            }
         }
 
         return explosionRange;
+    }
+
+    public override void KnockBack(float distance, float force)
+    {
+        base.KnockBack(2);
     }
 }

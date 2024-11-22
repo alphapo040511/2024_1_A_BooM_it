@@ -19,27 +19,5 @@ public class DefaultBomb : NetworkParabola
         }
 
         return explosionRange;
-
-        //return new Vector3Int[13] {
-        //new Vector3Int(0,0,0),
-        //new Vector3Int(1,0,0),
-        //new Vector3Int(2,0,0),
-        //new Vector3Int(-1,0,0),
-        //new Vector3Int(-2,0,0),
-        //new Vector3Int(0,0,1),
-        //new Vector3Int(0,0,2),
-        //new Vector3Int(0,0,-1),
-        //new Vector3Int(0,0,-2),
-        //new Vector3Int(1,0,1),
-        //new Vector3Int(1,0,-1),
-        //new Vector3Int(-1,0,1),
-        //new Vector3Int(-1,0,-1)
-        //};
     }
-
-    public override void KnockBack()
-    {
-        base.KnockBack();
-    }
-
 }

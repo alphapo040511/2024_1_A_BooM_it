@@ -35,6 +35,13 @@ public class ItemManager : MonoBehaviour
         GenerateButtons(items, false, SetItem);
     }
 
+    public void LoadItemList()
+    {
+        foreach(string index in itemDatas.Keys)
+        {
+            ManagerItemCheck(index);
+        }
+    }
 
     public void ItemButton(int index)
     {

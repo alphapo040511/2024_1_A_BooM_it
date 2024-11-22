@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6918097682142889182}
   - component: {fileID: 6952780346590514366}
   m_Layer: 0
-  m_Name: StraightBomb
+  m_Name: KnockbackBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,16 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a32c20afc7f7de41a24f0920695bfdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemIndex: StraightBomb
-  itemName: "\uC9C1\uC120 \uD3ED\uD0C4"
-  Description: "\uB113\uC740 \uBC94\uC704\uC5D0\uC11C \uC9C1\uC120\uC73C\uB85C \uD130\uC9C0\uB294
-    \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
+  itemIndex: KnockbackBomb
+  itemName: "\uB109\uBC31 \uD3ED\uD0C4"
+  Description: "\uBE14\uB85D\uC744 \uD30C\uAD34\uD558\uB294 \uB300\uC2E0 \uB354 \uB113\uC740
+    \uBC94\uC704\uC758 \uC801\uC744 \uBC00\uC5B4\uB0C5\uB2C8\uB2E4."
   itemType: 0
   itemImage: {fileID: 0}
   bombPrefab:
-    RawGuidValue: 70e9a6be932333347a84691ee0344190
-  bombParabola: {fileID: 2824594540909466843, guid: 70e9a6be932333347a84691ee0344190,
+    RawGuidValue: ed44007e2ab3ff3409cad678828787ff
+  bombParabola: {fileID: 46340539311174832, guid: ed44007e2ab3ff3409cad678828787ff,
     type: 3}
   isUsable: 1
   maxUses: 3
-  cooldownTime: 1.2
+  cooldownTime: 2

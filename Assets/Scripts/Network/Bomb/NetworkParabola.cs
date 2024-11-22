@@ -12,10 +12,9 @@ public abstract class NetworkParabola : NetworkBehaviour
     [Networked] private Vector3 initialVelocity{ get; set; }
     [Networked] private float currentTime{ get; set; }
 
-    public float speed = 8.0f;
+    public float speed = 16.0f;
     public float gravity = 9.81f;
-
-    private protected int knockbackDistance = 3;
+    public int knockbackDistance = 3;
 
     private const float adjustedMinAngle = -40f;     //출력 발사 각도 최소 최대값
     private const float adjustedMaxAngle = 80;
@@ -81,7 +80,7 @@ public abstract class NetworkParabola : NetworkBehaviour
         {
             Vector3Int blockData = hitCollider.GetComponent<NetworkBlock>().intPosition;
             Explosion(blockData);
-            KnockBack();
+            KnockBack(knockbackDistance);
             Runner.Despawn(Object);
             break;
         }
@@ -90,21 +89,24 @@ public abstract class NetworkParabola : NetworkBehaviour
     public virtual void Explosion(Vector3Int blockData)       //폭발 (블럭 파괴) 기능
     {
         Vector3Int[] range = ExplosionRange();
-        BattleManager.Instance.levelManager.DestroyBlocks(blockData, range);
+        if (range != null)
+        {
+            BattleManager.Instance.levelManager.DestroyBlocks(blockData, range);
+        }
     }
 
     public abstract Vector3Int[] ExplosionRange();
 
 
 
-    public virtual void KnockBack()
+    public virtual void KnockBack(float distance, float force = 10)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, knockbackDistance, 1 << 6);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distance, 1 << 6);
 
         foreach (var hitCollider in hitColliders)
         {
             Player player = hitCollider.GetComponent<Player>();
-            player.Knockback(transform.position);
+            player.Knockback(transform.position, force);
         }
     }
 

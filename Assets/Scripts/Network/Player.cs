@@ -81,12 +81,12 @@ public class Player : NetworkBehaviour
         for (int i = 0; i < weapon.Length; i++)
         {
             string weaponPath = Path.Combine("Weapons", weaponIndex[i]);
-            GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath), default, default, transform);
+            GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath), transform);
             weapon[i] = bomb.GetComponent<Item>();
         }
 
         string path = Path.Combine("Items", itemIndex);
-        GameObject temp = Instantiate(Resources.Load<GameObject>(path));
+        GameObject temp = Instantiate(Resources.Load<GameObject>(path), transform);
         item = temp.GetComponent<Item>();
     }
 
@@ -182,7 +182,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void Knockback(Vector3 bombPos)
+    public void Knockback(Vector3 bombPos, float knockbackForce = 10)
     {
         if (HasStateAuthority)
         {
@@ -192,7 +192,7 @@ public class Player : NetworkBehaviour
                 return;
             }
 
-            Vector3 knockback = (transform.position - bombPos).normalized * 10;
+            Vector3 knockback = (transform.position - bombPos).normalized * knockbackForce;
             if (knockback.y < 0)
             {
                 knockback.y = 0;
@@ -287,9 +287,9 @@ public class Player : NetworkBehaviour
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (weapon[0].isUsable)        //버튼 선언한 것 가져와서 진행한다.
+            if (weapon[currentWeapon].isUsable)        //버튼 선언한 것 가져와서 진행한다.
             {
-                weapon[0].UseItem(this);
+                weapon[currentWeapon].UseItem(this);
             }
         }
 
