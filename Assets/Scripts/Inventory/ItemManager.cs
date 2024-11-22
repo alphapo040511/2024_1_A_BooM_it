@@ -47,8 +47,7 @@ public class ItemManager : MonoBehaviour
     {
         foreach (Item data in datas)
         {
-            itemDatas.Add(data.itemName, data);
-            ManagerItemCheck(data.itemName);
+            itemDatas.Add(data.itemIndex, data);
         }
     }
 
@@ -57,6 +56,7 @@ public class ItemManager : MonoBehaviour
         foreach(Item item in target)
         {
             itemButtonManager.AddButtons(item, isWeapon, addEvent, showDescription);
+            ManagerItemCheck(item.itemIndex);
         }
     }
 

@@ -14,33 +14,26 @@ public class ItemButtonManager : MonoBehaviour
 
     public Image[] itemButtonImages = new Image[4];
 
-    private Dictionary<string, GameObject> selectImages = new Dictionary<string, GameObject>();
+    private Dictionary<string, Image> selectImages = new Dictionary<string, Image>();
 
     public void AddButtons(Item itemData, bool isWeapon , Action<string> addEvent, Action<string> infoEvent)
     {
         GameObject button = Instantiate(itemButtons, isWeapon ? weaponGrid : itemGrid);
         Image itemImage = button.transform.Find("ItemImage").GetComponent<Image>();
-        GameObject selectImage = button.transform.Find("SelectImage").gameObject;
+        Image selectImage = button.transform.Find("SelectImage").GetComponent<Image>();
 
         itemImage.sprite = itemData.itemImage;
 
-        button.GetComponent<Button>().onClick.AddListener (()=> addEvent(itemData.itemName));
+        button.GetComponent<Button>().onClick.AddListener (()=> addEvent(itemData.itemIndex));
         EventTrigger.Entry entry = new EventTrigger.Entry
         {
             eventID = EventTriggerType.PointerEnter
         };
-        entry.callback.AddListener ((evenetData) => infoEvent(itemData.itemName));
+        entry.callback.AddListener ((evenetData) => infoEvent(itemData.itemIndex));
         button.GetComponent<EventTrigger>().triggers.Add(entry);
 
-        if (selectImage != null)
-        {
-            selectImage.GetComponent<Image>().enabled = false;
-            selectImages.Add(itemData.itemName, selectImage);
-        }
-        else
-        {
-            Debug.Log(itemData.itemName + "의 이미지 못 찾아냄");
-        }
+        selectImage.enabled = false;
+        selectImages.Add(itemData.itemIndex, selectImage);
     }
 
     public void CheckSelected(string name, bool isSelected)
@@ -52,7 +45,7 @@ public class ItemButtonManager : MonoBehaviour
 
         if (selectImages.ContainsKey(name))
         {
-            selectImages[name].GetComponent<Image>().enabled = isSelected;
+            selectImages[name].enabled = isSelected;
         }
     }
 
