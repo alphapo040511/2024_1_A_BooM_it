@@ -49,6 +49,13 @@ public class ItemButtonManager : MonoBehaviour
         }
     }
 
+    public void SetCurrentItemButton(int index, bool isSelected, Sprite itemImage = default)
+    {
+        itemButtonImages[index].enabled = isSelected;
+        itemButtonImages[index].sprite = itemImage;
+        Debug.Log($"{index} 칸에 {itemImage} 이미지 적용");
+    }
+
     public void ShowDescription(Item data)
     {
         Debug.Log($"이름 : {data.itemName} 설명 : {data.Description}");
