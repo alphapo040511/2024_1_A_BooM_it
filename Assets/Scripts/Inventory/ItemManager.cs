@@ -29,10 +29,10 @@ public class ItemManager : MonoBehaviour
         KeepItemData(weapons);
         KeepItemData(items);
 
-        //CurrentItemCheck();
-
         GenerateButtons(weapons, true, SetWeapon);
         GenerateButtons(items, false, SetItem);
+
+        Invoke("CheckCurrentItem", 2);
     }
 
     public void LoadItemList()
@@ -73,6 +73,7 @@ public class ItemManager : MonoBehaviour
         GameManager.instance.SetWeapon(key, SelectWeaponIndex);
         ManagerItemCheck(oldWeapon);
         ManagerItemCheck(key);
+        CheckCurrentItem();
     }
 
     private void SetItem(string key)
@@ -81,6 +82,7 @@ public class ItemManager : MonoBehaviour
         GameManager.instance.SetItem(key);
         ManagerItemCheck(oldWeapon);
         ManagerItemCheck(key);
+        CheckCurrentItem();
     }
 
     private void ManagerItemCheck(string key)
@@ -91,6 +93,37 @@ public class ItemManager : MonoBehaviour
         itemButtonManager.CheckSelected(key, isActive);
     }
 
+    private void CheckCurrentItem()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            string weaponName = GameManager.instance.weaponIndex[i];
+            if (weaponName != null)
+            {
+                if (itemDatas.ContainsKey(weaponName))
+                {
+                    itemButtonManager.SetCurrentItemButton(i, true, itemDatas[weaponName].itemImage);
+                }
+            }
+            else
+            {
+                itemButtonManager.SetCurrentItemButton(i, false);
+            }
+        }
+
+        string itemName = GameManager.instance.itemIndex;
+        if (itemName != null)
+        {
+            if (itemDatas.ContainsKey(itemName))
+            {
+                itemButtonManager.SetCurrentItemButton(3, true, itemDatas[itemName].itemImage);
+            }
+        }
+        else
+        {
+            itemButtonManager.SetCurrentItemButton(3, false);
+        }
+    }
 
 
     private void ShowDescription(string key)
