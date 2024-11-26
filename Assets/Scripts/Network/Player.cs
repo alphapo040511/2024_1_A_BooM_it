@@ -40,6 +40,8 @@ public class Player : NetworkBehaviour
     public NetworkMecanimAnimator _animator;
     public Transform FirePoint;
     public LineRenderer lineRenderer;
+    public MeshTrail meshTrail;
+    public GameObject Shield;
 
     private GameObject thirdPersonCamera;
     private float cameraDistance;
@@ -157,14 +159,31 @@ public class Player : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_UpdateSkillState(SkillState state)
+    public void RPC_UpdateSkillState(SkillState state = SkillState.None)
     {
         skillState = state;
-        Debug.Log(skillState);
+        Shield.SetActive(false);
         if (HasInputAuthority)
         {
             WeaponUIManager.instance.UseItem(item.cooldownTime);
         }
+
+        switch (skillState)
+        {
+            case SkillState.SpeedUp:
+                meshTrail.Use();
+                if (HasStateAuthority) Invoke("OffSkill", 5);
+                break;
+            case SkillState.Resisting:
+                Shield.SetActive(true);
+                if (HasStateAuthority) Invoke("OffSkill", 5);
+                break;
+        }
+    }
+
+    private void OffSkill()
+    {
+        RPC_UpdateSkillState(SkillState.None);
     }
 
     private void ResetParameters()
