@@ -7,6 +7,8 @@ public class MainMenuController : MonoBehaviour
 {
     public GameObject mainMenu;
 
+    public Menu Menu;
+
     public RectTransform selectBar;
 
     private GameObject nowTab;
@@ -58,6 +60,7 @@ public class MainMenuController : MonoBehaviour
         {
             targetTab = mainMenu;
             tabStack = new Stack<GameObject>();
+            Menu.TurnTab();
         }
         TabMove(nowTab, targetTab);
     }
