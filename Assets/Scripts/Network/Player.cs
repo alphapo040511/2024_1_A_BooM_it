@@ -133,6 +133,14 @@ public class Player : NetworkBehaviour
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
 
+
+
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                PlayerMovement(default);
+                return;
+            }
+
             PlayerMovement(moveDirection);
 
             if (mouseDirection != Vector2.zero) CameraMovement(mouseDirection);

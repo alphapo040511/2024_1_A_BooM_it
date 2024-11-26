@@ -16,6 +16,8 @@ public class Menu : MonoBehaviour
     [SerializeField] private Slider BGMSlider;                 //UI Slider
     [SerializeField] private Slider SFXSlider;                 //UI Slider
 
+    private CursorLockMode cursorState = CursorLockMode.None;
+
     //슬라이더 Minvalue을 0.001
 
     private void Awake()
@@ -64,11 +66,14 @@ public class Menu : MonoBehaviour
     {
         menuUI.SetActive(true);
         ChangeVolumeValue();
+        cursorState = Cursor.lockState;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void CloseTab()
     {
         menuUI.SetActive(false);
+        Cursor.lockState = cursorState;
     }
 
     public void Exit()
