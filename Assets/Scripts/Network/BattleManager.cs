@@ -231,6 +231,7 @@ public class BattleManager : NetworkBehaviour
                 }
                 break;
             case GameState.GameOver:
+                UpdateAllPlayersState(PlayerState.Die);
                 RPC_Shutdown();
                 break;
         }
@@ -241,8 +242,7 @@ public class BattleManager : NetworkBehaviour
     {
         Debug.Log("게임종료");
         Cursor.lockState = CursorLockMode.None;
-        Runner.Shutdown();
-        Runner.LoadScene("LobbyScene");
+        NetworkManager.Instance.DisconnectClicked();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

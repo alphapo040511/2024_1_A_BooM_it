@@ -13,24 +13,11 @@ public class NetworkRoomLoader : MonoBehaviour
     private string _roomName;
     private int playerCount = 2;
 
-    private NetworkManager _networkManager;
-    private NetworkRunner runner;
-
     private List<SessionInfo> sessions;
 
     // Start is called before the first frame update
     void Start()
     {
-        _networkManager = NetworkManager.Instance;   
-        if( _networkManager._runner == null )
-        {
-            runner = _networkManager.NewRunner();
-        }
-        else
-        {
-            runner = _networkManager._runner;
-        }
-
         for (int i = 0; i < roomButtons.Count; i++)
         {
             roomButtons[i].selectRoom += SelectRoom;
@@ -42,7 +29,7 @@ public class NetworkRoomLoader : MonoBehaviour
         }
 
         JoinLobby();
-        _networkManager.updateSessions += UpdateRooms;
+        NetworkManager.Instance.updateSessions += UpdateRooms;
     }
 
     public void InputName()
@@ -59,7 +46,7 @@ public class NetworkRoomLoader : MonoBehaviour
         {
             if (IsRoomNameDuplicate(roomName.text))
             {
-                _networkManager.StartGame(GameMode.Host, roomName.text, playerCount);
+                NetworkManager.Instance.StartGame(GameMode.Host, roomName.text, playerCount);
             }
             else
             {
@@ -70,6 +57,8 @@ public class NetworkRoomLoader : MonoBehaviour
 
     private bool IsRoomNameDuplicate(string targetName)
     {
+        if (sessions == null) return true;
+
         foreach(var info in sessions)
         {
             if(info.Name == targetName)
@@ -85,7 +74,7 @@ public class NetworkRoomLoader : MonoBehaviour
     {
         if (_roomName != null)
         {
-            _networkManager.StartGame(GameMode.Client, _roomName, playerCount);
+            NetworkManager.Instance.StartGame(GameMode.Client, _roomName, playerCount);
         }
     }
 
@@ -128,7 +117,7 @@ public class NetworkRoomLoader : MonoBehaviour
 
     private async void JoinLobby()
     {
-        await _networkManager.JoinLobby();
+        await NetworkManager.Instance.JoinLobby();
     }
 
   

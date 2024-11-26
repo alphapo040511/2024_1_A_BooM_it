@@ -10,11 +10,24 @@ using System.Threading.Tasks;
 // NetworkManager 클래스
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    public NetworkRunner _runner;
+
+    private NetworkRunner runner;
+    public NetworkRunner Runner
+    {
+        get
+        {
+            if(runner == null)
+            {
+                runner = gameObject.AddComponent<NetworkRunner>();
+                runner.ProvideInput = true;
+            }
+
+            return runner;
+        }
+    }
     private NetworkInputHandler _inputHandler;
-    [SerializeField] private string _gameSceneName = "GameScene"; // 게임 씬 이름
+    private string _gameSceneName = "GameScene"; // 게임 씬 이름
     public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     public Action<List<SessionInfo>> updateSessions;
@@ -51,27 +64,35 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Destroy(gameObject);  // 기존 인스턴스가 있으면 새로 생성된 인스턴스를 파괴
         }
 
+
         _inputHandler = gameObject.AddComponent<NetworkInputHandler>();
     }
 
-    public NetworkRunner NewRunner()
-    {
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
-        return _runner;
-    }
+  
 
     public async Task JoinLobby()
     {
-        var result = await _runner.JoinSessionLobby(SessionLobby.ClientServer);
+        var result = await Runner.JoinSessionLobby(SessionLobby.ClientServer);
         if(result.Ok)
         {
             Debug.Log("로비에 입장");
+            NewRunner();
         }
+    }
+
+    public void NewRunner()
+    {
+        var events = gameObject.AddComponent<NetworkEvents>();
+        Debug.Log($"{events.gameObject.name} 오브젝트에 이벤트 추가");
+        events.OnShutdown.AddListener(OnShutdown);
+        events.OnSessionListUpdate.AddListener(OnSessionListUpdated);
     }
 
     public async void StartGame(GameMode mode, string roomName, int playerCount)
     {
+        _playerPrefab = GameManager.instance.playerRef;
+
+
         // 게임 씬의 빌드 인덱스 찾기
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_gameSceneName);
         if (sceneIndex == -1)
@@ -91,7 +112,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         // 세션 시작 또는 참가
-        await _runner.StartGame(new StartGameArgs()
+        await Runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
             SessionName = roomName, // 사용자가 입력한 방 이름 사용
@@ -134,6 +155,27 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log($"플레이어 퇴장: {player}");
     }
 
+    public async void DisconnectClicked()
+    {
+        await Disconnect();
+    }
+
+    public async Task Disconnect()
+    {
+        if (Runner == null)
+            return;
+
+        var events = Runner.GetComponent<NetworkEvents>();
+        events.OnShutdown.RemoveListener(OnShutdown);
+        events.OnSessionListUpdate.RemoveListener(OnSessionListUpdated);
+
+        await Runner.Shutdown();
+        runner = null;
+
+        SceneManager.LoadScene("LobbyScene");
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         input.Set(_inputHandler.GetNetworkInput());
@@ -142,7 +184,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        Debug.Log($"네트워크 셧다운: {shutdownReason}");
+        Debug.LogWarning($"네트워크 셧다운: {shutdownReason}");
+        SceneManager.LoadScene("LobbyScene");
+        runner = null;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -150,7 +195,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     }
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-        Debug.Log($"서버와의 연결이 끊김: {reason}");
+        Debug.LogWarning($"서버와의 연결이 끊김: {reason}");
+        SceneManager.LoadScene("LobbyScene");
+        runner = null;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)

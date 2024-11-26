@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
+    public NetworkPrefabRef playerRef;
+
     public string mapIndex;
 
     public string[] weaponIndex = new string[3];
