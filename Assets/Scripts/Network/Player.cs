@@ -88,6 +88,12 @@ public class Player : NetworkBehaviour
         string path = Path.Combine("Items", itemIndex);
         GameObject temp = Instantiate(Resources.Load<GameObject>(path), transform);
         item = temp.GetComponent<Item>();
+
+
+        if(HasInputAuthority)
+        {
+            WeaponUIManager.instance.SetWeapons(weapon[0].itemImage, weapon[2].itemImage, weapon[1].itemImage, item.itemImage);
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -150,10 +156,15 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void UpdateSkillState(SkillState state)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_UpdateSkillState(SkillState state)
     {
         skillState = state;
         Debug.Log(skillState);
+        if (HasInputAuthority)
+        {
+            WeaponUIManager.instance.UseItem(item.cooldownTime);
+        }
     }
 
     private void ResetParameters()
@@ -188,7 +199,7 @@ public class Player : NetworkBehaviour
         {
             if(skillState == SkillState.Resisting)
             {
-                UpdateSkillState(SkillState.None);
+                RPC_UpdateSkillState(SkillState.None);
                 return;
             }
 
@@ -255,11 +266,19 @@ public class Player : NetworkBehaviour
 
     private void ChangeWeapon(float wheel)
     {
-        if(changeDelay.ExpiredOrNotRunning(Runner))
+        if (state != PlayerState.Playing) return;
+
+        if (changeDelay.ExpiredOrNotRunning(Runner))
         {
             currentWeapon += wheel > 0 ? 1 : -1;
             currentWeapon = (int)Mathf.Repeat(currentWeapon, weapon.Length);
             changeDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
+            if(HasInputAuthority) 
+            { 
+                int previous = (int)Mathf.Repeat(currentWeapon - 1, weapon.Length);
+                int next = (int)Mathf.Repeat(currentWeapon +1, weapon.Length);
+                WeaponUIManager.instance.ChangeWeapons(weapon[currentWeapon].itemImage, weapon[previous].itemImage, weapon[next].itemImage);
+            }
         }
     }
 
@@ -314,13 +333,16 @@ public class Player : NetworkBehaviour
 
     private void UseItem()
     {
-        if (state != PlayerState.Playing || !HasInputAuthority) return;
+        if (state != PlayerState.Playing) return;
 
         if (_networkButtons.IsSet(NetworkInputData.KEYCODER))
         {
             if (item.isUsable)
             {
-                item.UseItem(this);
+                if (HasStateAuthority)
+                {
+                    item.UseItem(this);
+                }
             }
         }
     }

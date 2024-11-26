@@ -48,7 +48,7 @@ MonoBehaviour:
   itemName: "X \uD3ED\uD0C4"
   Description: "X\uC790 \uBAA8\uC591\uC73C\uB85C \uD130\uC9C0\uB294 \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
   itemType: 0
-  itemImage: {fileID: -230644170, guid: e6c4bec5eb9f52a48b7deecb284efc12, type: 3}
+  itemImage: {fileID: -100737287, guid: d9f13b1dad88a7243aa2adb7981599dd, type: 3}
   bombPrefab:
     RawGuidValue: 78cc27bf74fd62044a5dab1d2fe72846
   bombParabola: {fileID: 3126413873593658148, guid: 78cc27bf74fd62044a5dab1d2fe72846,

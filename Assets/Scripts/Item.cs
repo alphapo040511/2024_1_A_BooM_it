@@ -93,12 +93,12 @@ public class Item : MonoBehaviour
 
     private void SpeedUp(Player player)
     {
-        player.UpdateSkillState(SkillState.SpeedUp);
+        player.RPC_UpdateSkillState(SkillState.SpeedUp);
     }
 
     private void Shield(Player player)
     {
-        player.UpdateSkillState(SkillState.Resisting);
+        player.RPC_UpdateSkillState(SkillState.Resisting);
     }
 
     // 쿨타임을 관리하는 코루틴

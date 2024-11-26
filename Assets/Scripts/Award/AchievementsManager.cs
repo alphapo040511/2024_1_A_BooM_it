@@ -23,10 +23,7 @@ public class AchievementsManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ProgressAchievement("Kill", 30);
-        }
+
     }
 
     public void ProgressAchievement(string awardKey, int value)

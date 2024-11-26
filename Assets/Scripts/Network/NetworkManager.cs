@@ -82,6 +82,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void NewRunner()
     {
+        return;
+
         var events = gameObject.AddComponent<NetworkEvents>();
         Debug.Log($"{events.gameObject.name} 오브젝트에 이벤트 추가");
         events.OnShutdown.AddListener(OnShutdown);
@@ -165,9 +167,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (Runner == null)
             return;
 
-        var events = Runner.GetComponent<NetworkEvents>();
-        events.OnShutdown.RemoveListener(OnShutdown);
-        events.OnSessionListUpdate.RemoveListener(OnSessionListUpdated);
+        //var events = Runner.GetComponent<NetworkEvents>();
+        //events.OnShutdown.RemoveListener(OnShutdown);
+        //events.OnSessionListUpdate.RemoveListener(OnSessionListUpdated);
 
         await Runner.Shutdown();
         runner = null;
