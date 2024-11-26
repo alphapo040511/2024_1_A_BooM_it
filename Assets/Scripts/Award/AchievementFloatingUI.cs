@@ -27,7 +27,7 @@ public class AchievementFloatingUI : MonoBehaviour
         }
     }
 
-    public void ShowAchievementPopup(string name, int currentValue, int goalValue)
+    public void ShowAchievementPopup(AwardData data)
     {
         GameObject popup = Instantiate(textPregabs, transform);
 
@@ -36,16 +36,31 @@ public class AchievementFloatingUI : MonoBehaviour
         rectTransform.anchorMin = new Vector2(0.5f, 1f); // ÇÏ´Ü Áß¾Ó ¾ÞÄ¿
         rectTransform.anchorMax = new Vector2(0.5f, 1f); // ÇÏ´Ü Áß¾Ó ¾ÞÄ¿
         rectTransform.pivot = new Vector2(0.5f, 1f);     // Pivot ¼³Á¤
-        rectTransform.anchoredPosition = new Vector2(0f, 100f);
+        rectTransform.anchoredPosition = new Vector2(0f, 160f);
 
         TextMeshProUGUI awardName = popup.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI description = popup.transform.Find("Description").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI value = popup.transform.Find("Value").GetComponent<TextMeshProUGUI>();
-        Slider valueSlider = popup.transform.Find("Slider").GetComponent<Slider>();
+        RectTransform sliderValue = popup.transform.Find("SliderValue").GetComponent<RectTransform>();
+        Image achieved = popup.transform.Find("Achieved").GetComponent<Image>();
 
-        awardName.text = name;
-        value.text = $"{currentValue} / {goalValue}";
-        valueSlider.maxValue = goalValue;
-        valueSlider.value = currentValue;
+        awardName.text = data.awardName;
+        description.text = data.awardDescription;
+        value.text = $"{data.currentValue} / {data.goalValue}";
+
+        float size = ((float)data.currentValue / (float)data.goalValue);
+        size = Mathf.Clamp01(size);
+        sliderValue.localScale = new Vector3(size, 1, 1);
+        if(data.currentValue >= data.goalValue || data.isAchieved)
+        {
+            data.isAchieved = true;
+            achieved.enabled = true;
+        }
+        else
+        {
+            achieved.enabled = false;
+        }
+
 
         popupObject.Enqueue(popup);
     }
@@ -63,7 +78,7 @@ public class AchievementFloatingUI : MonoBehaviour
 
         yield return new WaitForSeconds(0.75f);
 
-        while (rectTransform.anchoredPosition.y <= 100)
+        while (rectTransform.anchoredPosition.y <= 160)
         {
             rectTransform.anchoredPosition += Vector2.up * 200 * Time.deltaTime;
             yield return null;

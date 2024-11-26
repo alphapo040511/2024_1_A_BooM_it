@@ -8,8 +8,19 @@ public class AwardList
             "Kill",
             new AwardData
             {
-                awardName = "학살자",
+                awardName = "다음은 너야",
                 awardDescription = "멀티플레이에서 상대방을 100 회 처치하기",
+                isAchieved = false,
+                goalValue = 100,
+                currentValue = 0,
+            }
+        },
+        {
+            "Die",
+            new AwardData
+            {
+                awardName = "프로 스카이다이버",
+                awardDescription = "맵 바깥으로 100회 떨어지기",
                 isAchieved = false,
                 goalValue = 100,
                 currentValue = 0,
@@ -19,24 +30,24 @@ public class AwardList
             "Win",
             new AwardData
             {
-                awardName = "승리자",
-                awardDescription = "멀티플레이에서 10 회 승리하기",
+                awardName = "BooMit! 고수가 될거야!",
+                awardDescription = "멀티플레이에서 100 회 승리하기",
                 isAchieved = false,
                 goalValue = 10,
                 currentValue = 0,
             }
         },
-        {
-            "Marathoner",
-            new AwardData
-            {
-                awardName = "마라토너",
-                awardDescription = "총합 10000 블록 만큼 이동하기",
-                isAchieved = false,
-                goalValue = 10000,
-                currentValue = 0,
-            }
-        },
+        //{
+        //    "Marathoner",
+        //    new AwardData
+        //    {
+        //        awardName = "마라토너",
+        //        awardDescription = "총합 10000 블록 만큼 이동하기",
+        //        isAchieved = false,
+        //        goalValue = 10000,
+        //        currentValue = 0,
+        //    }
+        //},
         {
             "WeaponMaster",
             new AwardData

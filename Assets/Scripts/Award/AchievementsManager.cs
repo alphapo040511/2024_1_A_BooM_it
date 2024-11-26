@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class AchievementsManager : MonoBehaviour
 {
     public static AchievementsManager instance { get; private set; }
+    public Action<string> addAward;
 
     void Awake()
     {
@@ -23,25 +25,28 @@ public class AchievementsManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ProgressAchievement("Kill", 1);
+            ProgressAchievement("Kill", 30);
         }
     }
 
-    public void ProgressAchievement(string awardName, int value)
+    public void ProgressAchievement(string awardKey, int value)
     {
-        Debug.Log(awardName + "달성");
-        if(AwardList.awardList.ContainsKey(awardName))
+        Debug.Log(awardKey + "달성");
+        if(AwardList.awardList.ContainsKey(awardKey))
         {
-            AwardList.awardList[awardName].currentValue += value;                                                   //최대치를 넘기더라도 저장
-            if(AwardList.awardList[awardName].currentValue >= AwardList.awardList[awardName].goalValue)
+            AwardList.awardList[awardKey].currentValue += value;                                                   //최대치를 넘기더라도 저장
+
+            if (AchievementFloatingUI.instance != null && AwardList.awardList[awardKey].isAchieved == false)
             {
-                AwardList.awardList[awardName].isAchieved = true;
+                AchievementFloatingUI.instance.ShowAchievementPopup(AwardList.awardList[awardKey]);
             }
 
-            if (AchievementFloatingUI.instance != null && AwardList.awardList[awardName].isAchieved == false)
+            if (AwardList.awardList[awardKey].currentValue >= AwardList.awardList[awardKey].goalValue)
             {
-                AchievementFloatingUI.instance.ShowAchievementPopup(awardName, AwardList.awardList[awardName].currentValue, AwardList.awardList[awardName].goalValue);
+                AwardList.awardList[awardKey].isAchieved = true;
             }
+
+            addAward?.Invoke(awardKey);
         }
     }
 }
