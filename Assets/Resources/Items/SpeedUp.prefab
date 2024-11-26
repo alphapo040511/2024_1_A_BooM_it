@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIndex: SpeedUp
   itemName: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
-  Description: "10\uCD08\uB3D9\uC548 \uC774\uB3D9\uC18D\uB3C4\uAC00 \uC870\uAE08
-    \uC0C1\uC2B9\uD569\uB2C8"
+  Description: "duration\uCD08\uB3D9\uC548 \uC774\uB3D9\uC18D\uB3C4\uAC00 \uC870\uAE08
+    \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
   itemType: 1
   itemImage: {fileID: 0}
   bombPrefab:
@@ -56,3 +56,4 @@ MonoBehaviour:
   isUsable: 1
   maxUses: 3
   cooldownTime: 10
+  duration: 5

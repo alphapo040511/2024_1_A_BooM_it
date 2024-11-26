@@ -83,11 +83,19 @@ public class Player : NetworkBehaviour
         for (int i = 0; i < weapon.Length; i++)
         {
             string weaponPath = Path.Combine("Weapons", weaponIndex[i]);
+            if (weaponIndex[i] == "None")
+            {
+                weaponPath = Path.Combine("Weapons", "BasicBomb");
+            }
             GameObject bomb = Instantiate(Resources.Load<GameObject>(weaponPath), transform);
             weapon[i] = bomb.GetComponent<Item>();
         }
 
         string path = Path.Combine("Items", itemIndex);
+        if(itemIndex == "None")
+        {
+            path = Path.Combine("Items", "Shield");
+        }
         GameObject temp = Instantiate(Resources.Load<GameObject>(path), transform);
         item = temp.GetComponent<Item>();
 
@@ -172,11 +180,11 @@ public class Player : NetworkBehaviour
         {
             case SkillState.SpeedUp:
                 meshTrail.Use();
-                if (HasStateAuthority) Invoke("OffSkill", 5);
+                if (HasStateAuthority) Invoke("OffSkill", item.duration);
                 break;
             case SkillState.Resisting:
                 Shield.SetActive(true);
-                if (HasStateAuthority) Invoke("OffSkill", 5);
+                if (HasStateAuthority) Invoke("OffSkill", item.duration);
                 break;
         }
     }

@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemIndex: CrossBomb
-  itemName: "X \uD3ED\uD0C4"
-  Description: "X\uC790 \uBAA8\uC591\uC73C\uB85C \uD130\uC9C0\uB294 \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
+  itemName: "+ \uD3ED\uD0C4"
+  Description: "+ \uBAA8\uC591\uC73C\uB85C \uD130\uC838 \uBE14\uB85D\uC744 \uD30C\uAD34\uD558\uB294
+    \uD3ED\uD0C4\uC785\uB2C8\uB2E4.\n\uB109\uBC31 \uBC94\uC704 : 3"
   itemType: 0
   itemImage: {fileID: -100737287, guid: d9f13b1dad88a7243aa2adb7981599dd, type: 3}
   bombPrefab:

@@ -14,7 +14,20 @@ public class ItemButtonManager : MonoBehaviour
 
     public Image[] itemButtonImages = new Image[4];
 
+    public GameObject descriptionPopup;
+    public TextMeshProUGUI itemName;
+    public TextMeshProUGUI description;
+    public TextMeshProUGUI cooltime;
+    public TextMeshProUGUI count;
+
+    public Action infoOutEvent;
+
     private Dictionary<string, Image> selectImages = new Dictionary<string, Image>();
+
+    private void Start()
+    {
+        infoOutEvent += HideDescription;
+    }
 
     public void AddButtons(Item itemData, bool isWeapon , Action<string> addEvent, Action<string> infoEvent)
     {
@@ -25,12 +38,20 @@ public class ItemButtonManager : MonoBehaviour
         itemImage.sprite = itemData.itemImage;
 
         button.GetComponent<Button>().onClick.AddListener (()=> addEvent(itemData.itemIndex));
+
         EventTrigger.Entry entry = new EventTrigger.Entry
         {
             eventID = EventTriggerType.PointerEnter
         };
         entry.callback.AddListener ((evenetData) => infoEvent(itemData.itemIndex));
         button.GetComponent<EventTrigger>().triggers.Add(entry);
+
+        EventTrigger.Entry _entry = new EventTrigger.Entry
+        {
+            eventID = EventTriggerType.PointerExit
+        };
+        _entry.callback.AddListener((evenetData) => infoOutEvent());
+        button.GetComponent<EventTrigger>().triggers.Add(_entry);
 
         selectImage.enabled = false;
         selectImages.Add(itemData.itemIndex, selectImage);
@@ -56,9 +77,30 @@ public class ItemButtonManager : MonoBehaviour
         Debug.Log($"{index} 칸에 {itemImage} 이미지 적용");
     }
 
-    public void ShowDescription(Item data)
+    public void ShowDescription(Item data, Vector3 mousePos)
     {
-        Debug.Log($"이름 : {data.itemName} 설명 : {data.Description}");
+        descriptionPopup.transform.localPosition = mousePos;
+
+        itemName.text = data.itemName;
+        string info = data.Description.Replace("duration", data.duration.ToString());
+        description.text = info;
+
+        if(data.itemType != ItemType.Weapon)
+        {
+            cooltime.text = $"쿨타임 : {data.cooldownTime}초";
+            count.text = $"사용가능 횟수 : {data.maxUses}";
+        }
+        else
+        {
+            cooltime.text = $"발사 쿨타임 : {data.cooldownTime}초";
+            count.text = "";
+        }
+
+        descriptionPopup.SetActive(true);
     }
 
+    private void HideDescription()
+    {
+        descriptionPopup.SetActive(false);
+    }
 }

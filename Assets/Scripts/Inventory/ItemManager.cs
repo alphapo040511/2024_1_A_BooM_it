@@ -87,7 +87,10 @@ public class ItemManager : MonoBehaviour
 
     private void ManagerItemCheck(string key)
     {
-        if (key == null) return;
+        if (key == "None")
+        {
+            return;
+        }
 
         bool isActive = (GameManager.instance.weaponIndex.Contains(key) || GameManager.instance.itemIndex == key);
         itemButtonManager.CheckSelected(key, isActive);
@@ -98,7 +101,7 @@ public class ItemManager : MonoBehaviour
         for(int i = 0; i < 3; i++)
         {
             string weaponName = GameManager.instance.weaponIndex[i];
-            if (weaponName != null)
+            if (weaponName != "None")
             {
                 if (itemDatas.ContainsKey(weaponName))
                 {
@@ -130,7 +133,9 @@ public class ItemManager : MonoBehaviour
     {
         if(itemDatas.ContainsKey(key))
         {
-            itemButtonManager.ShowDescription(itemDatas[key]);
+            Vector3 point = Input.mousePosition;
+            point -= new Vector3(960, 540, 0);
+            itemButtonManager.ShowDescription(itemDatas[key], point);
         }
     }
 }

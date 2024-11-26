@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
     // 아이템 속성
     public string itemIndex;                     // 아이템 인덱스
     public string itemName;                 //아이템 이름
-    public string Description;              //아이템 설명
+    [TextArea(3,5)]public string Description;              //아이템 설명
     public ItemType itemType;                  // 아이템 타입
     public Sprite itemImage;                // 아이템 UI 텍스처
     public NetworkPrefabRef bombPrefab;         //폭탄 프리팹
@@ -23,6 +23,7 @@ public class Item : MonoBehaviour
     public bool isUsable = true;               // 사용 가능한 상태
     public int maxUses = 1;                    // 사용 가능 횟수
     public float cooldownTime = 5f;            // 아이템 쿨타임 (초 단위)
+    public float duration = 5f;                 //아이템 지속시간
 
     private int remainingUses;                 // 남은 사용 가능 횟수
     private bool isOnCooldown = false;         // 쿨타임 상태

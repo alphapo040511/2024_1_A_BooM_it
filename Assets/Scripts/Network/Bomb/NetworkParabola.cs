@@ -14,7 +14,7 @@ public abstract class NetworkParabola : NetworkBehaviour
 
     public float speed = 16.0f;
     public float gravity = 9.81f;
-    public int knockbackDistance = 3;
+    private int knockbackDistance = 3;
 
     private const float adjustedMinAngle = -40f;     //출력 발사 각도 최소 최대값
     private const float adjustedMaxAngle = 80;

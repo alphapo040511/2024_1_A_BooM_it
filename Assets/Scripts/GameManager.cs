@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         {
             if (weaponIndex[i] == name)
             {
-                weaponIndex[i] = null;
+                weaponIndex[i] = "None";
                 if(i == index)
                 {
                     return;
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         if(itemIndex == name)
         {
-            itemIndex = null;
+            itemIndex = "None";
         }
         else
         {

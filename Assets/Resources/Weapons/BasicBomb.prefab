@@ -46,7 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIndex: BasicBomb
   itemName: "\uAE30\uBCF8 \uD3ED\uD0C4"
-  Description: "\uAE30\uBCF8\uC801\uC778 \uD3ED\uD0C4\uC785\uB2C8\uB2E4."
+  Description: "3\uCE78 \uC774\uB0B4\uC758 \uBE14\uB85D\uC744 \uC6D0\uD615\uC73C\uB85C
+    \uD30C\uAD34\uC2DC\uD0A4\uB294 \uAE30\uBCF8\uC801\uC778 \uD3ED\uD0C4\uC785\uB2C8\uB2E4.\n\uB109\uBC31
+    \uBC94\uC704 : 3"
   itemType: 0
   itemImage: {fileID: 98682500, guid: d9f13b1dad88a7243aa2adb7981599dd, type: 3}
   bombPrefab:
