@@ -8,8 +8,8 @@ public class MeshTrail : MonoBehaviour
     public float activeTime = 5f;               //잔상 효과 지속 시간
 
     [Header("Mesh Releted")]                    //메시(3D 모델) 관련 설정
-    public float meshRefreshRate = 0.1f;        //잔상이 생성되는 시간 간격
-    public float meshDestoryDelay = 1.0f;       //생성된 잔상이 사라지는 데 걸리는 시간
+    public float meshRefreshRate = 0.05f;        //잔상이 생성되는 시간 간격
+    public float meshDestoryDelay = 0.5f;       //생성된 잔상이 사라지는 데 걸리는 시간
     public Transform positionToSpawn;           //잔상이 생성될 위치
 
     [Header("Shader Releted")]                  //셰이더 관련 설정

@@ -331,8 +331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeTime: 5
-  meshRefreshRate: 0.1
-  meshDestoryDelay: 1
+  meshRefreshRate: 0.05
+  meshDestoryDelay: 0.5
   positionToSpawn: {fileID: 7210707085876697047}
   mat: {fileID: 2100000, guid: 30ef080baa176db45bd1f621df4e577e, type: 2}
   shaderVarRef: Fresnel Power
