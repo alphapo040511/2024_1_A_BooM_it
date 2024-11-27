@@ -56,7 +56,7 @@ public class AwardList
                 awardDescription = "무기 종류 5개 이상 획득하기",
                 isAchieved = false,
                 goalValue = 5,
-                currentValue = 0,
+                currentValue = 4,
             }
         }
     };

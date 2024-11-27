@@ -6,19 +6,19 @@ using System.IO;
 
 public enum PlayerState
 {
-    Ready,         // ???? ??
-    Loading,       // ???? ??
-    Standby,       // ???? ???? ??????????
-    Playing,       // ???? ??
-    Die,           // ???? ????
-    Spectating     // ????
+    Ready,         // 준비중
+    Loading,       // 로딩중
+    Standby,       // 대기중
+    Playing,       // 플레이중
+    Die,           // 사망
+    Spectating     // 관전중
 }
 
 public enum SkillState
 {
-    None,           //???? ???? ????
-    Resisting,         //???? ???? ????
-    SpeedUp,        //???? ???? ????
+    None,           //아무 효과 없음
+    Resisting,      //저항중 (쉴드)
+    SpeedUp,        //이속증가
 }
 
 public class Player : NetworkBehaviour
@@ -127,7 +127,6 @@ public class Player : NetworkBehaviour
 
         if (GetInput(out NetworkInputData data))
         {
-            //???? ?????? ???????? ????
             _networkButtons = data.buttons;
             Vector3 moveDirection = data.direction;
             Vector2 mouseDirection = data.lookDirection;
@@ -239,7 +238,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    //?????? ??????
+    //움직임 관련 로직
     private void PlayerMovement(Vector3 moveDirection)
     {
         if (state == PlayerState.Die)
@@ -253,7 +252,7 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        //?????????? ??????
+        //애니메이션 동기화
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
         _animator.Animator.SetFloat("Speed",Mathf.Abs(moveDirection.magnitude));
@@ -261,7 +260,7 @@ public class Player : NetworkBehaviour
         _cc.Move(moveDirection, skillState == SkillState.SpeedUp);
     }
 
-    //?????? ??????
+    //카메라 움직임 관련 로직
     private void CameraMovement(Vector2 mouseDirection)
     {
         Vector2 mouseDir = default;
@@ -310,7 +309,7 @@ public class Player : NetworkBehaviour
     }
 
 
-    //???? ????
+    //점프 체크
     private void CheckAndJump()
     {
         if (state != PlayerState.Playing) return;
@@ -326,14 +325,14 @@ public class Player : NetworkBehaviour
         }
     }
 
-    //???? ????
+    //발사 체크
     private void CheckAndFireProjectile()
     {
         if (state != PlayerState.Playing) return;
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (weapon[currentWeapon].isUsable)        //???? ?????? ?? ???????? ????????.
+            if (weapon[currentWeapon].isUsable)        //발사 가능 상태일때
             {
                 weapon[currentWeapon].UseItem(this);
             }
