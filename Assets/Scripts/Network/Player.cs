@@ -159,9 +159,10 @@ public class Player : NetworkBehaviour
     {
         state = newState;
         ResetParameters();
+        RPC_UpdateSkillState();
         if (HasStateAuthority)
         {
-            RPC_ChangeMouseMode((int)newState);
+            RPC_Reset((int)newState);
         }
     }
 
@@ -204,7 +205,7 @@ public class Player : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_ChangeMouseMode(int stateIndex)
+    public void RPC_Reset(int stateIndex)
     {
         Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
         if(stateIndex == 2)
@@ -216,6 +217,15 @@ public class Player : NetworkBehaviour
                 thirdPersonCamera.transform.localRotation = default;
                 cameraDistance = thirdPersonCamera.transform.localPosition.z;
             }
+        }
+        else if(stateIndex == 3)
+        {
+            foreach(Item weaponData in weapon)
+            {
+                weaponData.Reset();
+            }
+
+            item.Reset();
         }
     }
 

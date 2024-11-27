@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ec073763240f624e8a6ef29819c3257, type: 3}
-  m_Name: Plane_01
+  m_Name: Ice_03
   m_EditorClassIdentifier: 
-  BlockIndexData: {fileID: 11400000, guid: c460f49a4832b394f84713b142d3e4e9, type: 2}
-  SpawnPosition: []
-  mapJsonFile: {fileID: 4900000, guid: 493567a185cde2b4996d7c28b9cbb29d, type: 3}
+  BlockIndexData: {fileID: 11400000, guid: 947f36e9d04203c4590b80e0aac941b8, type: 2}
+  SpawnPosition:
+  - {x: 11, y: 0, z: 14}
+  - {x: 0, y: 0, z: 0}
+  mapJsonFile: {fileID: 4900000, guid: 83fda252a31104e4fadf533c3cb62c1a, type: 3}

@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ec073763240f624e8a6ef29819c3257, type: 3}
-  m_Name: Mountain
+  m_Name: Ice_04
   m_EditorClassIdentifier: 
-  BlockIndexData: {fileID: 11400000, guid: c460f49a4832b394f84713b142d3e4e9, type: 2}
-  SpawnPosition: []
+  BlockIndexData: {fileID: 11400000, guid: 947f36e9d04203c4590b80e0aac941b8, type: 2}
+  SpawnPosition:
+  - {x: 9, y: 0, z: 2}
+  - {x: 14, y: 0, z: 17}
   mapJsonFile: {fileID: 4900000, guid: cde48858f8cd30a42b76f046061e63df, type: 3}
