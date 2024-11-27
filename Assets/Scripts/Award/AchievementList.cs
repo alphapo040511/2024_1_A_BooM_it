@@ -13,8 +13,6 @@ public class AchievementList : MonoBehaviour
     void Start()
     {
         LoadAwardList();
-        AchievementsManager.instance.addAward -= ReloadAwardList;
-        AchievementsManager.instance.addAward += ReloadAwardList;
     }
 
     public void LoadAwardList()

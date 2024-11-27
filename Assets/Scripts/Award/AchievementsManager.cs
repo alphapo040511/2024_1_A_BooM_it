@@ -5,27 +5,22 @@ using UnityEngine;
 
 public class AchievementsManager : MonoBehaviour
 {
-    public static AchievementsManager instance { get; private set; }
-    public Action<string> addAward;
-
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     void Start()
     {
-        if(GameManager.instance.awardPoints.Count > 0)
+        Invoke("NewAward", 1);
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            foreach(var data in GameManager.instance.awardPoints)
+            ProgressAchievement("Kill", 10);
+        }
+    }
+    private void NewAward()
+    {
+        if (GameManager.instance.awardPoints.Count > 0)
+        {
+            foreach (var data in GameManager.instance.awardPoints)
             {
                 ProgressAchievement(data.Key, data.Value);
             }
@@ -36,8 +31,7 @@ public class AchievementsManager : MonoBehaviour
 
     public void ProgressAchievement(string awardKey, int value)
     {
-        Debug.Log(awardKey + "????");
-        if(AwardList.awardList.ContainsKey(awardKey))
+        if (AwardList.awardList.ContainsKey(awardKey))
         {
             AwardList.awardList[awardKey].currentValue += value;                                                   //???????? ?????????? ????
 
@@ -50,8 +44,6 @@ public class AchievementsManager : MonoBehaviour
             {
                 AwardList.awardList[awardKey].isAchieved = true;
             }
-
-            addAward?.Invoke(awardKey);
         }
     }
 }

@@ -116,8 +116,8 @@ public class Player : NetworkBehaviour
                 if (HasInputAuthority)
                 {
                     BattleManager.Instance.RPC_PlayerValueChange(Runner.LocalPlayer);
-                }
-                thirdPersonCamera.transform.SetParent(null);
+                    thirdPersonCamera.transform.SetParent(null);
+                } 
             }
             if (state == PlayerState.Die && HasInputAuthority)
             {
