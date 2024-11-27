@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public string[] weaponIndex = new string[3];
     public string itemIndex;
 
+    public Dictionary<string, int> awardPoints = new Dictionary<string, int>();
+
     private void Awake()
     {
         if(instance == null)
@@ -55,5 +57,22 @@ public class GameManager : MonoBehaviour
         {
             itemIndex = name;
         }
+    }
+
+    public void AwardAddValue(string name, int point)
+    {
+        if (awardPoints.ContainsKey(name))
+        {
+            awardPoints[name] += point;
+        }
+        else
+        {
+            awardPoints.Add(name, point);
+        }
+    }
+
+    public void ClearAward()
+    {
+        awardPoints.Clear();
     }
 }

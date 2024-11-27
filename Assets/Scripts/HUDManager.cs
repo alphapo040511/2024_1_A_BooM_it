@@ -32,6 +32,7 @@ public class HUDManager : MonoBehaviour
             if (isMyPoint)
             {
                 isWin = true;
+                GameManager.instance.AwardAddValue("Win", 1);
             }
             else
             {
@@ -43,10 +44,12 @@ public class HUDManager : MonoBehaviour
         if(isMyPoint)
         {
             StartCoroutine(StarTurnOn(blue_Stars[point - 1], point));
+            GameManager.instance.AwardAddValue("Kill", 1);
         }
         else
         {
             StartCoroutine(StarTurnOn(red_Stars[point - 1], point));
+            GameManager.instance.AwardAddValue("Die", 1);
         }
     }
 
@@ -69,7 +72,7 @@ public class HUDManager : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         float size = 0;
-        target.localScale = Vector2.one * size;       //사이즈 늘리는 연출은 일단 취소
+        target.localScale = Vector2.one * size;       //?????? ?????? ?????? ???? ????
         target.gameObject.SetActive(true);
         while (size < 1)
         {

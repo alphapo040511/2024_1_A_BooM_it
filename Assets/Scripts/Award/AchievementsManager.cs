@@ -21,17 +21,25 @@ public class AchievementsManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Start()
     {
+        if(GameManager.instance.awardPoints.Count > 0)
+        {
+            foreach(var data in GameManager.instance.awardPoints)
+            {
+                ProgressAchievement(data.Key, data.Value);
+            }
 
+            GameManager.instance.ClearAward();
+        }
     }
 
     public void ProgressAchievement(string awardKey, int value)
     {
-        Debug.Log(awardKey + "달성");
+        Debug.Log(awardKey + "????");
         if(AwardList.awardList.ContainsKey(awardKey))
         {
-            AwardList.awardList[awardKey].currentValue += value;                                                   //최대치를 넘기더라도 저장
+            AwardList.awardList[awardKey].currentValue += value;                                                   //???????? ?????????? ????
 
             if (AchievementFloatingUI.instance != null && AwardList.awardList[awardKey].isAchieved == false)
             {
