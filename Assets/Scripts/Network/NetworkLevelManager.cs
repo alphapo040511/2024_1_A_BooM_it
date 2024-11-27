@@ -32,7 +32,10 @@ public class NetworkLevelManager : NetworkBehaviour
     {
         foreach(Vector3Int intPosition in positions)
         {
-            DestroyBlock(hitPosition + intPosition);
+            for (int y = intPosition.y; y < levelGenerator.mapData.BlockArr.GetLength(1); y++)
+            {
+                DestroyBlock(hitPosition + intPosition + Vector3Int.up * y);
+            }
         }
     }
 
