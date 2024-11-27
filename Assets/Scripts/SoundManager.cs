@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip clickClip;
     public AudioClip itemChangeClip;
+    public AudioClip explosionClip;
 
     private void Awake()
     {
@@ -32,5 +33,10 @@ public class SoundManager : MonoBehaviour
     public void ItemChange()
     {
         SFX.PlayOneShot(itemChangeClip);
+    }
+
+    public void ExplosionSound()
+    {
+        SFX.PlayOneShot(explosionClip);
     }
 }

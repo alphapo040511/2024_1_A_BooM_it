@@ -93,6 +93,8 @@ public abstract class NetworkParabola : NetworkBehaviour
         {
             BattleManager.Instance.levelManager.DestroyBlocks(blockData, range);
         }
+
+        SoundManager.Instance.ExplosionSound();
     }
 
     public abstract Vector3Int[] ExplosionRange();

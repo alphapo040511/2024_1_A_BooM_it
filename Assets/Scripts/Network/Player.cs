@@ -405,7 +405,7 @@ public class Player : NetworkBehaviour
 
     public void FirePosition(NetworkPrefabRef bomb)                                             //?????? ???? ????
     {
-        audioSource.PlayOneShot(fireSound);
+        //audioSource.PlayOneShot(fireSound);
         if (Object.HasStateAuthority)
         {
             _animator.Animator.SetInteger("Fire", 1);

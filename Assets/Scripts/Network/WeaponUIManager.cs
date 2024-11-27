@@ -12,6 +12,9 @@ public class WeaponUIManager : MonoBehaviour
     public Image nextWeapon;
     public Image itemImage;
 
+    public AudioSource AudioSource;
+    public AudioClip AudioClip;
+
     private void Awake()
     {
         instance = this;
@@ -30,6 +33,7 @@ public class WeaponUIManager : MonoBehaviour
         currentWeapon.sprite = current;
         previousWeapon.sprite = previous;
         nextWeapon.sprite = next;
+        AudioSource.PlayOneShot(AudioClip);
     }
 
     public void UseItem(float timer)
