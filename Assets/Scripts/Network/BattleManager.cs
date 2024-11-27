@@ -42,6 +42,9 @@ public class BattleManager : NetworkBehaviour
     [Networked] public NetworkDictionary<PlayerRef, bool> players => default;
     [Networked] public NetworkDictionary<PlayerRef, int> playerPoints => default;
 
+    public AudioSource audioSource;
+    public AudioClip audioClip;
+
     private bool isPlayAble = false;
 
     private static BattleManager _instance;
@@ -265,6 +268,7 @@ public class BattleManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Countdown(int i)
     {
+        audioSource.PlayOneShot(audioClip);
         countdownImage[i].SetActive(true);
         if (i == 0)
         {

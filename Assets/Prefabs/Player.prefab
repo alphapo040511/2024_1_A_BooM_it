@@ -128,7 +128,7 @@ MonoBehaviour:
   meshTrail: {fileID: 6953520139961517371}
   Shield: {fileID: 5634294131457473783}
   audioSource: {fileID: 2610435387788082851}
-  fireSound: {fileID: 8300000, guid: 540bfb760ea5e4947a1e4e5d17073b29, type: 3}
+  fireSound: {fileID: 8300000, guid: 0eab05286a74d264fb90596561e795f4, type: 3}
   _currentWeapon: 0
   item: {fileID: 0}
   weapon:

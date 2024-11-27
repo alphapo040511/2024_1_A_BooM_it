@@ -13,6 +13,9 @@ public class HUDManager : MonoBehaviour
     public RectTransform win;
     public RectTransform lose;
 
+    public AudioSource audioSurce;
+    public AudioClip audioClip;
+
     private bool isOver;
     private bool isWin;
 
@@ -55,6 +58,8 @@ public class HUDManager : MonoBehaviour
 
     private IEnumerator StarTurnOn(RectTransform target, int point)
     {
+        audioSurce.PlayOneShot(audioClip);
+
         if (isOver)
         {
             if (isWin)
