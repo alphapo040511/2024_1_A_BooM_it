@@ -103,7 +103,7 @@ public class BattleManager : NetworkBehaviour
     //게임 시작 버튼을 눌렀을 때
     public void OnClickStartButton()
     {
-        RPC_GameStart();                            //게임 시작 RPC 호출
+        RPC_GameStart(GameManager.instance.mapIndex);                            //게임 시작 RPC 호출
         AllPlayerValueReset();                      //플레이어 준비 상태 false로 초기화
     }
 
@@ -111,12 +111,12 @@ public class BattleManager : NetworkBehaviour
 
     //게임 시작 RPC
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_GameStart()
+    public void RPC_GameStart(string mapName)
     {
         gameState = GameState.MapLoading;               //게임 상태 맵 로딩중으로 변경
         UpdateAllPlayersState(PlayerState.Loading);     //모든 플레이어의 상태를 '로딩중'으로 변경
         StartCoroutine(FadeCanvas(menuCanvas, false));
-        MapLoad(GameManager.instance.mapIndex);                                      //맵 로딩 시작
+        MapLoad(mapName);                                      //맵 로딩 시작
     }
 
 
