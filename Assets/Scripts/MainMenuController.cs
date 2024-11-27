@@ -11,6 +11,9 @@ public class MainMenuController : MonoBehaviour
 
     public RectTransform selectBar;
 
+    public AudioSource audioSource;
+    public AudioClip selectSound;
+
     private GameObject nowTab;
     private Stack<GameObject> tabStack = new Stack<GameObject>();
 
@@ -32,6 +35,8 @@ public class MainMenuController : MonoBehaviour
         selectBar.gameObject.SetActive(true);
         selectBar.anchoredPosition = newTransform.anchoredPosition - Vector2.right * 10;
         selectBar.sizeDelta = newTransform.sizeDelta + Vector2.right * 30;
+
+        audioSource.PlayOneShot(selectSound);
     }
 
     public void NewTab(GameObject newTab)

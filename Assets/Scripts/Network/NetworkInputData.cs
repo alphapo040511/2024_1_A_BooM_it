@@ -50,7 +50,7 @@ public class NetworkInputHandler : MonoBehaviour
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButton(0));
         data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButton(1));
         data.buttons.Set(NetworkInputData.KEYCODESPACE, Input.GetKey(KeyCode.Space));
-        data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKeyDown(KeyCode.R));
+        data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKey(KeyCode.R));
 
         return data;
     }

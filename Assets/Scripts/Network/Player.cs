@@ -42,6 +42,9 @@ public class Player : NetworkBehaviour
     public LineRenderer lineRenderer;
     public MeshTrail meshTrail;
     public GameObject Shield;
+    public AudioSource audioSource;
+
+    public AudioClip fireSound;
 
     private GameObject thirdPersonCamera;
     private float cameraDistance;
@@ -402,6 +405,7 @@ public class Player : NetworkBehaviour
 
     public void FirePosition(NetworkPrefabRef bomb)                                             //?????? ???? ????
     {
+        audioSource.PlayOneShot(fireSound);
         if (Object.HasStateAuthority)
         {
             _animator.Animator.SetInteger("Fire", 1);

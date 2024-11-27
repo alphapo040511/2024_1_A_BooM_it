@@ -58,7 +58,7 @@ public class MeshTrail : MonoBehaviour
                 mf.mesh = m;
                 mr.material = mat;
                 //잔상의 페이드아웃 효과 시작 
-                //StartCoroutine(AnimateMaterialFloat(mr.material, 0, shaderVarRate, shaderVarRefreshRate));
+                StartCoroutine(AnimateMaterialFloat(mr.material, 0, shaderVarRate, shaderVarRefreshRate));
 
                 Destroy(gObj, meshDestoryDelay);    //일정 시간 후 잔상 제거
             }
