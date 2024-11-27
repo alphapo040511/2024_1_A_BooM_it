@@ -31,7 +31,7 @@ public class AwardList
             new AwardData
             {
                 awardName = "BooMit! 고수가 될거야!",
-                awardDescription = "멀티플레이에서 100 회 승리하기",
+                awardDescription = "멀티플레이에서 10 회 승리하기",
                 isAchieved = false,
                 goalValue = 10,
                 currentValue = 0,
