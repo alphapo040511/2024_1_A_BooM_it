@@ -171,7 +171,7 @@ public class Player : NetworkBehaviour
     {
         skillState = state;
         Shield.SetActive(false);
-        if (HasInputAuthority)
+        if (HasInputAuthority && state != SkillState.None)
         {
             WeaponUIManager.instance.UseItem(item.cooldownTime);
         }

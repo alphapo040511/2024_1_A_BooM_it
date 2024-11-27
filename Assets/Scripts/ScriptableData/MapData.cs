@@ -14,6 +14,9 @@ public class MapData : ScriptableObject
     private int[] xPos = new int[] { };
     private int[] zPos = new int[] { };
     public TextAsset mapJsonFile;
+    public Sprite MapImage;
+
+
 
 #if UNITY_EDITOR
     public void SaveToJson()

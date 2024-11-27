@@ -17,3 +17,4 @@ MonoBehaviour:
   - {x: 9, y: 0, z: 2}
   - {x: 14, y: 0, z: 17}
   mapJsonFile: {fileID: 4900000, guid: cde48858f8cd30a42b76f046061e63df, type: 3}
+  MapImage: {fileID: 21300000, guid: 26dd89357b20e3f4fb8a17f44de4d8c5, type: 3}

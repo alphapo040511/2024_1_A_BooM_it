@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void NewMap(string mapName)
+    {
+        mapIndex = mapName;
+    }    
+
     public void SetWeapon(string name, int index)
     {
         for(int i = 0; i < weaponIndex.Length; i++)

@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class NetworkRoomLoader : MonoBehaviour
 {
     public List<RoomButton> roomButtons;
+    public Button JoinButton;
 
     public TMP_InputField roomName;
-    private string _roomName;
+    public string _roomName;
     private int playerCount = 2;
 
     private List<SessionInfo> sessions;
@@ -82,22 +84,32 @@ public class NetworkRoomLoader : MonoBehaviour
     {
         this.sessions = sessions;
         int count = Mathf.Min(sessions.Count, roomButtons.Count);
+        string temp = "";
         for(int i = 0; i < roomButtons.Count; i++)
         {
             if(i < count)
             {
                 roomButtons[i].SetData(i + 1, true, sessions[i]);
+                if (sessions[i].Name == _roomName)
+                {
+                    temp = _roomName;
+                }
             }
             else
             {
                 roomButtons[i].SetData(i + 1, false);
             }
-        }    
+        }
+
+        _roomName = temp;
+        JoinButton.interactable = (_roomName != "");
     }
     private void SelectRoom(SessionInfo info)
     {
         _roomName = info.Name;
         playerCount = info.MaxPlayers;
+
+        JoinButton.interactable = (_roomName != "");
     }
 
     public void OnClickPlayerCount(int count)

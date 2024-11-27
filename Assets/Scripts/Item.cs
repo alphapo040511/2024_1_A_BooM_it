@@ -37,6 +37,7 @@ public class Item : MonoBehaviour
     {
         // 초기 남은 사용 횟수를 최대 사용 횟수로 설정
         remainingUses = maxUses;
+        isUsable = true;
         isOnCooldown = false;
     }
 

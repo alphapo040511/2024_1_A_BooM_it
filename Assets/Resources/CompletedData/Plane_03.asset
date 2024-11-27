@@ -15,3 +15,4 @@ MonoBehaviour:
   BlockIndexData: {fileID: 11400000, guid: c460f49a4832b394f84713b142d3e4e9, type: 2}
   SpawnPosition: []
   mapJsonFile: {fileID: 4900000, guid: 83fda252a31104e4fadf533c3cb62c1a, type: 3}
+  MapImage: {fileID: 21300000, guid: 1ca68d60ad1188b49a5b12b52c95e558, type: 3}

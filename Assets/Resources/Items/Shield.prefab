@@ -51,7 +51,7 @@ MonoBehaviour:
     \uB3D9\uC548 \uD53C\uD574\uB97C 1\uD68C \uB9C9\uC544\uC8FC\uBA70 \uD53C\uD574\uB97C
     \uC785\uC744\uC2DC \uC989\uC2DC \uD30C\uAD34\uB429\uB2C8\uB2E4.)"
   itemType: 2
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 8d32ae23d5bf9dc4cb0b149450dee890, type: 3}
   bombPrefab:
     RawGuidValue: 00000000000000000000000000000000
   bombParabola: {fileID: 0}

@@ -32,7 +32,7 @@ public class ItemManager : MonoBehaviour
         GenerateButtons(weapons, true, SetWeapon);
         GenerateButtons(items, false, SetItem);
 
-        Invoke("CheckCurrentItem", 2);
+        Invoke("CheckCurrentItem", 0.5f);
     }
 
     public void LoadItemList()
