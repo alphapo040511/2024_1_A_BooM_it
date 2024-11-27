@@ -34,7 +34,7 @@ public class BattleManager : NetworkBehaviour
 
     public GameState gameState = GameState.Standby;
 
-    const int minPlayer = 1;        //최소 플레이어 수
+    const int minPlayer = 2;        //최소 플레이어 수
     public int maxPlayer = 2;       //최대 플레이어 수
 
     private bool nowLoading = false;
@@ -230,7 +230,7 @@ public class BattleManager : NetworkBehaviour
                 if (count >= players.Count)                                     //모든 연출이 종료 되었다면
                 {
                     AllPlayerValueReset();
-                    RPC_GameStart();                                            //게임 재시작
+                    RPC_GameStart(GameManager.instance.mapIndex);                                            //게임 재시작
                 }
                 break;
             case GameState.GameOver:
