@@ -6,19 +6,19 @@ using System.IO;
 
 public enum PlayerState
 {
-    Ready,         // 준비 중
-    Loading,       // 로딩 중
-    Standby,       // 게임 시작 카운트다운
-    Playing,       // 게임 중
-    Die,           // 게임 종료
-    Spectating     // 관전
+    Ready,         // ???? ??
+    Loading,       // ???? ??
+    Standby,       // ???? ???? ??????????
+    Playing,       // ???? ??
+    Die,           // ???? ????
+    Spectating     // ????
 }
 
 public enum SkillState
 {
-    None,           //아무 효과 없음
-    Resisting,         //쉴드 보유 상태
-    SpeedUp,        //속도 증가 상태
+    None,           //???? ???? ????
+    Resisting,         //???? ???? ????
+    SpeedUp,        //???? ???? ????
 }
 
 public class Player : NetworkBehaviour
@@ -127,19 +127,11 @@ public class Player : NetworkBehaviour
 
         if (GetInput(out NetworkInputData data))
         {
-            //인풋 데이터 받아오는 부분
+            //???? ?????? ???????? ????
             _networkButtons = data.buttons;
             Vector3 moveDirection = data.direction;
             Vector2 mouseDirection = data.lookDirection;
             float wheel = data.wheel;
-
-
-
-            if (Cursor.lockState != CursorLockMode.Locked)
-            {
-                PlayerMovement(default);
-                return;
-            }
 
             PlayerMovement(moveDirection);
 
@@ -247,7 +239,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    //캐릭터 움직임
+    //?????? ??????
     private void PlayerMovement(Vector3 moveDirection)
     {
         if (state == PlayerState.Die)
@@ -261,7 +253,7 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        //애니메이션 동기화
+        //?????????? ??????
         _animator.Animator.SetFloat("HorizontalSpeed", moveDirection.x);
         _animator.Animator.SetFloat("VerticalSpeed", moveDirection.z);
         _animator.Animator.SetFloat("Speed",Mathf.Abs(moveDirection.magnitude));
@@ -269,7 +261,7 @@ public class Player : NetworkBehaviour
         _cc.Move(moveDirection, skillState == SkillState.SpeedUp);
     }
 
-    //카메라 움직임
+    //?????? ??????
     private void CameraMovement(Vector2 mouseDirection)
     {
         Vector2 mouseDir = default;
@@ -318,7 +310,7 @@ public class Player : NetworkBehaviour
     }
 
 
-    //점프 확인
+    //???? ????
     private void CheckAndJump()
     {
         if (state != PlayerState.Playing) return;
@@ -334,14 +326,14 @@ public class Player : NetworkBehaviour
         }
     }
 
-    //발사 확인
+    //???? ????
     private void CheckAndFireProjectile()
     {
         if (state != PlayerState.Playing) return;
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (weapon[currentWeapon].isUsable)        //버튼 선언한 것 가져와서 진행한다.
+            if (weapon[currentWeapon].isUsable)        //???? ?????? ?? ???????? ????????.
             {
                 weapon[currentWeapon].UseItem(this);
             }
@@ -399,7 +391,7 @@ public class Player : NetworkBehaviour
         _animator.Animator.SetInteger("Fire", 0);
     }
 
-    public void FirePosition(NetworkPrefabRef bomb)                                             //발사체 생성 함수
+    public void FirePosition(NetworkPrefabRef bomb)                                             //?????? ???? ????
     {
         if (Object.HasStateAuthority)
         {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
-// NetworkInputData 구조체 정의
+// NetworkInputData ?????? ????
 public struct NetworkInputData : INetworkInput
 {
     public const byte MOUSEBUTTON0 = 0x01;
@@ -17,24 +17,26 @@ public struct NetworkInputData : INetworkInput
     public float wheel;
 }
 
-// NetworkInputHandler 클래스
+// NetworkInputHandler ??????
 public class NetworkInputHandler : MonoBehaviour
 {
-    //카메라 설정 변수
+    //?????? ???? ????
     [Header("Camera Settings")]
-    public float mouseSensitivity = 2.0f;       //마우스 감도
+    public float mouseSensitivity = 2.0f;       //?????? ????
 
-    public float yMinLimit = -75;               //카메라 수직 회전 최소각
-    public float yMaxLimit = 75;                //카메라 수직 회전 최대각
+    public float yMinLimit = -75;               //?????? ???? ???? ??????
+    public float yMaxLimit = 75;                //?????? ???? ???? ??????
 
-    private float theta = 0.0f;                 //카메라의 수평 회전 각도
-    private float phi = 0.0f;                   //카메라의 수직 회전 각도
-    private float targetVecticalRotation = 0;   //목표 수직 회전 각도
-    //private float verticalRotationSpeed = 240f; //수직 회전 각도
+    private float theta = 0.0f;                 //???????? ???? ???? ????
+    private float phi = 0.0f;                   //???????? ???? ???? ????
+    private float targetVecticalRotation = 0;   //???? ???? ???? ????
+    //private float verticalRotationSpeed = 240f; //???? ???? ????
 
     public NetworkInputData GetNetworkInput()
     {
         var data = new NetworkInputData();
+
+        if (Cursor.lockState != CursorLockMode.Locked) return data;
 
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
@@ -55,17 +57,17 @@ public class NetworkInputHandler : MonoBehaviour
 
     Vector3 HandleRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;         //마우스 좌우 입력
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;         //마우스 상하 입력
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;         //?????? ???? ????
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;         //?????? ???? ????
 
-        //수평 회전(theta 값)
-        theta += mouseX;                            //마우스 입력값 추가
-        theta = Mathf.Repeat(theta, 360.0f);        //각도 값이 360을 넘지 않도록 조정
+        //???? ????(theta ??)
+        theta += mouseX;                            //?????? ?????? ????
+        theta = Mathf.Repeat(theta, 360.0f);        //???? ???? 360?? ???? ?????? ????
 
-        //수직 회전 처리
+        //???? ???? ????
         targetVecticalRotation -= mouseY;
-        //targetVecticalRotation = Mathf.Clamp(targetVecticalRotation, yMinLimit, yMaxLimit);     //수직 회전 제한
-        phi = targetVecticalRotation;       //속도를 일정하게 해주는 부분인데 일단 제외
+        //targetVecticalRotation = Mathf.Clamp(targetVecticalRotation, yMinLimit, yMaxLimit);     //???? ???? ????
+        phi = targetVecticalRotation;       //?????? ???????? ?????? ???????? ???? ????
         //phi = Mathf.MoveTowards(phi, targetVecticalRotation, verticalRotationSpeed * Time.DeltaTime);
 
         return new Vector3(phi, theta);
