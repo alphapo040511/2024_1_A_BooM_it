@@ -42,6 +42,11 @@ public class WeaponUIManager : MonoBehaviour
         StartCoroutine(ItemTimer(timer));
     }
 
+    public void ResetItem()
+    {
+        StopCoroutine(ItemTimer(0));
+    }
+
     private IEnumerator ItemTimer(float timer)
     {
         float time = 0;

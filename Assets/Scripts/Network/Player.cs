@@ -229,6 +229,10 @@ public class Player : NetworkBehaviour
             }
 
             item.Reset();
+            if(HasInputAuthority)
+            {
+                WeaponUIManager.instance.ResetItem();
+            }
         }
     }
 
