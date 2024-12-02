@@ -54,6 +54,8 @@ public class Player : NetworkBehaviour
     public Item item;
     public Item[] weapon = new Item[3];
 
+    [Networked] public bool aiming { get; set; }
+
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
@@ -77,6 +79,13 @@ public class Player : NetworkBehaviour
             thirdPersonCamera.transform.localRotation = default;
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
             RPC_ItemSpawn(GameManager.instance.weaponIndex, GameManager.instance.itemIndex);
+        }
+
+        string[] mapName = GameManager.instance.mapIndex.ToString().Split('_');
+        if (mapName[0] == "Ice")
+        {
+            _cc.braking = 5;
+            _cc.acceleration = 5;
         }
     }
 
@@ -216,7 +225,7 @@ public class Player : NetworkBehaviour
             if (HasInputAuthority)
             {
                 thirdPersonCamera.transform.SetParent(cameraPivot.transform);
-                thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -5);
+                thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -2.5f);
                 thirdPersonCamera.transform.localRotation = default;
                 cameraDistance = thirdPersonCamera.transform.localPosition.z;
             }
@@ -301,6 +310,7 @@ public class Player : NetworkBehaviour
         angle = cameraPivot.localRotation.eulerAngles.x > 180 ? 360 - cameraPivot.localRotation.eulerAngles.x : -cameraPivot.localRotation.eulerAngles.x;
         if (HasInputAuthority)
         {
+            cameraDistance = aiming ? -1 : -2.5f;
             cameraDistance = Mathf.Clamp(cameraDistance, -2.5f, -1);
             Vector3 targetPos = Vector3.forward * cameraDistance;
             thirdPersonCamera.transform.localPosition = Vector3.Lerp(thirdPersonCamera.transform.localPosition, targetPos, Runner.DeltaTime * 15);
@@ -366,11 +376,14 @@ public class Player : NetworkBehaviour
                     lineRenderer.SetPosition(i, point[i]);
                 }
                 lineRenderer.enabled = true;
+
+                aiming = true;
             }
         }
         else
         {
             lineRenderer.enabled = false;
+            aiming = false;
         }
     }
 
