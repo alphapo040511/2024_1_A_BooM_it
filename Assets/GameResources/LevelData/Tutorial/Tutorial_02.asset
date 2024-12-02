@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BlockIndexData: {fileID: 11400000, guid: f628cc1f3f7b17c4ea71110b6c45bc4a, type: 2}
   SpawnPosition:
-  - {x: 11, y: 0, z: 14}
-  - {x: 0, y: 0, z: 0}
-  mapJsonFile: {fileID: 4900000, guid: 14c6b5c2b4ba73e4487c07f5cf6a5f29, type: 3}
+  - {x: 7, y: 0, z: 1}
+  mapJsonFile: {fileID: 4900000, guid: 635937e8c403e054495ca1ac1e149906, type: 3}
   MapImage: {fileID: 0}
