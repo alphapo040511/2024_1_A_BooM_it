@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1393303207536260606}
   - component: {fileID: 8493735803563790536}
   - component: {fileID: 582544721492585007}
-  - component: {fileID: 9075308696473276363}
   m_Layer: 0
   m_Name: Duumy
   m_TagString: Untagged
@@ -66,16 +65,3 @@ MonoBehaviour:
   Unbreakable: 1
   explosionEffect: {fileID: 0}
   intPosition: {x: 0, y: 0, z: 0}
---- !u!114 &9075308696473276363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3060277831550582698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 376aeb26024533f43b29bd8100369874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dummy: {fileID: 0}

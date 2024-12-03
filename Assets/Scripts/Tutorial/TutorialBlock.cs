@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class TutorialBlock : MonoBehaviour
 {
@@ -34,6 +33,8 @@ public class TutorialBlock : MonoBehaviour
         blockCollider.enabled = false;
         meshRenderer.enabled = false;
         Effect();
+
+        TutorialManager.instance.AddPoint(TutorialType.DestroyBlocks);
     }
 
     public void Effect()

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class GoalChecker : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("µµÂø");
+            TutorialManager.instance?.StageClear();
         }
     }
 }

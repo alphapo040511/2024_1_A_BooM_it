@@ -359,7 +359,7 @@ public class Player : NetworkBehaviour
 
         if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON0))
         {
-            if (weapon[currentWeapon].isUsable)        //발사 가능 상태일때
+            if (!weapon[currentWeapon].isOnCooldown)        //발사 가능 상태일때
             {
                 weapon[currentWeapon].UseItem(this);
             }
@@ -393,7 +393,7 @@ public class Player : NetworkBehaviour
 
         if (_networkButtons.IsSet(NetworkInputData.KEYCODER))
         {
-            if (item.isUsable)
+            if (!item.isOnCooldown)
             {
                 if (HasStateAuthority)
                 {

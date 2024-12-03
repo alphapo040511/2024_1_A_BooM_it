@@ -20,6 +20,8 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         nowTab = mainMenu;
+        tabStack = new Stack<GameObject>();
+        DOTween.Init();
     }
 
     void Update()

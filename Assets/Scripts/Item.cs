@@ -8,6 +8,8 @@ public enum ItemType
     Weapon,
     SpeedUp,
     Shield,
+    TutorialBomb,
+    TutorialShield,
 }
 
 public class Item : MonoBehaviour
@@ -26,7 +28,7 @@ public class Item : MonoBehaviour
     public float duration = 5f;                 //아이템 지속시간
 
     private int remainingUses;                 // 남은 사용 가능 횟수
-    private bool isOnCooldown = false;         // 쿨타임 상태
+    public bool isOnCooldown = false;         // 쿨타임 상태
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class Item : MonoBehaviour
         // 아이템이 사용 가능하고 쿨타임 중이 아닐 경우에만 사용
         if (isUsable && !isOnCooldown)
         {
-            if (remainingUses > 0 || itemType == ItemType.Weapon)
+            if (remainingUses > 0 || itemType == ItemType.Weapon || itemType == ItemType.TutorialBomb)
             {
                 Debug.Log("Item used: " + itemIndex);
 
@@ -56,14 +58,38 @@ public class Item : MonoBehaviour
 
                 remainingUses--; // 사용 횟수 감소
 
-                if (remainingUses <= 0 && itemType != ItemType.Weapon)
+                if (remainingUses <= 0 && (itemType != ItemType.Weapon && itemType != ItemType.TutorialBomb))
                 {
                     isUsable = false; // 더 이상 사용 불가
                 }
-                else
+                StartCoroutine(StartCooldown()); // 쿨타임 시작
+            }
+        }
+        else
+        {
+            Debug.Log("Item is not usable right now.");
+        }
+    }
+
+    public void UseItem(SinglePlayer player)
+    {
+        // 아이템이 사용 가능하고 쿨타임 중이 아닐 경우에만 사용
+        if (isUsable && !isOnCooldown)
+        {
+            if (remainingUses > 0 || itemType == ItemType.Weapon || itemType == ItemType.TutorialBomb)
+            {
+                Debug.Log("Item used: " + itemIndex);
+
+                // 아이템 사용 로직 추가 (예: 플레이어 체력 회복, 무기 발사 등)
+                PerformItemAction(player);
+
+                remainingUses--; // 사용 횟수 감소
+
+                if (remainingUses <= 0 && (itemType != ItemType.Weapon && itemType != ItemType.TutorialBomb))
                 {
-                    StartCoroutine(StartCooldown()); // 쿨타임 시작
+                    isUsable = false; // 더 이상 사용 불가
                 }
+                StartCoroutine(StartCooldown()); // 쿨타임 시작
             }
         }
         else
@@ -93,6 +119,20 @@ public class Item : MonoBehaviour
         }
     }
 
+    private void PerformItemAction(SinglePlayer player)
+    {
+        // 아이템 타입에 따른 특정 기능 구현 (예: 체력 회복, 방어막 활성화 등)
+        switch (itemType)
+        {
+            case ItemType.TutorialBomb:
+                TutoFire(player);
+                break;
+            case ItemType.TutorialShield:
+                TutoShield(player);
+                break;
+        }
+    }
+
     private void Fire(Player player)
     {
         player.FirePosition(bombPrefab);
@@ -106,6 +146,16 @@ public class Item : MonoBehaviour
     private void Shield(Player player)
     {
         player.RPC_UpdateSkillState(SkillState.Resisting);
+    }
+
+    private void TutoFire(SinglePlayer player)
+    {
+        Debug.Log("튜토리얼 폭탄 발사");
+    }
+
+    private void TutoShield(SinglePlayer player)
+    {
+        Debug.Log("튜토리얼 쉴드 사용");
     }
 
     // 쿨타임을 관리하는 코루틴

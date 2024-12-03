@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.111405306, g: 0.29984522, b: 0.635753, a: 1}
+  m_IndirectSpecularColor: {r: 0.111528, g: 0.2999869, b: 0.63604295, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 280972430}
   m_HandleRect: {fileID: 2064143842}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0.418
@@ -3949,7 +3949,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 253067444}
   m_HandleRect: {fileID: 1114512719}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0.418
@@ -4899,7 +4899,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 2098928256}
   m_HandleRect: {fileID: 677871877}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0.418
@@ -6976,6 +6976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTitleScene: 0
+  timeStop: 0
   menuUI: {fileID: 216853063}
   audioMixer: {fileID: 24100000, guid: 65ffa9773297e7b4e9ead1fa7d4acd2b, type: 2}
   MasterSlider: {fileID: 1118199779}
