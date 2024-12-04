@@ -84,7 +84,7 @@ public class Menu : MonoBehaviour
 
     public void BackLobby()
     {
-        SceneManager.LoadScene("LobbyScene");
+        SceneLoadManager.instance.LoadScene("TutorialLobbyScene");
     }
 
     public void Disconnect()

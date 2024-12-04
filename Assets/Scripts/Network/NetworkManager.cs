@@ -113,6 +113,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             return;
         }
 
+        SceneLoadManager.instance.LoadScene("ServerConnecting");
+
         // 세션 시작 또는 참가
         await Runner.StartGame(new StartGameArgs()
         {
@@ -174,7 +176,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         await Runner.Shutdown();
         runner = null;
 
-        SceneManager.LoadScene("LobbyScene");
+        SceneLoadManager.instance.LoadScene("LobbyScene");
         Cursor.lockState = CursorLockMode.None;
     }
 
@@ -187,7 +189,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
         Debug.LogWarning($"네트워크 셧다운: {shutdownReason}");
-        SceneManager.LoadScene("LobbyScene");
+        SceneLoadManager.instance.LoadScene("LobbyScene");
         runner = null;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -198,7 +200,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
         Debug.LogWarning($"서버와의 연결이 끊김: {reason}");
-        SceneManager.LoadScene("LobbyScene");
+        SceneLoadManager.instance.LoadScene("LobbyScene");
         runner = null;
         Cursor.lockState = CursorLockMode.None;
     }

@@ -38,7 +38,7 @@ public class TutorialButton : MonoBehaviour
     {
         if (sceneName != null)
         {
-            SceneManager.LoadScene(sceneName);
+            SceneLoadManager.instance.LoadScene(sceneName);
         }
     }
 }

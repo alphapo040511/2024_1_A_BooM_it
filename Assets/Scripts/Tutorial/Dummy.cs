@@ -83,10 +83,9 @@ public class Dummy : MonoBehaviour
             knockbackVel = Vector3.Lerp(knockbackVel, default, 50 * 0.25f * Time.deltaTime);
         }
 
-        if (!controller.isGrounded)
-        {
-            vel.y +=  -9.81f * Time.deltaTime;
-        }
+
+        vel.y +=  -9.81f * Time.deltaTime;
+
 
 
 

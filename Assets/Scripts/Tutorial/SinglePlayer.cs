@@ -134,31 +134,35 @@ public class SinglePlayer : MonoBehaviour
         if (Mathf.Abs(MoveDirInput().magnitude) < 0.1f) { animator.SetFloat("Speed", 0); }
         else { animator.SetFloat("Speed", Mathf.Abs(MoveDirInput().magnitude)); }
 
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && Grounded())
+        {
+            newVel += Jump();
+            animator.SetBool("Jump", true);
+        }
+
         if (newVel.y > maxSpeed * 2)
         {
             newVel.y = maxSpeed * 2;
         }
 
-        float VelY = newVel.y;
-        newVel.y = 0;
+        Vector3 temp = default;
+        temp.x = newVel.x;
+        temp.z = newVel.z;
 
-        if (playerState == PlayerState.Playing)
-        {
-            newVel = Vector3.ClampMagnitude(newVel + MoveDirInput() * acceleration * Time.deltaTime, maxSpeed);
+        temp = Vector3.ClampMagnitude(temp + MoveDirInput() * acceleration * Time.deltaTime, maxSpeed);
 
-            if (Input.GetKeyDown(KeyCode.Space) && Grounded())
-            {
-                VelY += Jump().y;
-                animator.SetBool("Jump", true);
-            }
-        }
+            
 
         if (MoveDirInput() == Vector3.zero)
         {
-            newVel = Vector3.Lerp(newVel, default, breaking * Time.deltaTime);
+            temp = Vector3.Lerp(temp, default, breaking * Time.deltaTime);
         }
 
-        newVel.y = VelY;
+        newVel.x = temp.x;
+        newVel.z = temp.z;
+
 
         newVel.y += gravity * Time.deltaTime;
 

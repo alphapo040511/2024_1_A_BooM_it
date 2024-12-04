@@ -239,7 +239,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -376,7 +376,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -862,12 +862,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29d179277b984de4ea5147be52a5605b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    Title: 
-    StageName: 
-    Description: 
-    SceneName: 
-    stageImage: {fileID: 0}
   button: {fileID: 130994427}
   title: {fileID: 1155219021}
   stageName: {fileID: 1021632593}
@@ -1262,12 +1256,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29d179277b984de4ea5147be52a5605b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    Title: 
-    StageName: 
-    Description: 
-    SceneName: 
-    stageImage: {fileID: 0}
   button: {fileID: 59743122}
   title: {fileID: 1841543455}
   stageName: {fileID: 750251805}
@@ -1415,7 +1403,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1569,11 +1557,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 2
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1808,12 +1796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29d179277b984de4ea5147be52a5605b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    Title: 
-    StageName: 
-    Description: 
-    SceneName: 
-    stageImage: {fileID: 0}
   button: {fileID: 928358225}
   title: {fileID: 2138636059}
   stageName: {fileID: 1422906199}
@@ -2634,31 +2616,30 @@ MonoBehaviour:
     Description: "\uD3ED\uD0C4\uC744 \uC774\uC6A9\uD55C \uAE30\uBCF8 \uACF5\uACA9\uC744
       \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
     SceneName: Tutorial_2
-    stageImage: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
+    stageImage: {fileID: 21300000, guid: 851e65021779dbb47942b24b68072169, type: 3}
   - Title: "\uD29C\uD1A0\uB9AC\uC5BCIII"
     StageName: "\uCD08\uAE09 \uC751\uC6A9"
     Description: "\uAE30\uBCF8 \uACF5\uACA9\uC744 \uC751\uC6A9\uD558\uC5EC \uACF5\uACA9\uD558\uB294
       \uBC29\uBC95\uC744 \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
     SceneName: Tutorial_3
-    stageImage: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
+    stageImage: {fileID: 21300000, guid: 6c138f1c1338f464a968a27d69ce5307, type: 3}
   - Title: "\uD29C\uD1A0\uB9AC\uC5BCIV"
     StageName: "\uC911\uAE09 \uC751\uC6A9"
-    Description: "\uD30C\uAD34\uAC00 \uC544\uB2CC \uBC00\uCE58\uAE30\uB97C \uD1B5\uD55C
-      \uACF5\uACA9\uC744 \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
+    Description: "\uBC00\uCE58\uAE30\uB97C \uD1B5\uD55C \uACF5\uACA9\uC744 \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
     SceneName: Tutorial_4
-    stageImage: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
+    stageImage: {fileID: 21300000, guid: 95a343365f76c9e45842bee1f3d1c6e6, type: 3}
   - Title: "\uD29C\uD1A0\uB9AC\uC5BCV"
     StageName: "\uC544\uC774\uD15C \uC0AC\uC6A9"
     Description: "\uC544\uC774\uD15C\uC744 \uC0AC\uC6A9\uD558\uC5EC \uACF5\uACA9\uC744
       \uB9C9\uB294\uBC95\uC744 \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
     SceneName: Tutorial_5
-    stageImage: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
+    stageImage: {fileID: 21300000, guid: 66c2fe5c57fd08e438f04758ca2c4afa, type: 3}
   - Title: "\uD29C\uD1A0\uB9AC\uC5BCVI"
     StageName: "\uACE0\uAE09 \uC751\uC6A9"
     Description: "\uD3ED\uD0C4\uC744 \uC774\uC6A9\uD55C \uBE60\uB978 \uC774\uB3D9\uC744
       \uC5F0\uC2B5\uD569\uB2C8\uB2E4."
     SceneName: Tutorial_6
-    stageImage: {fileID: 21300000, guid: 1b373726b93cbca49bdfe68172c9de90, type: 3}
+    stageImage: {fileID: 21300000, guid: cbf0c741bff1aef4b9238c241475e697, type: 3}
   current: {fileID: 809102811}
   next: {fileID: 924830867}
   prev: {fileID: 1079892345}

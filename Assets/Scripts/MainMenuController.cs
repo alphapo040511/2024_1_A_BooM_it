@@ -47,6 +47,11 @@ public class MainMenuController : MonoBehaviour
         TabMove(nowTab, newTab);
     }
 
+    public void TutorialScene()
+    {
+        SceneLoadManager.instance.LoadScene("TutorialLobbyScene");
+    }
+
     public void Exit()
     {
         Application.Quit();
