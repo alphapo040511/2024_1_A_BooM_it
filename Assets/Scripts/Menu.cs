@@ -30,7 +30,7 @@ public class Menu : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !isTitleScene)
         {
             TurnTab();
         }
@@ -57,7 +57,7 @@ public class Menu : MonoBehaviour
         {
             CloseTab();
         }
-        else if (!isTitleScene)
+        else
         {
             OpenTab();
         }
