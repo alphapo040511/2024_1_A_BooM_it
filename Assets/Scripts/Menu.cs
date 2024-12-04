@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class Menu : MonoBehaviour
 {
     public bool isTitleScene = false;
-    public bool timeStop = false;
     public GameObject menuUI;
 
     [SerializeField] private AudioMixer audioMixer;                 //private 선언한 것들을 인스팩터 창에서 보여지게
@@ -56,19 +55,11 @@ public class Menu : MonoBehaviour
     {
         if(menuUI.activeSelf)
         {
-            Time.timeScale = 1;
             CloseTab();
         }
-        else
+        else if (!isTitleScene)
         {
-            if(timeStop)
-            {
-                Time.timeScale = 0;
-            }
-            if (!isTitleScene)
-            {
-                OpenTab();
-            }
+            OpenTab();
         }
     }
 
