@@ -162,12 +162,6 @@ public class SinglePlayer : MonoBehaviour
 
         newVel.y += gravity * Time.deltaTime;
 
-        if (newVel.y < 0 && Grounded())
-        {
-            newVel.y = 0;
-        }
-
-
         if (knockbackVel != default)
         {
             newVel += knockbackVel;
@@ -222,8 +216,8 @@ public class SinglePlayer : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 weapon.UseItem(this);
-                GameObject temp = Instantiate(bomb, firePoint.position, firePoint.rotation);
-                temp.GetComponent<TutorialBomb>().Init(angle, firePoint.position, thirdPersonCamera.transform.rotation);
+                GameObject temp = Instantiate(bomb, firePoint.position, Quaternion.LookRotation(transform.forward));
+                temp.GetComponent<TutorialBomb>().Init(angle, firePoint.position, cameraPivot.rotation);
             }
         }
     }
@@ -255,7 +249,7 @@ public class SinglePlayer : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            Vector3[] point = weapon.bombParabola.Trajectory(angle, firePoint, cameraPivot);
+            Vector3[] point = bomb.GetComponent<TutorialBomb>().Trajectory(angle, firePoint, cameraPivot);
             lineRenderer.positionCount = point.Length;
             for (int i = 0; i < point.Length; i++)
             {

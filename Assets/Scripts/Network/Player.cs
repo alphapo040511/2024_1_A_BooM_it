@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
+using System.Linq;
 
 public enum PlayerState
 {
@@ -81,8 +82,7 @@ public class Player : NetworkBehaviour
             RPC_ItemSpawn(GameManager.instance.weaponIndex, GameManager.instance.itemIndex);
         }
 
-        string[] mapName = GameManager.instance.mapIndex.ToString().Split('_');
-        if (mapName[0] == "Ice")
+        if (GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
         {
             _cc.braking = 5;
             _cc.acceleration = 5;
