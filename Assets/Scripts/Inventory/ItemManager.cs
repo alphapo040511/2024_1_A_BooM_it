@@ -46,8 +46,8 @@ public class ItemManager : MonoBehaviour
     public void ItemButton(int index)
     {
         SelectWeaponIndex = index;
-        itemButtonManager.weaponGrid.gameObject.SetActive(!(SelectWeaponIndex == 3));
-        itemButtonManager.itemGrid.gameObject.SetActive((SelectWeaponIndex == 3));
+        itemButtonManager.weaponPanel.SetActive(!(SelectWeaponIndex == 3));
+        itemButtonManager.itemPanel.SetActive((SelectWeaponIndex == 3));
     }
 
     private void KeepItemData(Item[] datas)
