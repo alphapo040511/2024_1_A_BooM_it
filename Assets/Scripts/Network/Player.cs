@@ -84,8 +84,9 @@ public class Player : NetworkBehaviour
 
         if (GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
         {
-            _cc.braking = 5;
+            _cc.braking = 10;
             _cc.acceleration = 5;
+            _cc.maxSpeed = 5;
         }
     }
 
@@ -219,6 +220,7 @@ public class Player : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Reset(int stateIndex)
     {
+        aiming = false;
         Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
         if(stateIndex == 2)
         {
@@ -232,12 +234,14 @@ public class Player : NetworkBehaviour
         }
         else if(stateIndex == 3)
         {
-            foreach(Item weaponData in weapon)
+            if (weapon.Length > 0)
             {
-                weaponData.Reset();
+                foreach (Item weaponData in weapon)
+                {
+                    weaponData.Reset();
+                }
             }
-
-            item.Reset();
+            item?.Reset();
             if(HasInputAuthority)
             {
                 WeaponUIManager.instance.ResetItem();
@@ -365,25 +369,26 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if(!aiming)
+        if (HasInputAuthority)
         {
-            Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
-            lineRenderer.positionCount = point.Length;
-            for (int i = 0; i < point.Length; i++)
+            if (aiming)
             {
-                lineRenderer.SetPosition(i, point[i]);
+                Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
+                lineRenderer.positionCount = point.Length;
+                for (int i = 0; i < point.Length; i++)
+                {
+                    lineRenderer.SetPosition(i, point[i]);
+                }
+
+                lineRenderer.enabled = true;
             }
-            lineRenderer.enabled = true;
-        }
-        else
-        {
-            lineRenderer.enabled = false;
-        }
+            else
+            {
+                lineRenderer.enabled = false;
+            }
 
 
-        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
-        {
-            if (HasInputAuthority)
+            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
             {
                 aiming = !aiming;
             }

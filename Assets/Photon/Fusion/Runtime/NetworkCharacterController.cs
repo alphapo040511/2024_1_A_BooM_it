@@ -93,9 +93,9 @@ namespace Fusion {
         moveVelocity.y = 0f;
       }
 
-      if(moveVelocity.y > maxSpeed * 2 )
+      if(moveVelocity.y > 8 )
         {
-            moveVelocity.y = maxSpeed * 2;
+            moveVelocity.y = 8;
         }
 
       moveVelocity.y += gravity * Runner.DeltaTime;
@@ -121,7 +121,7 @@ namespace Fusion {
             if (knockbackVel != default)
             {
                 moveVelocity += knockbackVel;
-                knockbackVel = Vector3.Lerp(knockbackVel, default, braking * 0.25f * deltaTime);
+                knockbackVel = Vector3.Lerp(knockbackVel, default, 50 * 0.25f * deltaTime);
             }
 
         _controller.Move(moveVelocity * deltaTime);

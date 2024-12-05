@@ -112,7 +112,6 @@ public class TutorialMapGenerator : MonoBehaviour
                     }
                 }
             }
-            yield return null;
         }
 
         if (tutoType == TutorialType.UseSkill)
@@ -122,9 +121,10 @@ public class TutorialMapGenerator : MonoBehaviour
 
         TutorialManager.instance.Init(tutoType, count);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return null;
 
         PlayerSpawn();
+        yield return null;
     }
 
     public void RespawnBlocks()
