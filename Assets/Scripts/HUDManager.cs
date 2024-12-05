@@ -73,7 +73,7 @@ public class HUDManager : MonoBehaviour
 
         }
 
-        finish.DOMove(new Vector3(960, 540, 0), 1f);
+        finish.DOLocalMove(new Vector3(0, 0, 0), 1f);
         yield return new WaitForSeconds(1);
 
         float size = 0;

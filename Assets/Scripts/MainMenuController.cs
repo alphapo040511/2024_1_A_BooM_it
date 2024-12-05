@@ -83,7 +83,7 @@ public class MainMenuController : MonoBehaviour
 
         if (nowTab == newTab) return;
 
-        nowTab.GetComponent<RectTransform>().DOMoveX(2880, 0.5f).SetEase(Ease.OutCubic);
-        newTab.GetComponent<RectTransform>().DOMoveX(960, 0.5f).SetEase(Ease.OutCubic);
+        nowTab.GetComponent<RectTransform>().DOLocalMoveX(1920, 0.5f).SetEase(Ease.OutCubic);
+        newTab.GetComponent<RectTransform>().DOLocalMoveX(0, 0.5f).SetEase(Ease.OutCubic);
     }
 }

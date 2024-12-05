@@ -20,6 +20,8 @@ public struct NetworkInputData : INetworkInput
 // NetworkInputHandler ??????
 public class NetworkInputHandler : MonoBehaviour
 {
+    public bool isMobile = false;
+
     //?????? ???? ????
     [Header("Camera Settings")]
     public float mouseSensitivity = 2.0f;       //?????? ????
@@ -38,19 +40,27 @@ public class NetworkInputHandler : MonoBehaviour
 
         if (Cursor.lockState != CursorLockMode.Locked) return data;
 
-        float vertical = Input.GetAxis("Vertical");
-        float horizontal = Input.GetAxis("Horizontal");
-        data.direction = new Vector3(vertical, 0, horizontal);
 
-        data.wheel = Input.GetAxis("Mouse ScrollWheel") * 2;
+        if (!isMobile)      //pcÀÎ °æ¿ì
+        {
+            float vertical = Input.GetAxis("Vertical");
+            float horizontal = Input.GetAxis("Horizontal");
+            data.direction = new Vector3(vertical, 0, horizontal);
+
+            data.wheel = Input.GetAxis("Mouse ScrollWheel") * 2;
 
 
-        data.lookDirection = HandleRotation();
+            data.lookDirection = HandleRotation();
 
-        data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButton(0));
-        data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButton(1));
-        data.buttons.Set(NetworkInputData.KEYCODESPACE, Input.GetKey(KeyCode.Space));
-        data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKey(KeyCode.R));
+            data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButtonDown(0));
+            data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButtonDown(1));
+            data.buttons.Set(NetworkInputData.KEYCODESPACE, Input.GetKey(KeyCode.Space));
+            data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKey(KeyCode.R));
+        }
+        else
+        {
+
+        }
 
         return data;
     }

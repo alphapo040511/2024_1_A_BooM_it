@@ -365,26 +365,30 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
+        if(!aiming)
         {
-            if (HasInputAuthority)
+            Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
+            lineRenderer.positionCount = point.Length;
+            for (int i = 0; i < point.Length; i++)
             {
-                Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
-                lineRenderer.positionCount = point.Length;
-                for (int i = 0; i < point.Length; i++)
-                {
-                    lineRenderer.SetPosition(i, point[i]);
-                }
-                lineRenderer.enabled = true;
-
-                aiming = true;
+                lineRenderer.SetPosition(i, point[i]);
             }
+            lineRenderer.enabled = true;
         }
         else
         {
             lineRenderer.enabled = false;
-            aiming = false;
         }
+
+
+        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
+        {
+            if (HasInputAuthority)
+            {
+                aiming = !aiming;
+            }
+        }
+        
     }
 
     private void UseItem()

@@ -9,13 +9,7 @@ public class AchievementsManager : MonoBehaviour
     {
         Invoke("NewAward", 1);
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            ProgressAchievement("Kill", 10);
-        }
-    }
+
     private void NewAward()
     {
         if (GameManager.instance.awardPoints.Count > 0)

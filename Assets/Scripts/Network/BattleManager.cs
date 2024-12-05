@@ -125,7 +125,7 @@ public class BattleManager : NetworkBehaviour
     private IEnumerator FadeCanvas(CanvasGroup target, bool fadeIn)
     {
         yield return new WaitForSeconds(0.5f);
-        hudManager.finish.position = new Vector3(-960, 255, 0);             //종료 UI 초기화 (나중에 다시 정리)
+        hudManager.finish.localPosition = new Vector3(-1920, -283, 0);             //종료 UI 초기화 (나중에 다시 정리)
         if (fadeIn)
         {
             while(target.alpha < 1.0f)
