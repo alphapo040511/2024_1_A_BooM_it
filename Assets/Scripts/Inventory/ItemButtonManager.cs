@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public class ItemButtonManager : MonoBehaviour
 {
     public GameObject itemButtons;
+    public GameObject weaponPanel;
+    public GameObject itemPanel;
+
     public Transform weaponGrid;
     public Transform itemGrid;
 
