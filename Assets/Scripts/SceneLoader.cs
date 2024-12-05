@@ -28,15 +28,23 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator LoadingAsync(string name)
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(name);
+        asyncOperation.allowSceneActivation = false;
 
         while (!asyncOperation.isDone)
         {
+            if(asyncOperation.progress >= 0.9f)
+            {
+                break;
+            }
+
             yield return null;
         }
 
         yield return new WaitForSeconds(1.5f);
 
         asyncOperation.allowSceneActivation = true;
+
+        yield break;
     }
 
     private IEnumerator LoadingIcons()
