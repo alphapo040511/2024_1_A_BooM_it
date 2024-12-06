@@ -219,12 +219,20 @@ public class SinglePlayer : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                animator.SetInteger("Fire", 1);
+                StartCoroutine(AnimationDelay());
                 weapon.UseItem(this);
                 GameObject temp = Instantiate(bomb, firePoint.position, Quaternion.LookRotation(transform.forward));
                 temp.GetComponent<TutorialBomb>().Init(angle, firePoint.position, cameraPivot.rotation);
             }
         }
     }
+    private IEnumerator AnimationDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        animator.SetInteger("Fire", 0);
+    }
+
 
     public void UseItem()
     {

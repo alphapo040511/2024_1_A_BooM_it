@@ -142,11 +142,15 @@ public class TutorialMapGenerator : MonoBehaviour
 
     public void DestroyBlocks(Vector3Int pos , Vector3Int[] range)
     {
-        foreach(Vector3Int dir in range)
+        for (int y = pos.y; y < levelData.BlockArr.GetLength(1); y++)
         {
-            if(blocks.ContainsKey(pos + dir))
+            foreach (Vector3Int dir in range)
             {
-                blocks[pos + dir].DestroyBlock();
+                Vector3Int targetPos = dir + new Vector3Int(pos.x, y, pos.z);
+                if (blocks.ContainsKey(targetPos))
+                {
+                    blocks[targetPos].DestroyBlock();
+                }
             }
         }
     }

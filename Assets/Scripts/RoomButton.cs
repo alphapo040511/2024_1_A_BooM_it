@@ -50,7 +50,7 @@ public class RoomButton : MonoBehaviour
         }
         else
         {
-            Debug.Log("현제 데이터가 없습니다.");
+            Debug.Log("현재 데이터가 없습니다.");
         }
     }
 }

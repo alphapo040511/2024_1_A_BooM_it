@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
 public class NetworkRoomLoader : MonoBehaviour
 {
-    public List<RoomButton> roomButtons;
+    public Transform roomListContainer;
+    public RoomButton roomButtonPrefab;
+
     public Button JoinButton;
+    public FollowImage followImage;
 
     public TMP_InputField roomName;
+    public TMP_InputField searchText;
     public string _roomName;
     private int playerCount = 2;
 
@@ -20,26 +25,27 @@ public class NetworkRoomLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < roomButtons.Count; i++)
+        for (int i = 0; i < 5; i++)
         {
-            roomButtons[i].selectRoom += SelectRoom;
+            GenerateNoneDataButton(i + 1);
         }
-
-        for (int i = 0; i < roomButtons.Count; i++)
-        {
-            roomButtons[i].SetData(i + 1, false);
-        }
-
         JoinLobby();
         NetworkManager.Instance.updateSessions += UpdateRooms;
     }
 
-    public void InputName()
+    public void InputName(TMP_InputField input)
     {
-        if(roomName.text.Contains(" "))
+        if (input.text.Length > 12)
         {
-            roomName.text = roomName.text.Replace(" ", "");
+            input.text = input.text.Substring(0, 12);
         }
+
+        if(input.text.Contains(" "))
+        {
+            input.text = input.text.Replace(" ", "");
+        }
+
+        UpdateRooms(sessions);
     }
 
     public void CreateRoom()
@@ -83,27 +89,66 @@ public class NetworkRoomLoader : MonoBehaviour
     public void UpdateRooms(List<SessionInfo> sessions = default)
     {
         this.sessions = sessions;
-        int count = Mathf.Min(sessions.Count, roomButtons.Count);
         string temp = "";
-        for(int i = 0; i < roomButtons.Count; i++)
+
+        if (roomListContainer != null)
         {
-            if(i < count)
+            if (roomListContainer.childCount > 0)
             {
-                roomButtons[i].SetData(i + 1, true, sessions[i]);
-                if (sessions[i].Name == _roomName)
+                foreach (Transform Obj in roomListContainer)
                 {
-                    temp = _roomName;
+                    if (Obj != null)
+                    {
+                        Destroy(Obj.gameObject);
+                    }
                 }
             }
-            else
-            {
-                roomButtons[i].SetData(i + 1, false);
-            }
         }
+
+        for(int i = 0; i < sessions.Count; i++)
+        {
+            if(searchText.text != "")
+            {
+                if(sessions[i].Name.Contains(searchText.text) == false)
+                {
+                    return;
+                }
+            }
+
+            RoomButton button = Instantiate(roomButtonPrefab, roomListContainer);
+            button.SetData(i + 1, true, sessions[i]);
+            EventTrigger.Entry entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerEnter
+            };
+            entry.callback.AddListener((evenetData) => followImage.Follow(button.GetComponent<RectTransform>()));
+            button.GetComponent<EventTrigger>().triggers.Add(entry);
+            button.selectRoom += SelectRoom;
+        }
+
+
+        for (int i = sessions.Count; i < 5; i++)
+        {
+            GenerateNoneDataButton(i + 1);
+        }
+
 
         _roomName = temp;
         JoinButton.interactable = (_roomName != "");
     }
+
+    private void GenerateNoneDataButton(int i)
+    {
+        RoomButton button = Instantiate(roomButtonPrefab, roomListContainer);
+        button.SetData(i, false);
+        EventTrigger.Entry entry = new EventTrigger.Entry
+        {
+            eventID = EventTriggerType.PointerEnter
+        };
+        entry.callback.AddListener((evenetData) => followImage.Follow(button.GetComponent<RectTransform>()));
+        button.GetComponent<EventTrigger>().triggers.Add(entry);
+    }
+
     private void SelectRoom(SessionInfo info)
     {
         _roomName = info.Name;
