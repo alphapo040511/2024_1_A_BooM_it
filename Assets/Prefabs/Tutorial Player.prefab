@@ -123,7 +123,7 @@ MonoBehaviour:
   mouseSensitivity: 2
   yMinLimit: -75
   yMaxLimit: 75
-  playerState: 3
+  playerState: 0
   skillState: 0
   firePoint: {fileID: 6008749656435645201}
   groundChecker: {fileID: 2394378467405921652}

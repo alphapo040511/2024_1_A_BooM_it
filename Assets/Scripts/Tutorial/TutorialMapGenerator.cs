@@ -25,7 +25,7 @@ public class TutorialMapGenerator : MonoBehaviour
 
     public MapData levelData;
     public GameObject PlayerPrefab;
-    private SinglePlayer player;
+    public SinglePlayer player;
     private List<Dummy> dummys = new List<Dummy>();
 
     private Dictionary<Vector3Int, TutorialBlock> blocks = new Dictionary<Vector3Int, TutorialBlock>();

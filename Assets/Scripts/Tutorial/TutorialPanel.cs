@@ -55,7 +55,7 @@ public class TutorialPanel : MonoBehaviour
     public void NextTap()
     {
         if (index >= TutorialDatas.Length - 1) return;
-
+        audioSource.PlayOneShot(audioClip);
         index = Mathf.Clamp(index + 1, 0, TutorialDatas.Length - 1);
         UpdateButtons();
     }
@@ -63,14 +63,14 @@ public class TutorialPanel : MonoBehaviour
     public void PrevTap()
     {
         if (index <= 0) return;
-
+        audioSource.PlayOneShot(audioClip);
         index = Mathf.Clamp(index - 1, 0, TutorialDatas.Length - 1);
         UpdateButtons();
     }
 
     private void UpdateButtons()
     {
-        audioSource.PlayOneShot(audioClip);
+
         SendData(current, index);
         SendData(next, index + 1);
         SendData(prev, index - 1);

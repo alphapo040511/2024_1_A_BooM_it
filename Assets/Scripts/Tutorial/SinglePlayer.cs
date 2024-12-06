@@ -86,6 +86,8 @@ public class SinglePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerState != PlayerState.Playing) return;
+
         Movement();
         Grounded();
         if (Cursor.lockState != CursorLockMode.Locked) return;
