@@ -34,8 +34,8 @@ public class BattleManager : NetworkBehaviour
 
     public GameState gameState = GameState.Standby;
 
-    const int minPlayer = 2;        //최소 플레이어 수
-    public int maxPlayer = 2;       //최대 플레이어 수
+    const int minPlayer = 1;        //최소 플레이어 수
+    [Networked] public int maxPlayer { get; set; }       //최대 플레이어 수
 
     private bool nowLoading = false;
 
@@ -69,6 +69,7 @@ public class BattleManager : NetworkBehaviour
         {
             startButton.gameObject.SetActive(true);                     //게임 시작 버튼 활성화 및 리스너 등록
             startButton.onClick.AddListener(OnClickStartButton);
+            maxPlayer = Runner.SessionInfo.MaxPlayers;
         }    
         else
         {
@@ -251,7 +252,8 @@ public class BattleManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_ReadyCountUI(int count)
     {
-        readyCount.text = $"{count}/{Runner.SessionInfo.PlayerCount}";
+        //readyCount.text = $"{count}/{Runner.SessionInfo.PlayerCount}";        //전체 인원숫자를 햇깔려 하길래 일단 최대 인원 표시로 변경
+        readyCount.text = $"{count}/{maxPlayer}";
     }
 
     private IEnumerator Countdown()

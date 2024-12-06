@@ -35,6 +35,7 @@ public class Player : NetworkBehaviour
 
     private TickTimer changeDelay { get; set; }
     private TickTimer jumpDelay { get; set; }
+    private TickTimer aimingDelay { get; set; }
     private NetworkButtons _networkButtons { get; set; }
 
     [SerializeField] private Transform cameraPivot;
@@ -96,8 +97,8 @@ public class Player : NetworkBehaviour
 
         if (GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
         {
-            _cc.braking = 10;
-            _cc.acceleration = 5;
+            _cc.braking = 3;
+            _cc.acceleration = 8;
             _cc.maxSpeed = 5;
         }
     }
@@ -166,6 +167,7 @@ public class Player : NetworkBehaviour
                 thirdPersonCamera.transform.LookAt(cameraPivot);
             }
         }
+
 
         if (GetInput(out NetworkInputData data))
         {
@@ -419,12 +421,15 @@ public class Player : NetworkBehaviour
             }
 
 
-            if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1))
-            {
-                aiming = !aiming;
-            }
+            
         }
-        
+
+        if (_networkButtons.IsSet(NetworkInputData.MOUSEBUTTON1) && aimingDelay.ExpiredOrNotRunning(Runner))
+        {
+            aimingDelay = TickTimer.CreateFromSeconds(Runner, 0.2f);
+            aiming = !aiming;
+        }
+       
     }
 
     private void UseItem()
