@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.111399435, g: 0.2998796, b: 0.6360435, a: 1}
+  m_IndirectSpecularColor: {r: 0.111451566, g: 0.29990134, b: 0.63608694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1561,7 +1561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 0}
-  popupObj: {fileID: 906422736}
+  popupObj: {fileID: 2109805736}
   videoPlayer: {fileID: 180451644}
   descriptionText: {fileID: 1443743123}
   anykey: {fileID: 1459908324}

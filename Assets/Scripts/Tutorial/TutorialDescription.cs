@@ -65,7 +65,7 @@ public class TutorialDescription : MonoBehaviour
             index = 0;
             popupObj.SetActive(true);
             ShowDescription(index);
-            generator.player.playerState |= PlayerState.Ready;
+            generator.player.playerState = PlayerState.Ready;
         }
     }
 
