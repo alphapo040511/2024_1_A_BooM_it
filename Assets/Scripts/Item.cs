@@ -32,10 +32,10 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        Reset();
+        ItemReset();
     }
 
-    public void Reset()
+    public void ItemReset()
     {
         // 초기 남은 사용 횟수를 최대 사용 횟수로 설정
         remainingUses = maxUses;

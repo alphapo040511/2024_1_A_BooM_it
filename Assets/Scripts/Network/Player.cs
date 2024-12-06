@@ -39,8 +39,13 @@ public class Player : NetworkBehaviour
 
     [SerializeField] private Transform cameraPivot;
 
+    public GameObject girl;
+    public GameObject boy;
+    public Transform girlFirePoint;
+    public Transform boyFirePoint;
+
     public NetworkMecanimAnimator _animator;
-    public Transform FirePoint;
+    private Transform FirePoint;
     public LineRenderer lineRenderer;
     public MeshTrail meshTrail;
     public GameObject Shield;
@@ -50,6 +55,8 @@ public class Player : NetworkBehaviour
 
     private GameObject thirdPersonCamera;
     private float cameraDistance;
+
+    [Networked] CharacterType characterType { get; set; }
 
     [Networked] public int currentWeapon { get; set; }
 
@@ -65,7 +72,10 @@ public class Player : NetworkBehaviour
 
     public void Init()
     {
-        
+        if (HasInputAuthority)
+        {
+            characterType = GameManager.instance.characterType;
+        }
     }
 
     public override void Spawned()
@@ -82,12 +92,30 @@ public class Player : NetworkBehaviour
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
             RPC_ItemSpawn(GameManager.instance.weaponIndex, GameManager.instance.itemIndex);
         }
+        ChangeCharacter(characterType);
 
         if (GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
         {
             _cc.braking = 10;
             _cc.acceleration = 5;
             _cc.maxSpeed = 5;
+        }
+    }
+
+    public void ChangeCharacter(CharacterType type)
+    {
+        switch(type)
+        {
+            case CharacterType.Girl:
+                girl.SetActive(true);
+                _animator.Animator = girl.GetComponent<Animator>();
+                FirePoint = girlFirePoint;
+                break;
+            case CharacterType.Boy:
+                boy.SetActive(true);
+                _animator.Animator = boy.GetComponent<Animator>();
+                FirePoint = boyFirePoint;
+                break;
         }
     }
 
@@ -223,15 +251,17 @@ public class Player : NetworkBehaviour
     {
         aiming = false;
         Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
-        if(stateIndex == 2)
+
+        if (!HasInputAuthority) return;
+
+        if (stateIndex == 2)
         {
-            if (HasInputAuthority)
-            {
-                thirdPersonCamera.transform.SetParent(cameraPivot.transform);
-                thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -2.5f);
-                thirdPersonCamera.transform.localRotation = default;
-                cameraDistance = thirdPersonCamera.transform.localPosition.z;
-            }
+
+            thirdPersonCamera.transform.SetParent(cameraPivot.transform);
+            thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -2.5f);
+            thirdPersonCamera.transform.localRotation = default;
+            cameraDistance = thirdPersonCamera.transform.localPosition.z;
+
         }
         else if(stateIndex == 3)
         {
@@ -239,10 +269,10 @@ public class Player : NetworkBehaviour
             {
                 foreach (Item weaponData in weapon)
                 {
-                    weaponData.Reset();
+                    weaponData.ItemReset();
                 }
             }
-            item?.Reset();
+            item?.ItemReset();
             if(HasInputAuthority)
             {
                 WeaponUIManager.instance.ResetItem();

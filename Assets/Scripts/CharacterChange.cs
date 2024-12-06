@@ -21,7 +21,6 @@ public class CharacterChange : MonoBehaviour
         {
             girl.SetActive(true);
             boy.SetActive(false);
-
         }
         else if (type == CharacterType.Boy)
         {
