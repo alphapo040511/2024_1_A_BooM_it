@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
+    public RectTransform canvas;
     public ItemButtonManager itemButtonManager;
 
     private Dictionary<string, Item> itemDatas = new Dictionary<string, Item>();
@@ -133,8 +134,15 @@ public class ItemManager : MonoBehaviour
     {
         if(itemDatas.ContainsKey(key))
         {
-            Vector3 point = Input.mousePosition;
-            point -= new Vector3(960, 540, 0);
+            Vector2 point;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+           canvas,
+           Input.mousePosition,
+           null, // 카메라가 없으면 화면 기준으로 계산
+           out point
+       );
+
             itemButtonManager.ShowDescription(itemDatas[key], point);
         }
     }
