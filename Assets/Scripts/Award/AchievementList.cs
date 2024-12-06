@@ -58,7 +58,7 @@ public class AchievementList : MonoBehaviour
 
         awardName.text = data.awardName;
         description.text = data.awardDescription;
-        value.text = $"{data.currentValue} / {data.goalValue}";
+        value.text = $"{PlayerPrefs.GetInt(data.awardName, data.currentValue)} / {data.goalValue}";
 
         float size = ((float)data.currentValue / (float)data.goalValue);
         size = Mathf.Clamp01(size);

@@ -29,6 +29,8 @@ public class AchievementsManager : MonoBehaviour
         {
             AwardList.awardList[awardKey].currentValue += value;                                                   //???????? ?????????? ????
 
+            PlayerPrefs.SetInt(AwardList.awardList[awardKey].awardName, AwardList.awardList[awardKey].currentValue);
+
             if (AchievementFloatingUI.instance != null && AwardList.awardList[awardKey].isAchieved == false)
             {
                 AchievementFloatingUI.instance.ShowAchievementPopup(AwardList.awardList[awardKey]);

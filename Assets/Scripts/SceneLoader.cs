@@ -15,7 +15,7 @@ public class SceneLoader : MonoBehaviour
         string name = SceneLoadManager.instance.targetSceneName;
         if(SceneManager.GetSceneByName(name) != null)
         {
-            if (name == "ServerConnecting") return;
+            if (name == "ServerConnecting" || name == "DataLoading") return;
 
             StartCoroutine(LoadingAsync(name));
         }

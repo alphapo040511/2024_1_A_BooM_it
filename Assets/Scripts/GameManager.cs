@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using System.Linq;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
     public NetworkPrefabRef playerRef;
+    public AudioMixer audioMixer;
 
     public string mapIndex;
 
@@ -30,6 +32,41 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        
+    }
+    private void Start()
+    {
+        StartCoroutine(LoadData());
+    }
+
+    private IEnumerator LoadData()
+    {
+        weaponIndex[0] = PlayerPrefs.GetString("weapon_0", "BasicBomb");
+        weaponIndex[1] = PlayerPrefs.GetString("weapon_1", "CrossBomb");
+        weaponIndex[2] = PlayerPrefs.GetString("weapon_2", "StraightBomb");
+
+        itemIndex = PlayerPrefs.GetString("skill", "SpeedUp");
+
+        characterType = (CharacterType)PlayerPrefs.GetInt("character", 0);
+
+        audioMixer.SetFloat("Master", PlayerPrefs.GetFloat("Master", 0));
+        audioMixer.SetFloat("BGM", PlayerPrefs.GetFloat("BGM", 0));
+        audioMixer.SetFloat("SFX", PlayerPrefs.GetFloat("SFX", 0));
+
+        SceneLoadManager.instance.LoadScene("LobbyScene");
+        yield return null;
+    }
+
+    public void SaveData()
+    {
+        PlayerPrefs.SetString("weapon_0", weaponIndex[0]);
+        PlayerPrefs.SetString("weapon_1", weaponIndex[1]);
+        PlayerPrefs.SetString("weapon_2", weaponIndex[2]);
+
+        PlayerPrefs.SetString("skill", itemIndex);
+
+        PlayerPrefs.SetInt("character", (int)characterType);
     }
 
     public void NewMap(string mapName)
@@ -52,6 +89,7 @@ public class GameManager : MonoBehaviour
         }
 
         weaponIndex[index] = name;
+        SaveData();
     }
 
     public void SetItem(string name)
@@ -64,6 +102,8 @@ public class GameManager : MonoBehaviour
         {
             itemIndex = name;
         }
+
+        SaveData();
     }
 
     public void AwardAddValue(string name, int point)

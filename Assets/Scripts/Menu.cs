@@ -100,12 +100,15 @@ public class Menu : MonoBehaviour
     {
         float master = 0;
         audioMixer.GetFloat("Master", out master);
+        PlayerPrefs.SetFloat("Master", master);
         MasterSlider.value = Mathf.Pow(10, master * 0.05f);
         float BGM = 0;
         audioMixer.GetFloat("BGM", out BGM);
+        PlayerPrefs.SetFloat("BGM", BGM);
         BGMSlider.value = Mathf.Pow(10, BGM * 0.05f);
         float SFX = 0;
         audioMixer.GetFloat("SFX", out SFX);
+        PlayerPrefs.SetFloat("SFX", SFX);
         SFXSlider.value = Mathf.Pow(10, SFX * 0.05f);
     }
 
