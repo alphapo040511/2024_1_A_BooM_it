@@ -82,11 +82,15 @@ public class Menu : MonoBehaviour
         Application.Quit();
     }
 
-    public void BackLobby()
+    public void BackTutorialLobby()
     {
         SceneLoadManager.instance.LoadScene("TutorialLobbyScene");
     }
 
+    public void BackLobby()
+    {
+        SceneLoadManager.instance.LoadScene("LobbyScene");
+    }
     public void Disconnect()
     {
         NetworkManager.Instance.DisconnectClicked();
