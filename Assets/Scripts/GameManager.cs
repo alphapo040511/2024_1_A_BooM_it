@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public Dictionary<string, int> awardPoints = new Dictionary<string, int>();
 
+    public CharacterType characterType = CharacterType.Girl;
+
     private void Awake()
     {
         if(instance == null)
@@ -79,5 +81,10 @@ public class GameManager : MonoBehaviour
     public void ClearAward()
     {
         awardPoints.Clear();
+    }
+
+    public void ChangeCharacter(CharacterType type)                       //캐릭터가 늘어날 수 있으니 enum으로 관리
+    {
+        characterType = type;
     }
 }

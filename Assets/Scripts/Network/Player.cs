@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 public enum PlayerState
 {
@@ -373,9 +374,9 @@ public class Player : NetworkBehaviour
         {
             if (aiming)
             {
-                Vector3[] point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
-                lineRenderer.positionCount = point.Length;
-                for (int i = 0; i < point.Length; i++)
+                List<Vector3> point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
+                lineRenderer.positionCount = point.Count;
+                for (int i = 0; i < point.Count; i++)
                 {
                     lineRenderer.SetPosition(i, point[i]);
                 }

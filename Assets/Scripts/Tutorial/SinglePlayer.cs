@@ -251,16 +251,16 @@ public class SinglePlayer : MonoBehaviour
     {
         if (weapon == null) return;
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
         {
             aiming = !aiming;
         }
 
         if (aiming)
         {
-            Vector3[] point = bomb.GetComponent<TutorialBomb>().Trajectory(angle, firePoint, cameraPivot);
-            lineRenderer.positionCount = point.Length;
-            for (int i = 0; i < point.Length; i++)
+            List<Vector3> point = bomb.GetComponent<TutorialBomb>().Trajectory(angle, firePoint, cameraPivot);
+            lineRenderer.positionCount = point.Count;
+            for (int i = 0; i < point.Count; i++)
             {
                 lineRenderer.SetPosition(i, point[i]);
             }

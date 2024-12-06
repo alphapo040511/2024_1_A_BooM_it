@@ -112,22 +112,40 @@ public abstract class NetworkParabola : NetworkBehaviour
         }
     }
 
-    public Vector3[] Trajectory(float angle, Transform firePoint, Transform cameraDirection)
+    public List<Vector3> Trajectory(float angle, Transform firePoint, Transform cameraDirection)
     {
         float newAngle = ChangeAngle(angle);
         Vector3 vel = VelocityCalculate(newAngle, firePoint.position, cameraDirection);
 
-        Vector3[] point = new Vector3[10];
+        List<Vector3> point = new List<Vector3>();
         for (int i = 0; i < 10; i++)
         {
             float targetTime = i * 0.2f;
             Vector3 currentPosition = firePoint.position + vel * targetTime;
             currentPosition.y -= 0.5f * gravity * targetTime * targetTime;
-            point[i] = currentPosition;
+            point.Add(currentPosition);
+
+            if (ArrivalPoint(currentPosition))
+            {
+                break;
+            }
         }
 
         return point;
     }
+
+    private bool ArrivalPoint(Vector3 Pos)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(Pos, 0.25f, 1 << 3);
+
+        if (hitColliders.Length > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private float ChangeAngle(float angle)
     {

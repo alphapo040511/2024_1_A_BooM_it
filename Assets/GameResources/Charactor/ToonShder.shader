@@ -56,13 +56,17 @@ Shader "Custom/ToonShaderWithShadows"
 
                 // 조명 계산
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                float ndotl = max(0, dot(i.normal, lightDir));
+                float3 worldNormal = normalize(mul((float3x3)unity_ObjectToWorld, i.normal));
+                float ndotl = max(0, dot(worldNormal, lightDir));
+
 
                 // 셀 셰이딩
                 fixed4 finalColor = texColor * (ndotl > 0.5 ? 1 : 0.5);
                 
                 // 그림자 추가
                 finalColor = lerp(finalColor, _ShadowColor, (1 - ndotl) * _ShadowStrength);
+
+
 
                 return finalColor;
             }
