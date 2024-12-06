@@ -20,6 +20,7 @@ public class CharacterChange : MonoBehaviour
         if (type == CharacterType.Girl)
         {
             girl.SetActive(true);
+            girl.transform.Rotate(Vector3.up * 300 * Time.deltaTime);
             boy.SetActive(false);
         }
         else if (type == CharacterType.Boy)
@@ -27,6 +28,12 @@ public class CharacterChange : MonoBehaviour
             girl.SetActive(false);
             boy.SetActive(true);
         }
+    }
+
+    private void Update()
+    {
+        girl.transform.Rotate(Vector3.up * 30 * Time.deltaTime);
+        boy.transform.Rotate(Vector3.up * 30 * Time.deltaTime);
     }
 
     public void Change()
@@ -45,13 +52,14 @@ public class CharacterChange : MonoBehaviour
         if (type == CharacterType.Girl)
         {
             girl.SetActive(true);
+            girl.transform.rotation = Quaternion.identity;
             boy.SetActive(false);
-
         }
         else if (type == CharacterType.Boy)
         {
             girl.SetActive(false);
             boy.SetActive(true);
+            boy.transform.rotation = Quaternion.identity;
         }
 
         GameManager.instance.ChangeCharacter(type);
