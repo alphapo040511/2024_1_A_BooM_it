@@ -436,7 +436,7 @@ public class Player : NetworkBehaviour
     {
         if (state != PlayerState.Playing) return;
 
-        if (_networkButtons.IsSet(NetworkInputData.KEYCODER))
+        if (_networkButtons.IsSet(NetworkInputData.SKILLBUTTON))
         {
             if (!item.isOnCooldown)
             {

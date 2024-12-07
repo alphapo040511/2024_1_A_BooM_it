@@ -10,7 +10,7 @@ public struct NetworkInputData : INetworkInput
     public const byte MOUSEBUTTON0 = 0x01;
     public const byte MOUSEBUTTON1 = 0x02;
     public const byte KEYCODESPACE = 0x03;
-    public const byte KEYCODER= 0x04;
+    public const byte SKILLBUTTON= 0x04;
     public NetworkButtons buttons;
     public Vector3 direction;
     public Vector2 lookDirection;
@@ -34,6 +34,20 @@ public class NetworkInputHandler : MonoBehaviour
     private float targetVecticalRotation = 0;   //???? ???? ???? ????
     //private float verticalRotationSpeed = 240f; //???? ???? ????
 
+    private MobileTuouchInput mobileInput;
+
+    private void Awake()
+    {
+        if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            isMobile = true;
+        }
+        else
+        {
+            isMobile = false;
+        }
+    }
+
     public NetworkInputData GetNetworkInput()
     {
         var data = new NetworkInputData();
@@ -55,11 +69,24 @@ public class NetworkInputHandler : MonoBehaviour
             data.buttons.Set(NetworkInputData.MOUSEBUTTON0, Input.GetMouseButtonDown(0));
             data.buttons.Set(NetworkInputData.MOUSEBUTTON1, Input.GetMouseButtonDown(1));
             data.buttons.Set(NetworkInputData.KEYCODESPACE, Input.GetKey(KeyCode.Space));
-            data.buttons.Set(NetworkInputData.KEYCODER, Input.GetKey(KeyCode.R));
+            data.buttons.Set(NetworkInputData.SKILLBUTTON, Input.GetKey(KeyCode.R));
         }
         else
         {
-
+            if(mobileInput == null)
+            {
+                mobileInput = MobileTuouchInput.Instance;
+            }
+            else
+            {
+                data.direction = mobileInput.moveJoystick.Direction;
+                data.lookDirection = mobileInput.cameraJoystick.Direction;
+                data.wheel = mobileInput.Wheel;
+                data.buttons.Set(NetworkInputData.MOUSEBUTTON0, mobileInput.Fire);
+                data.buttons.Set(NetworkInputData.MOUSEBUTTON1, mobileInput.Aiming);
+                data.buttons.Set(NetworkInputData.KEYCODESPACE, mobileInput.Jump);
+                data.buttons.Set(NetworkInputData.SKILLBUTTON, mobileInput.Skill);
+            }
         }
 
         return data;

@@ -34,7 +34,7 @@ public class BattleManager : NetworkBehaviour
 
     public GameState gameState = GameState.Standby;
 
-    const int minPlayer = 1;        //최소 플레이어 수
+    const int minPlayer = 2;        //최소 플레이어 수
     [Networked] public int maxPlayer { get; set; }       //최대 플레이어 수
 
     private bool nowLoading = false;

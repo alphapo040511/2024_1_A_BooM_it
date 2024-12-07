@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11143558, g: 0.29986882, b: 0.6360883, a: 1}
+  m_IndirectSpecularColor: {r: 0.11146955, g: 0.29991138, b: 0.6361202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9734,6 +9734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRef:
     RawGuidValue: a37d0fdd024f6a143972943f2354eb16
+  audioMixer: {fileID: 24100000, guid: 65ffa9773297e7b4e9ead1fa7d4acd2b, type: 2}
   mapIndex: Mountain
   weaponIndex:
   - BasicBomb
