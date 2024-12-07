@@ -68,7 +68,7 @@ public class MobileTuouchInput : MonoBehaviour
         {
             if (aiming)
             {
-                fire = false;
+                aiming = false;
                 return true;
             }
             return false;
@@ -82,7 +82,7 @@ public class MobileTuouchInput : MonoBehaviour
         {
             if (jump)
             {
-                fire = false;
+                jump = false;
                 return true;
             }
             return false;
@@ -96,7 +96,7 @@ public class MobileTuouchInput : MonoBehaviour
         {
             if (skill)
             {
-                fire = false;
+                skill = false;
                 return true;
             }
             return false;
