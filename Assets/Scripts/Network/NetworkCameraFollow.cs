@@ -16,10 +16,7 @@ public class NetworkCameraFollow : MonoBehaviour
     private float currentHorizontalAngle = 0.0f;            //???? ???? ????
     private float currentVerticalAngle = 0f;              //???? ???? ????
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+
 
     public void SetPlayerTransform(Transform player, Transform pivot)
     {

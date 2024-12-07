@@ -74,8 +74,12 @@ public class SinglePlayer : MonoBehaviour
             weapon = null;
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
-        if(thirdPersonCamera != null)
+        if (Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if (thirdPersonCamera != null)
         {
             thirdPersonCamera.transform.SetParent(cameraPivot.transform);
             thirdPersonCamera.transform.localPosition = new Vector3(0, 0, -2.5f);

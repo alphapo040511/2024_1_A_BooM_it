@@ -252,8 +252,10 @@ public class Player : NetworkBehaviour
     public void RPC_Reset(int stateIndex)
     {
         aiming = false;
-        Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
-
+        if (Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer)
+        {
+            Cursor.lockState = stateIndex >= 1 ? CursorLockMode.Locked : CursorLockMode.None;
+        }
         if (!HasInputAuthority) return;
 
         if (stateIndex == 2)
