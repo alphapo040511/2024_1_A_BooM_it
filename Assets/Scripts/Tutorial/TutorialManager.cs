@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager instance;
-
+    public RectTransform finishImage;
     public TutorialInfomation info;
     private bool isClear = false;
     private TutorialType type;
@@ -48,6 +49,14 @@ public class TutorialManager : MonoBehaviour
     {
         if (isClear) return;
         isClear = true;
+        StartCoroutine(Finish());
         Debug.Log("스테이지 클리어");
+    }
+
+    private IEnumerator Finish()
+    {
+        finishImage.DOLocalMove(Vector2.zero, 1f);
+        yield return new WaitForSeconds(4);
+        SceneLoadManager.instance.LoadScene("TutorialLobbyScene");
     }
 }

@@ -11,6 +11,7 @@ public class SceneLoader : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
         StartCoroutine(LoadingIcons());
         string name = SceneLoadManager.instance.targetSceneName;
         if(SceneManager.GetSceneByName(name) != null)
