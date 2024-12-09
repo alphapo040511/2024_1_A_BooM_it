@@ -7,7 +7,7 @@ public class FollowImage : MonoBehaviour
     public GameObject image;
 
     private RectTransform thisRect;
-    private RectTransform target;
+    public RectTransform target;
 
     private void Awake()
     {
