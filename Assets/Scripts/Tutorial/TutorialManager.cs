@@ -8,6 +8,8 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager instance;
     public RectTransform finishImage;
     public TutorialInfomation info;
+    public AudioClip audioClip;
+    public AudioSource audioSource;
     private bool isClear = false;
     private TutorialType type;
     private int goalValue;
@@ -49,6 +51,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (isClear) return;
         isClear = true;
+        audioSource.PlayOneShot(audioClip);
         StartCoroutine(Finish());
         Debug.Log("스테이지 클리어");
     }
