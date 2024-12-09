@@ -89,6 +89,7 @@ public class NetworkRoomLoader : MonoBehaviour
     public void UpdateRooms(List<SessionInfo> sessions = default)
     {
         this.sessions = sessions;
+        int createCount = 0;
         string temp = "";
 
         if (roomListContainer != null)
@@ -107,27 +108,24 @@ public class NetworkRoomLoader : MonoBehaviour
 
         for(int i = 0; i < sessions.Count; i++)
         {
-            if(searchText.text != "")
-            {
-                if(sessions[i].Name.Contains(searchText.text) == false)
-                {
-                    return;
-                }
-            }
 
-            RoomButton button = Instantiate(roomButtonPrefab, roomListContainer);
-            button.SetData(i + 1, true, sessions[i]);
-            EventTrigger.Entry entry = new EventTrigger.Entry
+            if (searchText.text == "" || sessions[i].Name.Contains(searchText.text) == true)
             {
-                eventID = EventTriggerType.PointerEnter
-            };
-            entry.callback.AddListener((evenetData) => followImage.Follow(button.GetComponent<RectTransform>()));
-            button.GetComponent<EventTrigger>().triggers.Add(entry);
-            button.selectRoom += SelectRoom;
+                createCount++;
+                RoomButton button = Instantiate(roomButtonPrefab, roomListContainer);
+                button.SetData(i + 1, true, sessions[i]);
+                EventTrigger.Entry entry = new EventTrigger.Entry
+                {
+                    eventID = EventTriggerType.PointerEnter
+                };
+                entry.callback.AddListener((evenetData) => followImage.Follow(button.GetComponent<RectTransform>()));
+                button.GetComponent<EventTrigger>().triggers.Add(entry);
+                button.selectRoom += SelectRoom;
+            }
         }
 
 
-        for (int i = sessions.Count; i < 5; i++)
+        for (int i = createCount; i < 5; i++)
         {
             GenerateNoneDataButton(i + 1);
         }

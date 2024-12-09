@@ -406,7 +406,7 @@ public class Player : NetworkBehaviour
 
         if (HasInputAuthority)
         {
-            if (aiming)
+            if (aiming && state == PlayerState.Playing)
             {
                 List<Vector3> point = weapon[0].bombParabola.Trajectory(angle, FirePoint, cameraPivot);
                 lineRenderer.positionCount = point.Count;
