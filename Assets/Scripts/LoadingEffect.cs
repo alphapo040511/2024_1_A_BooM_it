@@ -17,9 +17,7 @@ public class LoadingEffect : MonoBehaviour
 
     private IEnumerator Movement()
     {
-        int repeat = 10;
-
-        while (repeat-- > 0)
+        while (true)
         {
             duration = Random.Range(0, 5f);
             yield return new WaitForSeconds(duration);

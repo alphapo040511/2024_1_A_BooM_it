@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class SceneLoader : MonoBehaviour
 {
+    public TextMeshProUGUI errorMessege;
+    public GameObject popup;
     public Image image;
     public Sprite[] icons = new Sprite[] { };
 
@@ -14,6 +17,9 @@ public class SceneLoader : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         StartCoroutine(LoadingIcons());
         string name = SceneLoadManager.instance.targetSceneName;
+
+        StartCoroutine (LoadingIcons());
+
         if(SceneManager.GetSceneByName(name) != null)
         {
             if (name == "ServerConnecting" || name == "DataLoading") return;
@@ -24,6 +30,31 @@ public class SceneLoader : MonoBehaviour
         {
             StartCoroutine(LoadingAsync("LobbyScene"));
         }    
+    }
+
+    private IEnumerator Timer()
+    {
+        float timer = 0;
+        timer += Time.deltaTime;
+        if (timer >= 15)
+        {
+            string reason = "";
+            switch (SceneLoadManager.instance.targetSceneName)
+            {
+                case "DataLoading":
+                    reason = "데이터를 불러올 수 없습니다.";
+                    break;
+                case "ServerConnecting":
+                    reason = "서버에 연결할 수 없습니다.";
+                    break;
+                default:
+                    reason = "데이터 처리 제한 시간이 초과되었습니다.";
+                    break;
+            }
+            errorMessege.text = reason;
+            popup.SetActive(true);
+            yield break;
+        }
     }
 
     private IEnumerator LoadingAsync(string name)
@@ -37,7 +68,6 @@ public class SceneLoader : MonoBehaviour
             {
                 break;
             }
-
             yield return null;
         }
 
@@ -87,5 +117,10 @@ public class SceneLoader : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void ClickExit()
+    {
+        Application.Quit();
     }
 }
