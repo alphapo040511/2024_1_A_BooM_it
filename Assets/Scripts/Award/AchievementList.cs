@@ -47,8 +47,6 @@ public class AchievementList : MonoBehaviour
 
     private GameObject UpdateList(AwardData data, GameObject awardList)
     {
-        int currentValue = 0;
-
         // RectTransform ¼³Á¤
         RectTransform rectTransform = awardList.GetComponent<RectTransform>();
 
@@ -58,16 +56,16 @@ public class AchievementList : MonoBehaviour
         RectTransform sliderValue = awardList.transform.Find("SliderValue").GetComponent<RectTransform>();
         Image achieved = awardList.transform.Find("Achieved").GetComponent<Image>();
 
-        PlayerPrefs.GetInt(data.awardName, currentValue);
+        data.currentValue = PlayerPrefs.GetInt(data.awardName, data.currentValue);
 
         awardName.text = data.awardName;
         description.text = data.awardDescription;
-        value.text = $"{PlayerPrefs.GetInt(data.awardName, currentValue)} / {data.goalValue}";
+        value.text = $"{PlayerPrefs.GetInt(data.awardName, data.currentValue)} / {data.goalValue}";
 
-        float size = (currentValue / (float)data.goalValue);
+        float size = (data.currentValue / (float)data.goalValue);
         size = Mathf.Clamp01(size);
         sliderValue.localScale = new Vector3(size, 1, 1);
-        if (currentValue >= data.goalValue || data.isAchieved)
+        if (data.currentValue >= data.goalValue || data.isAchieved)
         {
             data.isAchieved = true;
             achieved.enabled = true;
