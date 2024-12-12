@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using System.Linq;
 
 public abstract class NetworkParabola : NetworkBehaviour
 {
@@ -103,12 +104,18 @@ public abstract class NetworkParabola : NetworkBehaviour
 
     public virtual void KnockBack(float distance, float force = 10)
     {
+        float fixedForce = force;
+        if(GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
+        {
+            fixedForce = force * 0.5f;
+        }
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, distance, 1 << 6);
 
         foreach (var hitCollider in hitColliders)
         {
             Player player = hitCollider.GetComponent<Player>();
-            player.Knockback(transform.position, force);
+            player.Knockback(transform.position, fixedForce);
         }
     }
 
