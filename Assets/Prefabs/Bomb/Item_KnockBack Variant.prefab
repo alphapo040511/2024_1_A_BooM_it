@@ -78,6 +78,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.50008726
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.49991274
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.50008726
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.49991274
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186896015879707711, guid: aac1f3022f0a6ea418f2a6ed7f9cb20b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -115,7 +145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 16
   gravity: 9.81
-  knockbackDistance: 3
 --- !u!114 &2268056032364994154
 MonoBehaviour:
   m_ObjectHideFlags: 0

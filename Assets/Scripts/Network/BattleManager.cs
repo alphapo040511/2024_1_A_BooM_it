@@ -377,15 +377,12 @@ public class BattleManager : NetworkBehaviour
     private Vector3 GetNextSpawnPosition(int playerNum)
     {
         Vector3Int pos = levelGenerator.mapData.SpawnPosition[playerNum];
-        pos.y = levelGenerator.mapData.BlockArr.GetLength(1);
+        pos.y = levelGenerator.mapData.BlockArr.GetLength(1) + 1;
         for (int y = levelGenerator.mapData.BlockArr.GetLength(1) - 1; y >= 0; y--)
         {
-            if (levelGenerator.mapData.BlockArr[pos.x, y, pos.z] == 0)
+            if (levelGenerator.mapData.BlockArr[pos.x, y, pos.z] != 0)
             {
-                pos.y = y;
-            }
-            else
-            {
+                pos.y = y + 1;
                 break;
             }
         }
