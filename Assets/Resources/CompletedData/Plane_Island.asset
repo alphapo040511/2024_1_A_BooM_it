@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec073763240f624e8a6ef29819c3257, type: 3}
+  m_Name: Plane_Island
+  m_EditorClassIdentifier: 
+  BlockIndexData: {fileID: 11400000, guid: c460f49a4832b394f84713b142d3e4e9, type: 2}
+  SpawnPosition:
+  - {x: 5, y: 0, z: 4}
+  - {x: 4, y: 0, z: 17}
+  mapJsonFile: {fileID: 4900000, guid: 49323338795941947a5261e85c0a8b51, type: 3}
+  MapImage: {fileID: 21300000, guid: 7ea63cb5e68df284d990b32c2f220775, type: 3}
