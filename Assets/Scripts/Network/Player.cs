@@ -93,7 +93,6 @@ public class Player : NetworkBehaviour
             cameraDistance = thirdPersonCamera.transform.localPosition.z;
             RPC_ItemSpawn(GameManager.instance.weaponIndex, GameManager.instance.itemIndex);
         }
-        ChangeCharacter(characterType);
 
         if (GameManager.instance.mapIndex.ToString().Split('_').Contains("Ice"))
         {
@@ -193,6 +192,7 @@ public class Player : NetworkBehaviour
 
     public void Respawn(Vector3 position, Quaternion lookDir)
     {
+        ChangeCharacter(characterType);
         _cc.Teleport(position, Quaternion.identity);
         cameraPivot.localRotation = Quaternion.identity;
         rotateAngle = lookDir.eulerAngles.y;
