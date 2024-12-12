@@ -57,7 +57,7 @@ public class Player : NetworkBehaviour
     private GameObject thirdPersonCamera;
     private float cameraDistance;
 
-    [Networked] CharacterType characterType { get; set; }
+    [Networked] public CharacterType characterType { get; set; }
 
     [Networked] public int currentWeapon { get; set; }
 
@@ -73,14 +73,23 @@ public class Player : NetworkBehaviour
 
     public void Init()
     {
+        RPC_CharacterSet();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    private void RPC_CharacterSet()
+    {
         if (HasInputAuthority)
         {
             characterType = GameManager.instance.characterType;
+            RPC_ChangeCharacter(characterType);
         }
+
     }
 
     public override void Spawned()
     {
+        RPC_CharacterSet();
         if (HasInputAuthority)
         {
             if (thirdPersonCamera == null)
@@ -102,7 +111,8 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void ChangeCharacter(CharacterType type)
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_ChangeCharacter(CharacterType type)
     {
         switch(type)
         {
@@ -250,7 +260,7 @@ public class Player : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Reset(int stateIndex)
     {
-        ChangeCharacter(characterType);
+        RPC_CharacterSet();
         aiming = false;
         if (Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer)
         {

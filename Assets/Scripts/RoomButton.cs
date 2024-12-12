@@ -37,7 +37,7 @@ public class RoomButton : MonoBehaviour
         {
             sessionInfo = null;
             roomName.text = "";
-            playerCount.text = " / ";
+            playerCount.text = "/";
         }
     }
 
