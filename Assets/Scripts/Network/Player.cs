@@ -192,7 +192,6 @@ public class Player : NetworkBehaviour
 
     public void Respawn(Vector3 position, Quaternion lookDir)
     {
-        ChangeCharacter(characterType);
         _cc.Teleport(position, Quaternion.identity);
         cameraPivot.localRotation = Quaternion.identity;
         rotateAngle = lookDir.eulerAngles.y;
@@ -251,6 +250,7 @@ public class Player : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Reset(int stateIndex)
     {
+        ChangeCharacter(characterType);
         aiming = false;
         if (Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer)
         {
